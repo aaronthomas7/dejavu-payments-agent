@@ -1,6 +1,6 @@
 """Copy the real replay numbers into the README table and the content drafts.
 
-    python scripts/fill_content.py --github https://github.com/<you>/dejavu-payments-agent
+    python scripts/fill_content.py
 
 Reads data/replay_results.json (produced by scripts/replay.py with real API keys),
 fills {{PLACEHOLDERS}} in content/*.md and writes the results to content/final/.
@@ -25,7 +25,7 @@ def pct(v) -> str:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--github", default="https://github.com/<your-account>/dejavu-payments-agent")
+    ap.add_argument("--github", default="https://github.com/aaronthomas7/dejavu-payments-agent")
     ap.add_argument("--allow-offline", action="store_true")
     args = ap.parse_args()
 

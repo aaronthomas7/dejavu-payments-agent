@@ -103,7 +103,7 @@ Run it and the UI's **Learning curve** tab animates the results. `python scripts
 ## Quickstart
 
 ```bash
-git clone <this repo> && cd dejavu
+git clone https://github.com/aaronthomas7/dejavu-payments-agent.git && cd dejavu-payments-agent
 python -m venv .venv
 source .venv/bin/activate                 # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
