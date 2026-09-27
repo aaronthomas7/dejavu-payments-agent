@@ -1,0 +1,2273 @@
+[
+  {
+    "case_id": "EXC-260817-01",
+    "created_at": "2026-08-17T09:40:00+08:00",
+    "status": "resolved",
+    "exception_type": "HELD",
+    "reason_code": "AM05",
+    "reason_text": "Duplication",
+    "counterparty_message": "Duplicate check: identical instruction received at 06:12 and 06:47 SGT (same beneficiary, amount and value date). Second instruction held.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7510145",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-08-17T08:04:00+08:00",
+      "value_date": "2026-08-17",
+      "amount": 27450.0,
+      "currency": "USD",
+      "debtor": {
+        "name": "Arcadia Foods Pte Ltd",
+        "account": "0721-009877-1",
+        "client_id": "arcadia"
+      },
+      "creditor": {
+        "name": "Mekong Delta Seafood JSC",
+        "account": "700192115765",
+        "country": "VN"
+      },
+      "creditor_bank": {
+        "name": "Saigon Riverside Bank",
+        "bic": "SGRBVNVXXXX",
+        "city": "Ho Chi Minh City",
+        "country": "VN",
+        "code": "SGRB"
+      },
+      "intermediary_bank": null,
+      "remittance_info": "INV MDS-4410 frozen seafood"
+    },
+    "ground_truth": {
+      "root_cause": "CLIENT_ERP_DUPLICATE",
+      "pattern_id": "P7",
+      "resolution_note": "Arcadia's treasury confirmed their ERP weekend batch re-ran on Monday morning and re-sent the whole payment file. Cancelled the second instruction and informed Arcadia's IT team, who opened a ticket with their ERP vendor.",
+      "minutes_spent": 38,
+      "is_repeat": false
+    }
+  },
+  {
+    "case_id": "EXC-260818-01",
+    "created_at": "2026-08-18T11:05:00+08:00",
+    "status": "resolved",
+    "exception_type": "REJECTED",
+    "reason_code": "AC01",
+    "reason_text": "Incorrect account number",
+    "counterparty_message": "Beneficiary account 62014488091 not found. Please verify and resend.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7891050",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-08-18T08:47:00+08:00",
+      "value_date": "2026-08-18",
+      "amount": 19040.0,
+      "currency": "USD",
+      "debtor": {
+        "name": "Kestrel Components Pte Ltd",
+        "account": "0721-006621-5",
+        "client_id": "kestrel"
+      },
+      "creditor": {
+        "name": "Dongguan Precision Parts Co., Ltd.",
+        "account": "62014488091",
+        "country": "CN"
+      },
+      "creditor_bank": {
+        "name": "Pearl Delta Commercial Bank",
+        "bic": "PDCBCNGZXXX",
+        "city": "Guangzhou",
+        "country": "CN",
+        "code": "PDCB"
+      },
+      "intermediary_bank": null,
+      "remittance_info": "INV DPP-2231 machined housings"
+    },
+    "ground_truth": {
+      "root_cause": "CLIENT_TYPO_IN_DETAILS",
+      "pattern_id": null,
+      "resolution_note": "Account number had only 11 digits - Kestrel dropped a digit while keying it. Kestrel confirmed the correct 12-digit number; repaired and resent. Pearl Delta accepted it the same day.",
+      "minutes_spent": 25,
+      "is_repeat": false
+    }
+  },
+  {
+    "case_id": "EXC-260819-01",
+    "created_at": "2026-08-19T14:20:00+08:00",
+    "status": "resolved",
+    "exception_type": "SCREENING_HOLD",
+    "reason_code": null,
+    "reason_text": null,
+    "counterparty_message": "Sanctions screening hit: beneficiary 'DESERT STAR GENERAL TRADING LLC' vs list entry 'DESERT STAR SHIPPING FZE' (match score 0.86). Payment held.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7794956",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-08-19T12:50:00+08:00",
+      "value_date": "2026-08-19",
+      "amount": 43020.0,
+      "currency": "USD",
+      "debtor": {
+        "name": "Blue Harbour Logistics Pte Ltd",
+        "account": "0721-013340-8",
+        "client_id": "blueharbour"
+      },
+      "creditor": {
+        "name": "Desert Star General Trading LLC",
+        "account": "AE070339586728147928393",
+        "country": "AE"
+      },
+      "creditor_bank": {
+        "name": "Desert Rose Bank",
+        "bic": "DRBKAEADXXX",
+        "city": "Dubai",
+        "country": "AE",
+        "code": "DRBK"
+      },
+      "intermediary_bank": null,
+      "remittance_info": "INV DSGT-0977 port handling charges"
+    },
+    "ground_truth": {
+      "root_cause": "SANCTIONS_POTENTIAL_MATCH",
+      "pattern_id": "P4",
+      "resolution_note": "First time we saw this hit. Escalated to Compliance. Compliance reviewed the trade licence, ownership and address - Desert Star General Trading LLC is a different company from the listed Desert Star Shipping FZE. Cleared as a false positive, clearance reference CLR-2026-0819-07. Compliance released the payment two days later.",
+      "minutes_spent": 95,
+      "is_repeat": false
+    }
+  },
+  {
+    "case_id": "EXC-260820-01",
+    "created_at": "2026-08-20T16:10:00+08:00",
+    "status": "resolved",
+    "exception_type": "NON_RECEIPT_CLAIM",
+    "reason_code": null,
+    "reason_text": null,
+    "counterparty_message": "Client reports the beneficiary did not receive funds on the value date (19 Aug). Please investigate.",
+    "tracker": "Tracker: delivered to Golconda Commercial Bank 19 Aug 15:09 SGT - status: credit pending",
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7305083",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-08-19T15:05:00+08:00",
+      "value_date": "2026-08-19",
+      "amount": 487000.0,
+      "currency": "INR",
+      "debtor": {
+        "name": "Vantage Analytics Pte Ltd",
+        "account": "0721-017745-6",
+        "client_id": "vantage"
+      },
+      "creditor": {
+        "name": "Srinivasa Infotech Private Limited",
+        "account": "502002863428720",
+        "country": "IN"
+      },
+      "creditor_bank": {
+        "name": "Golconda Commercial Bank",
+        "bic": "GOLCINHHXXX",
+        "city": "Hyderabad",
+        "country": "IN",
+        "code": "GOLC"
+      },
+      "intermediary_bank": {
+        "name": "Coromandel Clearing Bank, Mumbai",
+        "bic": "CRMCINBBXXX"
+      },
+      "remittance_info": "INV SI-8841 data engineering services Jul"
+    },
+    "ground_truth": {
+      "root_cause": "MISSED_CUTOFF_NEXT_DAY_CREDIT",
+      "pattern_id": "P2",
+      "resolution_note": "Checked the tracker - nothing stuck at the intermediary. Golconda Commercial Bank confirmed our payment arrived after their same-day cut-off of 12:00 IST (14:30 SGT), so it was credited the next morning (20 Aug, 09:10 IST). Told Vantage no trace is needed.",
+      "minutes_spent": 50,
+      "is_repeat": false
+    }
+  },
+  {
+    "case_id": "EXC-260821-01",
+    "created_at": "2026-08-21T10:30:00+08:00",
+    "status": "resolved",
+    "exception_type": "REJECTED",
+    "reason_code": "BE01",
+    "reason_text": "Inconsistent with end customer",
+    "counterparty_message": "Beneficiary name does not match the account holder name. Payment rejected.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7746594",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-08-21T08:25:00+08:00",
+      "value_date": "2026-08-21",
+      "amount": 787000.0,
+      "currency": "INR",
+      "debtor": {
+        "name": "Orchid Pharma Asia Pte Ltd",
+        "account": "0721-011208-2",
+        "client_id": "orchid"
+      },
+      "creditor": {
+        "name": "Deccan Bio Labs Pvt Ltd",
+        "account": "11834713830157",
+        "country": "IN"
+      },
+      "creditor_bank": {
+        "name": "Tungabhadra Co-operative Bank",
+        "bic": "TUNGINBBXXX",
+        "city": "Bengaluru",
+        "country": "IN",
+        "code": "TUNG"
+      },
+      "intermediary_bank": {
+        "name": "Coromandel Clearing Bank, Mumbai",
+        "bic": "CRMCINBBXXX"
+      },
+      "remittance_info": "INV DBL-3307 lab consumables"
+    },
+    "ground_truth": {
+      "root_cause": "NAME_LEGAL_SUFFIX_MISMATCH",
+      "pattern_id": "P3",
+      "resolution_note": "Tungabhadra Co-operative Bank does exact name matching. The account is registered as 'DECCAN BIO LABS PRIVATE LIMITED' but we sent 'Deccan Bio Labs Pvt Ltd'. Amended the name to the full legal suffix and resent - accepted.",
+      "minutes_spent": 45,
+      "is_repeat": false
+    }
+  },
+  {
+    "case_id": "EXC-260824-01",
+    "created_at": "2026-08-24T09:15:00+08:00",
+    "status": "resolved",
+    "exception_type": "HELD",
+    "reason_code": "AM05",
+    "reason_text": "Duplication",
+    "counterparty_message": "Duplicate check: identical instruction received at 06:15 and 06:40 SGT (same beneficiary, amount and value date). Second instruction held.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7844674",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-08-24T06:53:00+08:00",
+      "value_date": "2026-08-24",
+      "amount": 79200.0,
+      "currency": "MYR",
+      "debtor": {
+        "name": "Arcadia Foods Pte Ltd",
+        "account": "0721-009877-1",
+        "client_id": "arcadia"
+      },
+      "creditor": {
+        "name": "Penang Spice Traders Sdn Bhd",
+        "account": "514099655896",
+        "country": "MY"
+      },
+      "creditor_bank": {
+        "name": "Straits Heritage Bank",
+        "bic": "STHBMYKPXXX",
+        "city": "Penang",
+        "country": "MY",
+        "code": "STHB"
+      },
+      "intermediary_bank": null,
+      "remittance_info": "INV PST-1182 spices"
+    },
+    "ground_truth": {
+      "root_cause": "CLIENT_ERP_DUPLICATE",
+      "pattern_id": "P7",
+      "resolution_note": "Same as last Monday: Arcadia's ERP re-sent its weekend batch at 06:40. Cancelled the duplicate. Arcadia IT is investigating their job scheduler.",
+      "minutes_spent": 20,
+      "is_repeat": true
+    }
+  },
+  {
+    "case_id": "EXC-260824-02",
+    "created_at": "2026-08-24T15:30:00+08:00",
+    "status": "resolved",
+    "exception_type": "REJECTED",
+    "reason_code": "RR04",
+    "reason_text": "Regulatory reason",
+    "counterparty_message": "Payment rejected. Reason: RR04 Regulatory reason.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7964956",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-08-24T14:36:00+08:00",
+      "value_date": "2026-08-24",
+      "amount": 24800.0,
+      "currency": "USD",
+      "debtor": {
+        "name": "Kestrel Components Pte Ltd",
+        "account": "0721-006621-5",
+        "client_id": "kestrel"
+      },
+      "creditor": {
+        "name": "Kowloon Circuit Supplies Ltd",
+        "account": "719-384955-324",
+        "country": "HK"
+      },
+      "creditor_bank": {
+        "name": "Victoria Harbour Bank",
+        "bic": "VHBKHKHHXXX",
+        "city": "Hong Kong",
+        "country": "HK",
+        "code": "VHBK"
+      },
+      "intermediary_bank": {
+        "name": "Atlantic Clearing Bank, New York",
+        "bic": "ACBKUS33XXX"
+      },
+      "remittance_info": "Payment for goods"
+    },
+    "ground_truth": {
+      "root_cause": "MISSING_INVOICE_REFERENCE",
+      "pattern_id": "P5",
+      "resolution_note": "Called Victoria Harbour Bank: their compliance rules require an invoice number in the remittance information for trade payments above USD 10,000. Got invoice KCS-55812 from Kestrel and resubmitted with it - accepted.",
+      "minutes_spent": 55,
+      "is_repeat": false
+    }
+  },
+  {
+    "case_id": "EXC-260825-01",
+    "created_at": "2026-08-25T11:45:00+08:00",
+    "status": "resolved",
+    "exception_type": "REJECTED",
+    "reason_code": "RC01",
+    "reason_text": "Bank identifier incorrect",
+    "counterparty_message": "Bank identifier NKYSNOBX incorrect. Payment rejected.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7026103",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-08-25T10:09:00+08:00",
+      "value_date": "2026-08-25",
+      "amount": 23580.0,
+      "currency": "USD",
+      "debtor": {
+        "name": "Tanjong Marine Services Pte Ltd",
+        "account": "0721-003390-4",
+        "client_id": "tanjong"
+      },
+      "creditor": {
+        "name": "Bergen Subsea Services AS",
+        "account": "NO9347395723279",
+        "country": "NO"
+      },
+      "creditor_bank": {
+        "name": "Nordkyst Bank",
+        "bic": "NKYSNOBX",
+        "city": "Bergen",
+        "country": "NO",
+        "code": "NKYS"
+      },
+      "intermediary_bank": {
+        "name": "Atlantic Clearing Bank, New York",
+        "bic": "ACBKUS33XXX"
+      },
+      "remittance_info": "INV BSS-620 ROV hire"
+    },
+    "ground_truth": {
+      "root_cause": "CLIENT_TYPO_IN_DETAILS",
+      "pattern_id": null,
+      "resolution_note": "The client keyed the BIC as NKYSNOBX instead of NKYSNOBB. Corrected the BIC and resent via Atlantic Clearing Bank New York as usual.",
+      "minutes_spent": 20,
+      "is_repeat": false
+    }
+  },
+  {
+    "case_id": "EXC-260826-01",
+    "created_at": "2026-08-26T10:50:00+08:00",
+    "status": "resolved",
+    "exception_type": "REJECTED",
+    "reason_code": "AC01",
+    "reason_text": "Incorrect account number",
+    "counterparty_message": "Beneficiary account 620144880913 not found. Please verify and resend.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7637059",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-08-26T08:29:00+08:00",
+      "value_date": "2026-08-26",
+      "amount": 10200.0,
+      "currency": "USD",
+      "debtor": {
+        "name": "Sunrise Textiles Pte Ltd",
+        "account": "0721-004512-3",
+        "client_id": "sunrise"
+      },
+      "creditor": {
+        "name": "Guangzhou Hengtai Trading Co., Ltd.",
+        "account": "620144880913",
+        "country": "CN"
+      },
+      "creditor_bank": {
+        "name": "Pearl Delta Commercial Bank",
+        "bic": "PDCBCNGZXXX",
+        "city": "Guangzhou",
+        "country": "CN",
+        "code": "PDCB"
+      },
+      "intermediary_bank": null,
+      "remittance_info": "INV HT-20931 cotton yarn"
+    },
+    "ground_truth": {
+      "root_cause": "ACCOUNT_FORMAT_CHANGED",
+      "pattern_id": "P1",
+      "resolution_note": "Called Pearl Delta Commercial Bank's Guangzhou operations desk: they migrated to 15-digit account numbers on 25 Aug 2026. Old 12-digit numbers must be prefixed with branch code 601. Repaired the account to 601620144880913 and resent - credited the same day.",
+      "minutes_spent": 60,
+      "is_repeat": false
+    }
+  },
+  {
+    "case_id": "EXC-260826-02",
+    "created_at": "2026-08-26T16:20:00+08:00",
+    "status": "resolved",
+    "exception_type": "RETURNED",
+    "reason_code": "AC04",
+    "reason_text": "Closed account number",
+    "counterparty_message": "Payment returned. Reason: AC04 Closed account number.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7359497",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-08-26T13:51:00+08:00",
+      "value_date": "2026-08-26",
+      "amount": 1827000.0,
+      "currency": "PHP",
+      "debtor": {
+        "name": "Lotus Hospitality Group Pte Ltd",
+        "account": "0721-015532-9",
+        "client_id": "lotus"
+      },
+      "creditor": {
+        "name": "Cebu Linen Supply Inc",
+        "account": "004581990307",
+        "country": "PH"
+      },
+      "creditor_bank": {
+        "name": "Manila Bay Savings Bank",
+        "bic": "MBSBPHMMXXX",
+        "city": "Manila",
+        "country": "PH",
+        "code": "MBSB"
+      },
+      "intermediary_bank": null,
+      "remittance_info": "INV CLS-9021 linen"
+    },
+    "ground_truth": {
+      "root_cause": "BENEFICIARY_ACCOUNT_CLOSED",
+      "pattern_id": null,
+      "resolution_note": "The beneficiary closed this account in July. Funds returned; Lotus got the new account details from the supplier and re-initiated.",
+      "minutes_spent": 35,
+      "is_repeat": false
+    }
+  },
+  {
+    "case_id": "EXC-260827-01",
+    "created_at": "2026-08-27T11:30:00+08:00",
+    "status": "resolved",
+    "exception_type": "HELD",
+    "reason_code": "AM05",
+    "reason_text": "Duplication",
+    "counterparty_message": "Duplicate check: two instructions with the same beneficiary and amount received at 10:02 and 10:48 SGT. Second instruction held.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7806909",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-08-27T09:20:00+08:00",
+      "value_date": "2026-08-27",
+      "amount": 465000000.0,
+      "currency": "IDR",
+      "debtor": {
+        "name": "Lotus Hospitality Group Pte Ltd",
+        "account": "0721-015532-9",
+        "client_id": "lotus"
+      },
+      "creditor": {
+        "name": "PT Bali Villas Management",
+        "account": "1270412372824",
+        "country": "ID"
+      },
+      "creditor_bank": {
+        "name": "Nusantara Sentral Bank",
+        "bic": "NSBKIDJAXXX",
+        "city": "Jakarta",
+        "country": "ID",
+        "code": "NSBK"
+      },
+      "intermediary_bank": null,
+      "remittance_info": "Management fee Aug"
+    },
+    "ground_truth": {
+      "root_cause": "POSSIBLE_DUPLICATE_VERIFY",
+      "pattern_id": null,
+      "resolution_note": "Lotus confirmed both payments were intended - two separate monthly invoices that happen to have the same amount. Released the second payment after the client's confirmation.",
+      "minutes_spent": 25,
+      "is_repeat": false
+    }
+  },
+  {
+    "case_id": "EXC-260827-02",
+    "created_at": "2026-08-27T14:10:00+08:00",
+    "status": "resolved",
+    "exception_type": "NON_RECEIPT_CLAIM",
+    "reason_code": null,
+    "reason_text": null,
+    "counterparty_message": "Client reports the beneficiary did not receive funds on the value date (26 Aug). Please investigate.",
+    "tracker": "Tracker: delivered to Golconda Commercial Bank 26 Aug 16:08 SGT - status: credit pending",
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7725102",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-08-26T16:05:00+08:00",
+      "value_date": "2026-08-26",
+      "amount": 1975000.0,
+      "currency": "INR",
+      "debtor": {
+        "name": "Orchid Pharma Asia Pte Ltd",
+        "account": "0721-011208-2",
+        "client_id": "orchid"
+      },
+      "creditor": {
+        "name": "Hyderabad Organics Private Limited",
+        "account": "502025898174512",
+        "country": "IN"
+      },
+      "creditor_bank": {
+        "name": "Golconda Commercial Bank",
+        "bic": "GOLCINHHXXX",
+        "city": "Hyderabad",
+        "country": "IN",
+        "code": "GOLC"
+      },
+      "intermediary_bank": {
+        "name": "Coromandel Clearing Bank, Mumbai",
+        "bic": "CRMCINBBXXX"
+      },
+      "remittance_info": "INV HO-5520 active ingredients"
+    },
+    "ground_truth": {
+      "root_cause": "MISSED_CUTOFF_NEXT_DAY_CREDIT",
+      "pattern_id": "P2",
+      "resolution_note": "Golconda Commercial Bank again: the payment landed after their 12:00 IST (14:30 SGT) same-day cut-off and was credited the next business day morning. Advised Orchid to submit INR payments before 14:00 SGT for same-day value.",
+      "minutes_spent": 30,
+      "is_repeat": true
+    }
+  },
+  {
+    "case_id": "EXC-260828-01",
+    "created_at": "2026-08-28T10:05:00+08:00",
+    "status": "resolved",
+    "exception_type": "HELD",
+    "reason_code": "AM04",
+    "reason_text": "Insufficient funds",
+    "counterparty_message": "Payment held: AM04 Insufficient funds on the IDR settlement account. Client debit account balance check: passed.",
+    "tracker": null,
+    "debtor_balance_check": "passed",
+    "payment": {
+      "payment_ref": "PAY-7417771",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-08-28T09:22:00+08:00",
+      "value_date": "2026-08-28",
+      "amount": 1210000000.0,
+      "currency": "IDR",
+      "debtor": {
+        "name": "Lotus Hospitality Group Pte Ltd",
+        "account": "0721-015532-9",
+        "client_id": "lotus"
+      },
+      "creditor": {
+        "name": "PT Bali Villas Management",
+        "account": "1270651399995",
+        "country": "ID"
+      },
+      "creditor_bank": {
+        "name": "Nusantara Sentral Bank",
+        "bic": "NSBKIDJAXXX",
+        "city": "Jakarta",
+        "country": "ID",
+        "code": "NSBK"
+      },
+      "intermediary_bank": null,
+      "remittance_info": "Villa lease Sep"
+    },
+    "ground_truth": {
+      "root_cause": "NOSTRO_FUNDING_SHORTFALL",
+      "pattern_id": "P8",
+      "resolution_note": "Our IDR nostro at Nusantara Sentral Bank was short - month-end outflows drained it. Treasury topped it up by IDR 5bn at 13:00 and we released the payment after funding.",
+      "minutes_spent": 70,
+      "is_repeat": false
+    }
+  },
+  {
+    "case_id": "EXC-260828-02",
+    "created_at": "2026-08-28T15:40:00+08:00",
+    "status": "resolved",
+    "exception_type": "SCREENING_HOLD",
+    "reason_code": null,
+    "reason_text": null,
+    "counterparty_message": "Sanctions screening hit: beneficiary 'DESERT STAR GENERAL TRADING LLC' vs list entry 'DESERT STAR SHIPPING FZE' (match score 0.86). Payment held.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7874880",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-08-28T14:41:00+08:00",
+      "value_date": "2026-08-28",
+      "amount": 37090.0,
+      "currency": "USD",
+      "debtor": {
+        "name": "Blue Harbour Logistics Pte Ltd",
+        "account": "0721-013340-8",
+        "client_id": "blueharbour"
+      },
+      "creditor": {
+        "name": "Desert Star General Trading LLC",
+        "account": "AE070330158233623401959",
+        "country": "AE"
+      },
+      "creditor_bank": {
+        "name": "Desert Rose Bank",
+        "bic": "DRBKAEADXXX",
+        "city": "Dubai",
+        "country": "AE",
+        "code": "DRBK"
+      },
+      "intermediary_bank": null,
+      "remittance_info": "INV DSGT-1012 port handling charges"
+    },
+    "ground_truth": {
+      "root_cause": "SANCTIONS_KNOWN_FALSE_POSITIVE",
+      "pattern_id": "P4",
+      "resolution_note": "Same false-positive hit as 19 Aug. Routed to Compliance with the prior clearance CLR-2026-0819-07. Compliance re-confirmed and released it the same day.",
+      "minutes_spent": 30,
+      "is_repeat": true
+    }
+  },
+  {
+    "case_id": "EXC-260831-01",
+    "created_at": "2026-08-31T09:20:00+08:00",
+    "status": "resolved",
+    "exception_type": "HELD",
+    "reason_code": "AM05",
+    "reason_text": "Duplication",
+    "counterparty_message": "Duplicate check: identical instruction received at 06:10 and 06:44 SGT (same beneficiary, amount and value date). Second instruction held.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7952142",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-08-31T07:14:00+08:00",
+      "value_date": "2026-08-31",
+      "amount": 59130.0,
+      "currency": "USD",
+      "debtor": {
+        "name": "Arcadia Foods Pte Ltd",
+        "account": "0721-009877-1",
+        "client_id": "arcadia"
+      },
+      "creditor": {
+        "name": "Mekong Delta Seafood JSC",
+        "account": "700166251187",
+        "country": "VN"
+      },
+      "creditor_bank": {
+        "name": "Saigon Riverside Bank",
+        "bic": "SGRBVNVXXXX",
+        "city": "Ho Chi Minh City",
+        "country": "VN",
+        "code": "SGRB"
+      },
+      "intermediary_bank": null,
+      "remittance_info": "INV MDS-4466 frozen seafood"
+    },
+    "ground_truth": {
+      "root_cause": "CLIENT_ERP_DUPLICATE",
+      "pattern_id": "P7",
+      "resolution_note": "Third Monday in a row - Arcadia's ERP re-sent the file. Cancelled the duplicate within 10 minutes.",
+      "minutes_spent": 12,
+      "is_repeat": true
+    }
+  },
+  {
+    "case_id": "EXC-260831-02",
+    "created_at": "2026-08-31T11:10:00+08:00",
+    "status": "resolved",
+    "exception_type": "HELD",
+    "reason_code": "AM04",
+    "reason_text": "Insufficient funds",
+    "counterparty_message": "Payment held: AM04 Insufficient funds on the IDR settlement account. Client debit account balance check: passed.",
+    "tracker": null,
+    "debtor_balance_check": "passed",
+    "payment": {
+      "payment_ref": "PAY-7092966",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-08-31T08:36:00+08:00",
+      "value_date": "2026-08-31",
+      "amount": 307000000.0,
+      "currency": "IDR",
+      "debtor": {
+        "name": "Blue Harbour Logistics Pte Ltd",
+        "account": "0721-013340-8",
+        "client_id": "blueharbour"
+      },
+      "creditor": {
+        "name": "PT Surabaya Port Logistics",
+        "account": "1270875727420",
+        "country": "ID"
+      },
+      "creditor_bank": {
+        "name": "Nusantara Sentral Bank",
+        "bic": "NSBKIDJAXXX",
+        "city": "Jakarta",
+        "country": "ID",
+        "code": "NSBK"
+      },
+      "intermediary_bank": null,
+      "remittance_info": "INV SPL-3390 terminal handling"
+    },
+    "ground_truth": {
+      "root_cause": "NOSTRO_FUNDING_SHORTFALL",
+      "pattern_id": "P8",
+      "resolution_note": "IDR nostro short again on the last business day of the month. Requested a Treasury top-up at 11:30; payment released at 14:05. Treasury suggests pre-funding the IDR nostro before month-end.",
+      "minutes_spent": 45,
+      "is_repeat": true
+    }
+  },
+  {
+    "case_id": "EXC-260831-03",
+    "created_at": "2026-08-31T14:45:00+08:00",
+    "status": "resolved",
+    "exception_type": "REJECTED",
+    "reason_code": "AC01",
+    "reason_text": "Incorrect account number",
+    "counterparty_message": "Beneficiary account 620177312045 not found. Please verify and resend.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7637305",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-08-31T13:41:00+08:00",
+      "value_date": "2026-08-31",
+      "amount": 9670.0,
+      "currency": "USD",
+      "debtor": {
+        "name": "Kestrel Components Pte Ltd",
+        "account": "0721-006621-5",
+        "client_id": "kestrel"
+      },
+      "creditor": {
+        "name": "Foshan Metalworks Co., Ltd.",
+        "account": "620177312045",
+        "country": "CN"
+      },
+      "creditor_bank": {
+        "name": "Pearl Delta Commercial Bank",
+        "bic": "PDCBCNGZXXX",
+        "city": "Guangzhou",
+        "country": "CN",
+        "code": "PDCB"
+      },
+      "intermediary_bank": null,
+      "remittance_info": "INV FMW-8802 steel brackets"
+    },
+    "ground_truth": {
+      "root_cause": "ACCOUNT_FORMAT_CHANGED",
+      "pattern_id": "P1",
+      "resolution_note": "Pearl Delta 15-digit migration again. Prefixed branch code 601 (601620177312045), resent, credited.",
+      "minutes_spent": 15,
+      "is_repeat": true
+    }
+  },
+  {
+    "case_id": "EXC-260901-01",
+    "created_at": "2026-09-01T10:25:00+08:00",
+    "status": "resolved",
+    "exception_type": "REJECTED",
+    "reason_code": "BE01",
+    "reason_text": "Inconsistent with end customer",
+    "counterparty_message": "Beneficiary name does not match the account holder name. Payment rejected.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7234705",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-09-01T09:10:00+08:00",
+      "value_date": "2026-09-01",
+      "amount": 563000.0,
+      "currency": "INR",
+      "debtor": {
+        "name": "Vantage Analytics Pte Ltd",
+        "account": "0721-017745-6",
+        "client_id": "vantage"
+      },
+      "creditor": {
+        "name": "Mysuru Software Services Pvt. Ltd.",
+        "account": "11861634276940",
+        "country": "IN"
+      },
+      "creditor_bank": {
+        "name": "Tungabhadra Co-operative Bank",
+        "bic": "TUNGINBBXXX",
+        "city": "Bengaluru",
+        "country": "IN",
+        "code": "TUNG"
+      },
+      "intermediary_bank": {
+        "name": "Coromandel Clearing Bank, Mumbai",
+        "bic": "CRMCINBBXXX"
+      },
+      "remittance_info": "INV MSS-0442 QA services"
+    },
+    "ground_truth": {
+      "root_cause": "NAME_LEGAL_SUFFIX_MISMATCH",
+      "pattern_id": "P3",
+      "resolution_note": "Tungabhadra strict name match again - 'Pvt. Ltd.' was rejected, it needs 'PRIVATE LIMITED'. Amended and resent.",
+      "minutes_spent": 20,
+      "is_repeat": true
+    }
+  },
+  {
+    "case_id": "EXC-260902-01",
+    "created_at": "2026-09-02T11:50:00+08:00",
+    "status": "resolved",
+    "exception_type": "REJECTED",
+    "reason_code": "RC01",
+    "reason_text": "Bank identifier incorrect",
+    "counterparty_message": "Bank identifier incorrect. Payment rejected by intermediary.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7093074",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-09-02T09:26:00+08:00",
+      "value_date": "2026-09-02",
+      "amount": 41000.0,
+      "currency": "USD",
+      "debtor": {
+        "name": "Tanjong Marine Services Pte Ltd",
+        "account": "0721-003390-4",
+        "client_id": "tanjong"
+      },
+      "creditor": {
+        "name": "Bergen Subsea Services AS",
+        "account": "NO9357313943399",
+        "country": "NO"
+      },
+      "creditor_bank": {
+        "name": "Nordkyst Bank",
+        "bic": "NKYSNOBBXXX",
+        "city": "Bergen",
+        "country": "NO",
+        "code": "NKYS"
+      },
+      "intermediary_bank": {
+        "name": "Atlantic Clearing Bank, New York",
+        "bic": "ACBKUS33XXX"
+      },
+      "remittance_info": "INV BSS-655 ROV hire"
+    },
+    "ground_truth": {
+      "root_cause": "CORRESPONDENT_ROUTING_CHANGED",
+      "pattern_id": "P6",
+      "resolution_note": "Nordkyst Bank moved its USD correspondent from Atlantic Clearing Bank New York (ACBKUS33) to Hudson Federal Bank New York (HFBKUS33) effective 1 Sep 2026. Updated the settlement instructions and resent via Hudson Federal.",
+      "minutes_spent": 65,
+      "is_repeat": false
+    }
+  },
+  {
+    "case_id": "EXC-260902-02",
+    "created_at": "2026-09-02T15:05:00+08:00",
+    "status": "resolved",
+    "exception_type": "REJECTED",
+    "reason_code": "BE01",
+    "reason_text": "Inconsistent with end customer",
+    "counterparty_message": "Beneficiary name does not match the account holder name. Payment rejected.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7144627",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-09-02T12:21:00+08:00",
+      "value_date": "2026-09-02",
+      "amount": 585000.0,
+      "currency": "PHP",
+      "debtor": {
+        "name": "Lotus Hospitality Group Pte Ltd",
+        "account": "0721-015532-9",
+        "client_id": "lotus"
+      },
+      "creditor": {
+        "name": "Illoilo Food Distributors Inc",
+        "account": "004555141985",
+        "country": "PH"
+      },
+      "creditor_bank": {
+        "name": "Manila Bay Savings Bank",
+        "bic": "MBSBPHMMXXX",
+        "city": "Manila",
+        "country": "PH",
+        "code": "MBSB"
+      },
+      "intermediary_bank": null,
+      "remittance_info": "INV IFD-2210 F&B supplies"
+    },
+    "ground_truth": {
+      "root_cause": "CLIENT_TYPO_IN_DETAILS",
+      "pattern_id": null,
+      "resolution_note": "The client misspelled the beneficiary ('Illoilo' instead of 'Iloilo'). Corrected the spelling and resent.",
+      "minutes_spent": 20,
+      "is_repeat": false
+    }
+  },
+  {
+    "case_id": "EXC-260903-01",
+    "created_at": "2026-09-03T16:30:00+08:00",
+    "status": "resolved",
+    "exception_type": "NON_RECEIPT_CLAIM",
+    "reason_code": null,
+    "reason_text": null,
+    "counterparty_message": "Client reports the beneficiary did not receive funds on the value date (2 Sep). Please investigate.",
+    "tracker": "Tracker: delivered to Golconda Commercial Bank 2 Sep 14:55 SGT - status: credit pending",
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7468466",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-09-02T14:52:00+08:00",
+      "value_date": "2026-09-02",
+      "amount": 2132000.0,
+      "currency": "INR",
+      "debtor": {
+        "name": "Vantage Analytics Pte Ltd",
+        "account": "0721-017745-6",
+        "client_id": "vantage"
+      },
+      "creditor": {
+        "name": "Srinivasa Infotech Private Limited",
+        "account": "502028746262824",
+        "country": "IN"
+      },
+      "creditor_bank": {
+        "name": "Golconda Commercial Bank",
+        "bic": "GOLCINHHXXX",
+        "city": "Hyderabad",
+        "country": "IN",
+        "code": "GOLC"
+      },
+      "intermediary_bank": {
+        "name": "Coromandel Clearing Bank, Mumbai",
+        "bic": "CRMCINBBXXX"
+      },
+      "remittance_info": "INV SI-8903 data engineering services Aug"
+    },
+    "ground_truth": {
+      "root_cause": "MISSED_CUTOFF_NEXT_DAY_CREDIT",
+      "pattern_id": "P2",
+      "resolution_note": "Submitted at 14:52 SGT, after Golconda's 14:30 SGT cut-off, so it credited the next day. Client informed; no trace required.",
+      "minutes_spent": 15,
+      "is_repeat": true
+    }
+  },
+  {
+    "case_id": "EXC-260904-01",
+    "created_at": "2026-09-04T10:40:00+08:00",
+    "status": "resolved",
+    "exception_type": "REJECTED",
+    "reason_code": "RR04",
+    "reason_text": "Regulatory reason",
+    "counterparty_message": "Payment rejected. Reason: RR04 Regulatory reason.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7682549",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-09-04T08:29:00+08:00",
+      "value_date": "2026-09-04",
+      "amount": 12300.0,
+      "currency": "USD",
+      "debtor": {
+        "name": "Sunrise Textiles Pte Ltd",
+        "account": "0721-004512-3",
+        "client_id": "sunrise"
+      },
+      "creditor": {
+        "name": "Tsuen Wan Garment Accessories Ltd",
+        "account": "310-977816-698",
+        "country": "HK"
+      },
+      "creditor_bank": {
+        "name": "Victoria Harbour Bank",
+        "bic": "VHBKHKHHXXX",
+        "city": "Hong Kong",
+        "country": "HK",
+        "code": "VHBK"
+      },
+      "intermediary_bank": {
+        "name": "Atlantic Clearing Bank, New York",
+        "bic": "ACBKUS33XXX"
+      },
+      "remittance_info": "Trade payment"
+    },
+    "ground_truth": {
+      "root_cause": "MISSING_INVOICE_REFERENCE",
+      "pattern_id": "P5",
+      "resolution_note": "Victoria Harbour Bank again needs an invoice number for trade payments above USD 10k. Added invoice TWG-7718 and resubmitted.",
+      "minutes_spent": 25,
+      "is_repeat": true
+    }
+  },
+  {
+    "case_id": "EXC-260907-01",
+    "created_at": "2026-09-07T09:30:00+08:00",
+    "status": "resolved",
+    "exception_type": "HELD",
+    "reason_code": "AM05",
+    "reason_text": "Duplication",
+    "counterparty_message": "Duplicate check: identical instruction received at 06:08 and 06:41 SGT (same beneficiary, amount and value date). Second instruction held.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7430880",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-09-07T07:41:00+08:00",
+      "value_date": "2026-09-07",
+      "amount": 26690.0,
+      "currency": "MYR",
+      "debtor": {
+        "name": "Arcadia Foods Pte Ltd",
+        "account": "0721-009877-1",
+        "client_id": "arcadia"
+      },
+      "creditor": {
+        "name": "Penang Spice Traders Sdn Bhd",
+        "account": "514075911467",
+        "country": "MY"
+      },
+      "creditor_bank": {
+        "name": "Straits Heritage Bank",
+        "bic": "STHBMYKPXXX",
+        "city": "Penang",
+        "country": "MY",
+        "code": "STHB"
+      },
+      "intermediary_bank": null,
+      "remittance_info": "INV PST-1219 spices"
+    },
+    "ground_truth": {
+      "root_cause": "CLIENT_ERP_DUPLICATE",
+      "pattern_id": "P7",
+      "resolution_note": "Arcadia ERP Monday resend again; cancelled the duplicate.",
+      "minutes_spent": 10,
+      "is_repeat": true
+    }
+  },
+  {
+    "case_id": "EXC-260907-02",
+    "created_at": "2026-09-07T13:15:00+08:00",
+    "status": "resolved",
+    "exception_type": "SCREENING_HOLD",
+    "reason_code": null,
+    "reason_text": null,
+    "counterparty_message": "Sanctions screening hit: beneficiary 'DESERT STAR GENERAL TRADING LLC' vs list entry 'DESERT STAR SHIPPING FZE' (match score 0.86). Payment held.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7087156",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-09-07T11:45:00+08:00",
+      "value_date": "2026-09-07",
+      "amount": 55750.0,
+      "currency": "USD",
+      "debtor": {
+        "name": "Blue Harbour Logistics Pte Ltd",
+        "account": "0721-013340-8",
+        "client_id": "blueharbour"
+      },
+      "creditor": {
+        "name": "Desert Star General Trading LLC",
+        "account": "AE070330087823519608760",
+        "country": "AE"
+      },
+      "creditor_bank": {
+        "name": "Desert Rose Bank",
+        "bic": "DRBKAEADXXX",
+        "city": "Dubai",
+        "country": "AE",
+        "code": "DRBK"
+      },
+      "intermediary_bank": null,
+      "remittance_info": "INV DSGT-1049 port handling charges"
+    },
+    "ground_truth": {
+      "root_cause": "SANCTIONS_KNOWN_FALSE_POSITIVE",
+      "pattern_id": "P4",
+      "resolution_note": "Recurring false positive; routed to Compliance with CLR-2026-0819-07 and it was released in two hours. Compliance asked us to always attach the prior clearance reference.",
+      "minutes_spent": 20,
+      "is_repeat": true
+    }
+  },
+  {
+    "case_id": "EXC-260908-01",
+    "created_at": "2026-09-08T11:20:00+08:00",
+    "status": "resolved",
+    "exception_type": "REJECTED",
+    "reason_code": "AC01",
+    "reason_text": "Incorrect account number",
+    "counterparty_message": "Beneficiary IBAN invalid (check digits failed). Payment rejected.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7306716",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-09-08T09:22:00+08:00",
+      "value_date": "2026-09-08",
+      "amount": 37890.0,
+      "currency": "EUR",
+      "debtor": {
+        "name": "Orchid Pharma Asia Pte Ltd",
+        "account": "0721-011208-2",
+        "client_id": "orchid"
+      },
+      "creditor": {
+        "name": "Rhein Chemie Vertrieb GmbH",
+        "account": "DE89370400569723049312",
+        "country": "DE"
+      },
+      "creditor_bank": {
+        "name": "Rheinland Handelsbank",
+        "bic": "RHHBDEFFXXX",
+        "city": "Frankfurt",
+        "country": "DE",
+        "code": "RHHB"
+      },
+      "intermediary_bank": null,
+      "remittance_info": "INV RCV-44120 reagents"
+    },
+    "ground_truth": {
+      "root_cause": "CLIENT_TYPO_IN_DETAILS",
+      "pattern_id": null,
+      "resolution_note": "The IBAN had two transposed digits so the check digits failed. The client supplied the correct IBAN; resent.",
+      "minutes_spent": 20,
+      "is_repeat": false
+    }
+  },
+  {
+    "case_id": "EXC-260908-02",
+    "created_at": "2026-09-08T15:10:00+08:00",
+    "status": "resolved",
+    "exception_type": "REJECTED",
+    "reason_code": "RC01",
+    "reason_text": "Bank identifier incorrect",
+    "counterparty_message": "Bank identifier incorrect. Payment rejected by intermediary.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7468913",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-09-08T13:51:00+08:00",
+      "value_date": "2026-09-08",
+      "amount": 28640.0,
+      "currency": "USD",
+      "debtor": {
+        "name": "Tanjong Marine Services Pte Ltd",
+        "account": "0721-003390-4",
+        "client_id": "tanjong"
+      },
+      "creditor": {
+        "name": "Stavanger Offshore Supply AS",
+        "account": "NO9377157437169",
+        "country": "NO"
+      },
+      "creditor_bank": {
+        "name": "Nordkyst Bank",
+        "bic": "NKYSNOBBXXX",
+        "city": "Bergen",
+        "country": "NO",
+        "code": "NKYS"
+      },
+      "intermediary_bank": {
+        "name": "Atlantic Clearing Bank, New York",
+        "bic": "ACBKUS33XXX"
+      },
+      "remittance_info": "INV SOS-218 deck equipment"
+    },
+    "ground_truth": {
+      "root_cause": "CORRESPONDENT_ROUTING_CHANGED",
+      "pattern_id": "P6",
+      "resolution_note": "Old correspondent used again - our settlement-instruction table was not updated for Nordkyst. Rerouted via Hudson Federal Bank New York (HFBKUS33) and raised a request to update static data.",
+      "minutes_spent": 30,
+      "is_repeat": true
+    }
+  },
+  {
+    "case_id": "EXC-260909-01",
+    "created_at": "2026-09-09T10:05:00+08:00",
+    "status": "resolved",
+    "exception_type": "REJECTED",
+    "reason_code": "AC01",
+    "reason_text": "Incorrect account number",
+    "counterparty_message": "Beneficiary account 620190047781 not found. Please verify and resend.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7912178",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-09-09T08:17:00+08:00",
+      "value_date": "2026-09-09",
+      "amount": 58910.0,
+      "currency": "USD",
+      "debtor": {
+        "name": "Sunrise Textiles Pte Ltd",
+        "account": "0721-004512-3",
+        "client_id": "sunrise"
+      },
+      "creditor": {
+        "name": "Zhongshan Weaving Co., Ltd.",
+        "account": "620190047781",
+        "country": "CN"
+      },
+      "creditor_bank": {
+        "name": "Pearl Delta Commercial Bank",
+        "bic": "PDCBCNGZXXX",
+        "city": "Guangzhou",
+        "country": "CN",
+        "code": "PDCB"
+      },
+      "intermediary_bank": null,
+      "remittance_info": "INV ZSW-3310 woven fabric"
+    },
+    "ground_truth": {
+      "root_cause": "ACCOUNT_FORMAT_CHANGED",
+      "pattern_id": "P1",
+      "resolution_note": "Pearl Delta account format change (12 to 15 digits, prefix 601). Fixed in five minutes.",
+      "minutes_spent": 8,
+      "is_repeat": true
+    }
+  },
+  {
+    "case_id": "EXC-260909-02",
+    "created_at": "2026-09-09T14:40:00+08:00",
+    "status": "resolved",
+    "exception_type": "NON_RECEIPT_CLAIM",
+    "reason_code": null,
+    "reason_text": null,
+    "counterparty_message": "Client reports the beneficiary did not receive funds on the value date (8 Sep). Please investigate.",
+    "tracker": "Tracker: last update from Albion Clearing Bank, London 8 Sep 17:40 SGT - status: pending (compliance check)",
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7888363",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-09-08T10:15:00+08:00",
+      "value_date": "2026-09-08",
+      "amount": 4690.0,
+      "currency": "GBP",
+      "debtor": {
+        "name": "Orchid Pharma Asia Pte Ltd",
+        "account": "0721-011208-2",
+        "client_id": "orchid"
+      },
+      "creditor": {
+        "name": "Albion Lab Equipment Ltd",
+        "account": "GB95THUB40115629567932",
+        "country": "GB"
+      },
+      "creditor_bank": {
+        "name": "Thames Union Bank",
+        "bic": "THUBGB2LXXX",
+        "city": "London",
+        "country": "GB",
+        "code": "THUB"
+      },
+      "intermediary_bank": {
+        "name": "Albion Clearing Bank, London",
+        "bic": "ALBNGB2LXXX"
+      },
+      "remittance_info": "INV ALE-7781 lab equipment"
+    },
+    "ground_truth": {
+      "root_cause": "INTERMEDIARY_DELAY",
+      "pattern_id": null,
+      "resolution_note": "Funds were held at the intermediary (Albion Clearing Bank) for a compliance check. Sent an MT199 trace; released the next day.",
+      "minutes_spent": 60,
+      "is_repeat": false
+    }
+  },
+  {
+    "case_id": "EXC-260910-01",
+    "created_at": "2026-09-10T11:35:00+08:00",
+    "status": "resolved",
+    "exception_type": "HELD",
+    "reason_code": "AM04",
+    "reason_text": "Insufficient funds",
+    "counterparty_message": "Payment held: AM04 Insufficient funds. Client debit account balance check: failed.",
+    "tracker": null,
+    "debtor_balance_check": "failed",
+    "payment": {
+      "payment_ref": "PAY-7922565",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-09-10T10:31:00+08:00",
+      "value_date": "2026-09-10",
+      "amount": 1458000.0,
+      "currency": "PHP",
+      "debtor": {
+        "name": "Lotus Hospitality Group Pte Ltd",
+        "account": "0721-015532-9",
+        "client_id": "lotus"
+      },
+      "creditor": {
+        "name": "Manila Harbour Laundry Services Inc",
+        "account": "004580709921",
+        "country": "PH"
+      },
+      "creditor_bank": {
+        "name": "Manila Bay Savings Bank",
+        "bic": "MBSBPHMMXXX",
+        "city": "Manila",
+        "country": "PH",
+        "code": "MBSB"
+      },
+      "intermediary_bank": null,
+      "remittance_info": "INV MHL-3301 laundry services"
+    },
+    "ground_truth": {
+      "root_cause": "CLIENT_INSUFFICIENT_FUNDS",
+      "pattern_id": null,
+      "resolution_note": "Lotus's own account lacked funds because their payroll went out the same morning. Held the payment; the client funded the account at 15:00 and we released it.",
+      "minutes_spent": 30,
+      "is_repeat": false
+    }
+  },
+  {
+    "case_id": "EXC-260910-02",
+    "created_at": "2026-09-10T12:40:00+08:00",
+    "status": "resolved",
+    "exception_type": "REJECTED",
+    "reason_code": "RR04",
+    "reason_text": "Regulatory reason",
+    "counterparty_message": "Payment rejected. Reason: RR04 Regulatory reason.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7163425",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-09-10T10:59:00+08:00",
+      "value_date": "2026-09-10",
+      "amount": 2594000.0,
+      "currency": "INR",
+      "debtor": {
+        "name": "Vantage Analytics Pte Ltd",
+        "account": "0721-017745-6",
+        "client_id": "vantage"
+      },
+      "creditor": {
+        "name": "Srinivasa Infotech Private Limited",
+        "account": "502064811308000",
+        "country": "IN"
+      },
+      "creditor_bank": {
+        "name": "Golconda Commercial Bank",
+        "bic": "GOLCINHHXXX",
+        "city": "Hyderabad",
+        "country": "IN",
+        "code": "GOLC"
+      },
+      "intermediary_bank": {
+        "name": "Coromandel Clearing Bank, Mumbai",
+        "bic": "CRMCINBBXXX"
+      },
+      "remittance_info": "Services"
+    },
+    "ground_truth": {
+      "root_cause": "PURPOSE_CODE_MISSING",
+      "pattern_id": null,
+      "resolution_note": "Inward INR remittances need an RBI purpose code and this one had none. Vantage confirmed P0802 (software services); resubmitted with the purpose code.",
+      "minutes_spent": 30,
+      "is_repeat": false
+    }
+  },
+  {
+    "case_id": "EXC-260911-01",
+    "created_at": "2026-09-11T10:15:00+08:00",
+    "status": "resolved",
+    "exception_type": "REJECTED",
+    "reason_code": "BE01",
+    "reason_text": "Inconsistent with end customer",
+    "counterparty_message": "Beneficiary name does not match the account holder name. Payment rejected.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7043608",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-09-11T07:51:00+08:00",
+      "value_date": "2026-09-11",
+      "amount": 1499000.0,
+      "currency": "INR",
+      "debtor": {
+        "name": "Orchid Pharma Asia Pte Ltd",
+        "account": "0721-011208-2",
+        "client_id": "orchid"
+      },
+      "creditor": {
+        "name": "Deccan Bio Labs Pvt Ltd",
+        "account": "11841589524446",
+        "country": "IN"
+      },
+      "creditor_bank": {
+        "name": "Tungabhadra Co-operative Bank",
+        "bic": "TUNGINBBXXX",
+        "city": "Bengaluru",
+        "country": "IN",
+        "code": "TUNG"
+      },
+      "intermediary_bank": {
+        "name": "Coromandel Clearing Bank, Mumbai",
+        "bic": "CRMCINBBXXX"
+      },
+      "remittance_info": "INV DBL-3361 lab consumables"
+    },
+    "ground_truth": {
+      "root_cause": "NAME_LEGAL_SUFFIX_MISMATCH",
+      "pattern_id": "P3",
+      "resolution_note": "The client used the abbreviated name for Deccan Bio Labs again. Amended to 'DECCAN BIO LABS PRIVATE LIMITED' and asked Orchid to update their beneficiary master data.",
+      "minutes_spent": 12,
+      "is_repeat": true
+    }
+  },
+  {
+    "case_id": "EXC-260911-02",
+    "created_at": "2026-09-11T16:00:00+08:00",
+    "status": "resolved",
+    "exception_type": "NON_RECEIPT_CLAIM",
+    "reason_code": null,
+    "reason_text": null,
+    "counterparty_message": "Client reports the beneficiary did not receive funds on the value date (10 Sep). Please investigate.",
+    "tracker": "Tracker: delivered to Golconda Commercial Bank 10 Sep 15:44 SGT - status: credit pending",
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7554276",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-09-10T15:40:00+08:00",
+      "value_date": "2026-09-10",
+      "amount": 1918000.0,
+      "currency": "INR",
+      "debtor": {
+        "name": "Orchid Pharma Asia Pte Ltd",
+        "account": "0721-011208-2",
+        "client_id": "orchid"
+      },
+      "creditor": {
+        "name": "Hyderabad Organics Private Limited",
+        "account": "502009997127309",
+        "country": "IN"
+      },
+      "creditor_bank": {
+        "name": "Golconda Commercial Bank",
+        "bic": "GOLCINHHXXX",
+        "city": "Hyderabad",
+        "country": "IN",
+        "code": "GOLC"
+      },
+      "intermediary_bank": {
+        "name": "Coromandel Clearing Bank, Mumbai",
+        "bic": "CRMCINBBXXX"
+      },
+      "remittance_info": "INV HO-5588 active ingredients"
+    },
+    "ground_truth": {
+      "root_cause": "MISSED_CUTOFF_NEXT_DAY_CREDIT",
+      "pattern_id": "P2",
+      "resolution_note": "After Golconda's cut-off again (submitted 15:40 SGT). Credited on 11 Sep morning.",
+      "minutes_spent": 10,
+      "is_repeat": true
+    }
+  },
+  {
+    "case_id": "EXC-260914-01",
+    "created_at": "2026-09-14T09:25:00+08:00",
+    "status": "resolved",
+    "exception_type": "HELD",
+    "reason_code": "AM05",
+    "reason_text": "Duplication",
+    "counterparty_message": "Duplicate check: identical instruction received at 06:11 and 06:45 SGT (same beneficiary, amount and value date). Second instruction held.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7460133",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-09-14T08:01:00+08:00",
+      "value_date": "2026-09-14",
+      "amount": 36570.0,
+      "currency": "USD",
+      "debtor": {
+        "name": "Arcadia Foods Pte Ltd",
+        "account": "0721-009877-1",
+        "client_id": "arcadia"
+      },
+      "creditor": {
+        "name": "Mekong Delta Seafood JSC",
+        "account": "700116479942",
+        "country": "VN"
+      },
+      "creditor_bank": {
+        "name": "Saigon Riverside Bank",
+        "bic": "SGRBVNVXXXX",
+        "city": "Ho Chi Minh City",
+        "country": "VN",
+        "code": "SGRB"
+      },
+      "intermediary_bank": null,
+      "remittance_info": "INV MDS-4521 frozen seafood"
+    },
+    "ground_truth": {
+      "root_cause": "CLIENT_ERP_DUPLICATE",
+      "pattern_id": "P7",
+      "resolution_note": "Arcadia Monday resend; cancelled. Arcadia IT says their scheduler fix goes live in October.",
+      "minutes_spent": 8,
+      "is_repeat": true
+    }
+  },
+  {
+    "case_id": "EXC-260914-02",
+    "created_at": "2026-09-14T12:30:00+08:00",
+    "status": "resolved",
+    "exception_type": "REJECTED",
+    "reason_code": "RC01",
+    "reason_text": "Bank identifier incorrect",
+    "counterparty_message": "Bank identifier THUBGB2X incorrect. Payment rejected.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7941810",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-09-14T10:42:00+08:00",
+      "value_date": "2026-09-14",
+      "amount": 17090.0,
+      "currency": "GBP",
+      "debtor": {
+        "name": "Blue Harbour Logistics Pte Ltd",
+        "account": "0721-013340-8",
+        "client_id": "blueharbour"
+      },
+      "creditor": {
+        "name": "Felixstowe Freight Ltd",
+        "account": "GB61THUB40112193345346",
+        "country": "GB"
+      },
+      "creditor_bank": {
+        "name": "Thames Union Bank",
+        "bic": "THUBGB2X",
+        "city": "London",
+        "country": "GB",
+        "code": "THUB"
+      },
+      "intermediary_bank": {
+        "name": "Albion Clearing Bank, London",
+        "bic": "ALBNGB2LXXX"
+      },
+      "remittance_info": "INV FFL-9902 haulage"
+    },
+    "ground_truth": {
+      "root_cause": "CLIENT_TYPO_IN_DETAILS",
+      "pattern_id": null,
+      "resolution_note": "Wrong location code in the BIC; corrected to THUBGB2L and resent.",
+      "minutes_spent": 15,
+      "is_repeat": false
+    }
+  },
+  {
+    "case_id": "EXC-260915-01",
+    "created_at": "2026-09-15T11:00:00+08:00",
+    "status": "resolved",
+    "exception_type": "REJECTED",
+    "reason_code": "RR04",
+    "reason_text": "Regulatory reason",
+    "counterparty_message": "Payment rejected. Reason: RR04 Regulatory reason.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7613079",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-09-15T10:22:00+08:00",
+      "value_date": "2026-09-15",
+      "amount": 16750.0,
+      "currency": "USD",
+      "debtor": {
+        "name": "Kestrel Components Pte Ltd",
+        "account": "0721-006621-5",
+        "client_id": "kestrel"
+      },
+      "creditor": {
+        "name": "Kowloon Circuit Supplies Ltd",
+        "account": "123-989121-792",
+        "country": "HK"
+      },
+      "creditor_bank": {
+        "name": "Victoria Harbour Bank",
+        "bic": "VHBKHKHHXXX",
+        "city": "Hong Kong",
+        "country": "HK",
+        "code": "VHBK"
+      },
+      "intermediary_bank": {
+        "name": "Atlantic Clearing Bank, New York",
+        "bic": "ACBKUS33XXX"
+      },
+      "remittance_info": "Components"
+    },
+    "ground_truth": {
+      "root_cause": "MISSING_INVOICE_REFERENCE",
+      "pattern_id": "P5",
+      "resolution_note": "Same Victoria Harbour invoice-number rule for trade payments over USD 10k. Added invoice KCS-56120 and resubmitted.",
+      "minutes_spent": 12,
+      "is_repeat": true
+    }
+  },
+  {
+    "case_id": "EXC-260915-02",
+    "created_at": "2026-09-15T15:45:00+08:00",
+    "status": "resolved",
+    "exception_type": "SCREENING_HOLD",
+    "reason_code": null,
+    "reason_text": null,
+    "counterparty_message": "Sanctions screening hit: beneficiary 'ORIENT STAR MARITIME CO' vs list entry 'ORIENT STAR MARINE LTD' (match score 0.91). Payment held.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7885903",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-09-15T13:08:00+08:00",
+      "value_date": "2026-09-15",
+      "amount": 56080.0,
+      "currency": "USD",
+      "debtor": {
+        "name": "Kestrel Components Pte Ltd",
+        "account": "0721-006621-5",
+        "client_id": "kestrel"
+      },
+      "creditor": {
+        "name": "Orient Star Maritime Co",
+        "account": "700101500364",
+        "country": "VN"
+      },
+      "creditor_bank": {
+        "name": "Saigon Riverside Bank",
+        "bic": "SGRBVNVXXXX",
+        "city": "Ho Chi Minh City",
+        "country": "VN",
+        "code": "SGRB"
+      },
+      "intermediary_bank": null,
+      "remittance_info": "INV OSM-117 freight"
+    },
+    "ground_truth": {
+      "root_cause": "SANCTIONS_POTENTIAL_MATCH",
+      "pattern_id": null,
+      "resolution_note": "New screening hit on a different entity (not Desert Star). Escalated to Compliance for full review; Compliance requested ownership documents and the payment stays held pending review.",
+      "minutes_spent": 40,
+      "is_repeat": false
+    }
+  },
+  {
+    "case_id": "EXC-260916-01",
+    "created_at": "2026-09-16T10:20:00+08:00",
+    "status": "resolved",
+    "exception_type": "NON_RECEIPT_CLAIM",
+    "reason_code": null,
+    "reason_text": null,
+    "counterparty_message": "Client reports the beneficiary did not receive funds on the value date (15 Sep). Please investigate.",
+    "tracker": "Tracker: last update from Coromandel Clearing Bank, Mumbai 15 Sep 10:31 SGT - status: pending",
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7187044",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-09-15T10:20:00+08:00",
+      "value_date": "2026-09-15",
+      "amount": 777000.0,
+      "currency": "INR",
+      "debtor": {
+        "name": "Vantage Analytics Pte Ltd",
+        "account": "0721-017745-6",
+        "client_id": "vantage"
+      },
+      "creditor": {
+        "name": "Srinivasa Infotech Private Limited",
+        "account": "502047719440597",
+        "country": "IN"
+      },
+      "creditor_bank": {
+        "name": "Golconda Commercial Bank",
+        "bic": "GOLCINHHXXX",
+        "city": "Hyderabad",
+        "country": "IN",
+        "code": "GOLC"
+      },
+      "intermediary_bank": {
+        "name": "Coromandel Clearing Bank, Mumbai",
+        "bic": "CRMCINBBXXX"
+      },
+      "remittance_info": "INV SI-8960 data engineering services"
+    },
+    "ground_truth": {
+      "root_cause": "INTERMEDIARY_DELAY",
+      "pattern_id": null,
+      "resolution_note": "Submitted at 10:20 SGT, well before Golconda's cut-off, so this was not a cut-off issue. Funds were stuck at the INR correspondent (Coromandel Clearing Bank) over a purpose-code query. Sent a trace; credited on 16 Sep afternoon.",
+      "minutes_spent": 55,
+      "is_repeat": false
+    }
+  },
+  {
+    "case_id": "EXC-260916-02",
+    "created_at": "2026-09-16T14:30:00+08:00",
+    "status": "resolved",
+    "exception_type": "SCREENING_HOLD",
+    "reason_code": null,
+    "reason_text": null,
+    "counterparty_message": "Sanctions screening hit: beneficiary 'DESERT STAR GENERAL TRADING LLC' vs list entry 'DESERT STAR SHIPPING FZE' (match score 0.86). Payment held.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7902925",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-09-16T13:27:00+08:00",
+      "value_date": "2026-09-16",
+      "amount": 44940.0,
+      "currency": "USD",
+      "debtor": {
+        "name": "Blue Harbour Logistics Pte Ltd",
+        "account": "0721-013340-8",
+        "client_id": "blueharbour"
+      },
+      "creditor": {
+        "name": "Desert Star General Trading LLC",
+        "account": "AE070332745180418842535",
+        "country": "AE"
+      },
+      "creditor_bank": {
+        "name": "Desert Rose Bank",
+        "bic": "DRBKAEADXXX",
+        "city": "Dubai",
+        "country": "AE",
+        "code": "DRBK"
+      },
+      "intermediary_bank": null,
+      "remittance_info": "INV DSGT-1088 port handling charges"
+    },
+    "ground_truth": {
+      "root_cause": "SANCTIONS_KNOWN_FALSE_POSITIVE",
+      "pattern_id": "P4",
+      "resolution_note": "Recurring Desert Star false positive. Routed to Compliance with CLR-2026-0819-07; released within the hour.",
+      "minutes_spent": 10,
+      "is_repeat": true
+    }
+  },
+  {
+    "case_id": "EXC-260917-01",
+    "created_at": "2026-09-17T11:10:00+08:00",
+    "status": "resolved",
+    "exception_type": "HELD",
+    "reason_code": "AM05",
+    "reason_text": "Duplication",
+    "counterparty_message": "Duplicate check: two instructions with the same beneficiary and amount received at 10:05 and 10:52 SGT. Second instruction held.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7185515",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-09-17T10:03:00+08:00",
+      "value_date": "2026-09-17",
+      "amount": 216000000.0,
+      "currency": "IDR",
+      "debtor": {
+        "name": "Lotus Hospitality Group Pte Ltd",
+        "account": "0721-015532-9",
+        "client_id": "lotus"
+      },
+      "creditor": {
+        "name": "PT Bali Villas Management",
+        "account": "1270527827757",
+        "country": "ID"
+      },
+      "creditor_bank": {
+        "name": "Nusantara Sentral Bank",
+        "bic": "NSBKIDJAXXX",
+        "city": "Jakarta",
+        "country": "ID",
+        "code": "NSBK"
+      },
+      "intermediary_bank": null,
+      "remittance_info": "Management fee instalment"
+    },
+    "ground_truth": {
+      "root_cause": "POSSIBLE_DUPLICATE_VERIFY",
+      "pattern_id": null,
+      "resolution_note": "Lotus confirmed the second payment was a genuine second instalment; released after confirmation.",
+      "minutes_spent": 15,
+      "is_repeat": false
+    }
+  },
+  {
+    "case_id": "EXC-260917-02",
+    "created_at": "2026-09-17T15:20:00+08:00",
+    "status": "resolved",
+    "exception_type": "REJECTED",
+    "reason_code": "AC01",
+    "reason_text": "Incorrect account number",
+    "counterparty_message": "Beneficiary account 620133905527 not found. Please verify and resend.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7112550",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-09-17T12:56:00+08:00",
+      "value_date": "2026-09-17",
+      "amount": 12460.0,
+      "currency": "USD",
+      "debtor": {
+        "name": "Blue Harbour Logistics Pte Ltd",
+        "account": "0721-013340-8",
+        "client_id": "blueharbour"
+      },
+      "creditor": {
+        "name": "Guangzhou Harbour Freight Agency Co., Ltd.",
+        "account": "620133905527",
+        "country": "CN"
+      },
+      "creditor_bank": {
+        "name": "Pearl Delta Commercial Bank",
+        "bic": "PDCBCNGZXXX",
+        "city": "Guangzhou",
+        "country": "CN",
+        "code": "PDCB"
+      },
+      "intermediary_bank": null,
+      "remittance_info": "INV GHF-7740 freight forwarding"
+    },
+    "ground_truth": {
+      "root_cause": "ACCOUNT_FORMAT_CHANGED",
+      "pattern_id": "P1",
+      "resolution_note": "Pearl Delta 12-to-15-digit issue (prefix 601). Fixed and resent.",
+      "minutes_spent": 6,
+      "is_repeat": true
+    }
+  },
+  {
+    "case_id": "EXC-260918-01",
+    "created_at": "2026-09-18T10:40:00+08:00",
+    "status": "resolved",
+    "exception_type": "REJECTED",
+    "reason_code": "RC01",
+    "reason_text": "Bank identifier incorrect",
+    "counterparty_message": "Bank identifier incorrect. Payment rejected by intermediary.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7464698",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-09-18T09:42:00+08:00",
+      "value_date": "2026-09-18",
+      "amount": 27610.0,
+      "currency": "USD",
+      "debtor": {
+        "name": "Tanjong Marine Services Pte Ltd",
+        "account": "0721-003390-4",
+        "client_id": "tanjong"
+      },
+      "creditor": {
+        "name": "Bergen Subsea Services AS",
+        "account": "NO9302065967658",
+        "country": "NO"
+      },
+      "creditor_bank": {
+        "name": "Nordkyst Bank",
+        "bic": "NKYSNOBBXXX",
+        "city": "Bergen",
+        "country": "NO",
+        "code": "NKYS"
+      },
+      "intermediary_bank": {
+        "name": "Atlantic Clearing Bank, New York",
+        "bic": "ACBKUS33XXX"
+      },
+      "remittance_info": "INV BSS-701 ROV hire"
+    },
+    "ground_truth": {
+      "root_cause": "CORRESPONDENT_ROUTING_CHANGED",
+      "pattern_id": "P6",
+      "resolution_note": "Static data still pointed to Atlantic Clearing Bank for Nordkyst. Rerouted via Hudson Federal Bank (HFBKUS33) and escalated the settlement-instruction update to the reference-data team again.",
+      "minutes_spent": 15,
+      "is_repeat": true
+    }
+  },
+  {
+    "case_id": "EXC-260921-01",
+    "created_at": "2026-09-21T09:35:00+08:00",
+    "status": "resolved",
+    "exception_type": "HELD",
+    "reason_code": "AM05",
+    "reason_text": "Duplication",
+    "counterparty_message": "Duplicate check: identical instruction received at 06:14 and 06:43 SGT (same beneficiary, amount and value date). Second instruction held.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7975065",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-09-21T08:19:00+08:00",
+      "value_date": "2026-09-21",
+      "amount": 38940.0,
+      "currency": "MYR",
+      "debtor": {
+        "name": "Arcadia Foods Pte Ltd",
+        "account": "0721-009877-1",
+        "client_id": "arcadia"
+      },
+      "creditor": {
+        "name": "Penang Spice Traders Sdn Bhd",
+        "account": "514077318639",
+        "country": "MY"
+      },
+      "creditor_bank": {
+        "name": "Straits Heritage Bank",
+        "bic": "STHBMYKPXXX",
+        "city": "Penang",
+        "country": "MY",
+        "code": "STHB"
+      },
+      "intermediary_bank": null,
+      "remittance_info": "INV PST-1260 spices"
+    },
+    "ground_truth": {
+      "root_cause": "CLIENT_ERP_DUPLICATE",
+      "pattern_id": "P7",
+      "resolution_note": "Monday ERP resend from Arcadia; cancelled.",
+      "minutes_spent": 5,
+      "is_repeat": true
+    }
+  },
+  {
+    "case_id": "EXC-260921-02",
+    "created_at": "2026-09-21T16:05:00+08:00",
+    "status": "resolved",
+    "exception_type": "RETURNED",
+    "reason_code": "AC04",
+    "reason_text": "Closed account number",
+    "counterparty_message": "Payment returned. Reason: AC04 Closed account number.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7076595",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-09-21T14:50:00+08:00",
+      "value_date": "2026-09-21",
+      "amount": 59540.0,
+      "currency": "USD",
+      "debtor": {
+        "name": "Kestrel Components Pte Ltd",
+        "account": "0721-006621-5",
+        "client_id": "kestrel"
+      },
+      "creditor": {
+        "name": "Hanoi Electronics Assembly JSC",
+        "account": "700171198909",
+        "country": "VN"
+      },
+      "creditor_bank": {
+        "name": "Saigon Riverside Bank",
+        "bic": "SGRBVNVXXXX",
+        "city": "Ho Chi Minh City",
+        "country": "VN",
+        "code": "SGRB"
+      },
+      "intermediary_bank": null,
+      "remittance_info": "INV HEA-5501 PCB assembly"
+    },
+    "ground_truth": {
+      "root_cause": "BENEFICIARY_ACCOUNT_CLOSED",
+      "pattern_id": null,
+      "resolution_note": "The beneficiary switched banks and closed this account. Funds returned; the client re-initiated to the new account.",
+      "minutes_spent": 25,
+      "is_repeat": false
+    }
+  },
+  {
+    "case_id": "EXC-260922-01",
+    "created_at": "2026-09-22T11:15:00+08:00",
+    "status": "resolved",
+    "exception_type": "NON_RECEIPT_CLAIM",
+    "reason_code": null,
+    "reason_text": null,
+    "counterparty_message": "Client reports the beneficiary did not receive funds on the value date (21 Sep). Please investigate.",
+    "tracker": "Tracker: delivered to Golconda Commercial Bank 21 Sep 15:18 SGT - status: credit pending",
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7682760",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-09-21T15:15:00+08:00",
+      "value_date": "2026-09-21",
+      "amount": 1959000.0,
+      "currency": "INR",
+      "debtor": {
+        "name": "Vantage Analytics Pte Ltd",
+        "account": "0721-017745-6",
+        "client_id": "vantage"
+      },
+      "creditor": {
+        "name": "Srinivasa Infotech Private Limited",
+        "account": "502056474258244",
+        "country": "IN"
+      },
+      "creditor_bank": {
+        "name": "Golconda Commercial Bank",
+        "bic": "GOLCINHHXXX",
+        "city": "Hyderabad",
+        "country": "IN",
+        "code": "GOLC"
+      },
+      "intermediary_bank": {
+        "name": "Coromandel Clearing Bank, Mumbai",
+        "bic": "CRMCINBBXXX"
+      },
+      "remittance_info": "INV SI-9012 data engineering services"
+    },
+    "ground_truth": {
+      "root_cause": "MISSED_CUTOFF_NEXT_DAY_CREDIT",
+      "pattern_id": "P2",
+      "resolution_note": "After the Golconda cut-off again; next-day credit confirmed with the bank.",
+      "minutes_spent": 8,
+      "is_repeat": true
+    }
+  },
+  {
+    "case_id": "EXC-260922-02",
+    "created_at": "2026-09-22T14:50:00+08:00",
+    "status": "resolved",
+    "exception_type": "REJECTED",
+    "reason_code": "AC01",
+    "reason_text": "Incorrect account number",
+    "counterparty_message": "Beneficiary account 5020112233445566 not found. Please verify and resend.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7214362",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-09-22T13:37:00+08:00",
+      "value_date": "2026-09-22",
+      "amount": 1889000.0,
+      "currency": "INR",
+      "debtor": {
+        "name": "Vantage Analytics Pte Ltd",
+        "account": "0721-017745-6",
+        "client_id": "vantage"
+      },
+      "creditor": {
+        "name": "Srinivasa Infotech Private Limited",
+        "account": "5020112233445566",
+        "country": "IN"
+      },
+      "creditor_bank": {
+        "name": "Golconda Commercial Bank",
+        "bic": "GOLCINHHXXX",
+        "city": "Hyderabad",
+        "country": "IN",
+        "code": "GOLC"
+      },
+      "intermediary_bank": {
+        "name": "Coromandel Clearing Bank, Mumbai",
+        "bic": "CRMCINBBXXX"
+      },
+      "remittance_info": "INV SI-9030 cloud migration"
+    },
+    "ground_truth": {
+      "root_cause": "CLIENT_TYPO_IN_DETAILS",
+      "pattern_id": null,
+      "resolution_note": "The client mistyped the account number (an extra digit - 16 instead of 15). Corrected and resent.",
+      "minutes_spent": 15,
+      "is_repeat": false
+    }
+  },
+  {
+    "case_id": "EXC-260923-01",
+    "created_at": "2026-09-23T10:30:00+08:00",
+    "status": "resolved",
+    "exception_type": "REJECTED",
+    "reason_code": "BE01",
+    "reason_text": "Inconsistent with end customer",
+    "counterparty_message": "Beneficiary name does not match the account holder name. Payment rejected.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7648091",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-09-23T08:27:00+08:00",
+      "value_date": "2026-09-23",
+      "amount": 1390000.0,
+      "currency": "INR",
+      "debtor": {
+        "name": "Vantage Analytics Pte Ltd",
+        "account": "0721-017745-6",
+        "client_id": "vantage"
+      },
+      "creditor": {
+        "name": "Mysuru Software Services Pvt Ltd",
+        "account": "11878325331009",
+        "country": "IN"
+      },
+      "creditor_bank": {
+        "name": "Tungabhadra Co-operative Bank",
+        "bic": "TUNGINBBXXX",
+        "city": "Bengaluru",
+        "country": "IN",
+        "code": "TUNG"
+      },
+      "intermediary_bank": {
+        "name": "Coromandel Clearing Bank, Mumbai",
+        "bic": "CRMCINBBXXX"
+      },
+      "remittance_info": "INV MSS-0470 QA services"
+    },
+    "ground_truth": {
+      "root_cause": "NAME_LEGAL_SUFFIX_MISMATCH",
+      "pattern_id": "P3",
+      "resolution_note": "Tungabhadra strict name match; amended to 'MYSURU SOFTWARE SERVICES PRIVATE LIMITED'.",
+      "minutes_spent": 6,
+      "is_repeat": true
+    }
+  },
+  {
+    "case_id": "EXC-260923-02",
+    "created_at": "2026-09-23T15:30:00+08:00",
+    "status": "resolved",
+    "exception_type": "REJECTED",
+    "reason_code": "RR04",
+    "reason_text": "Regulatory reason",
+    "counterparty_message": "Payment rejected. Reason: RR04 Regulatory reason.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7207819",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-09-23T14:01:00+08:00",
+      "value_date": "2026-09-23",
+      "amount": 11050.0,
+      "currency": "USD",
+      "debtor": {
+        "name": "Sunrise Textiles Pte Ltd",
+        "account": "0721-004512-3",
+        "client_id": "sunrise"
+      },
+      "creditor": {
+        "name": "Tsuen Wan Garment Accessories Ltd",
+        "account": "351-452480-877",
+        "country": "HK"
+      },
+      "creditor_bank": {
+        "name": "Victoria Harbour Bank",
+        "bic": "VHBKHKHHXXX",
+        "city": "Hong Kong",
+        "country": "HK",
+        "code": "VHBK"
+      },
+      "intermediary_bank": {
+        "name": "Atlantic Clearing Bank, New York",
+        "bic": "ACBKUS33XXX"
+      },
+      "remittance_info": "Trade settlement"
+    },
+    "ground_truth": {
+      "root_cause": "MISSING_INVOICE_REFERENCE",
+      "pattern_id": "P5",
+      "resolution_note": "Added invoice reference TWG-7802 for Victoria Harbour; accepted.",
+      "minutes_spent": 6,
+      "is_repeat": true
+    }
+  },
+  {
+    "case_id": "EXC-260924-01",
+    "created_at": "2026-09-24T11:40:00+08:00",
+    "status": "resolved",
+    "exception_type": "REJECTED",
+    "reason_code": "AC01",
+    "reason_text": "Incorrect account number",
+    "counterparty_message": "Beneficiary account 620144880917 not found. Please verify and resend.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7995077",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-09-24T08:57:00+08:00",
+      "value_date": "2026-09-24",
+      "amount": 16900.0,
+      "currency": "USD",
+      "debtor": {
+        "name": "Kestrel Components Pte Ltd",
+        "account": "0721-006621-5",
+        "client_id": "kestrel"
+      },
+      "creditor": {
+        "name": "Dongguan Precision Parts Co., Ltd.",
+        "account": "620144880917",
+        "country": "CN"
+      },
+      "creditor_bank": {
+        "name": "Pearl Delta Commercial Bank",
+        "bic": "PDCBCNGZXXX",
+        "city": "Guangzhou",
+        "country": "CN",
+        "code": "PDCB"
+      },
+      "intermediary_bank": null,
+      "remittance_info": "INV DPP-2309 machined housings"
+    },
+    "ground_truth": {
+      "root_cause": "ACCOUNT_FORMAT_CHANGED",
+      "pattern_id": "P1",
+      "resolution_note": "Prefixed 601 for the Pearl Delta format change; resent.",
+      "minutes_spent": 5,
+      "is_repeat": true
+    }
+  },
+  {
+    "case_id": "EXC-260925-01",
+    "created_at": "2026-09-25T10:10:00+08:00",
+    "status": "resolved",
+    "exception_type": "SCREENING_HOLD",
+    "reason_code": null,
+    "reason_text": null,
+    "counterparty_message": "Sanctions screening hit: beneficiary 'DESERT STAR GENERAL TRADING LLC' vs list entry 'DESERT STAR SHIPPING FZE' (match score 0.86). Payment held.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7096914",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-09-25T08:27:00+08:00",
+      "value_date": "2026-09-25",
+      "amount": 55730.0,
+      "currency": "USD",
+      "debtor": {
+        "name": "Blue Harbour Logistics Pte Ltd",
+        "account": "0721-013340-8",
+        "client_id": "blueharbour"
+      },
+      "creditor": {
+        "name": "Desert Star General Trading LLC",
+        "account": "AE070338582869691015952",
+        "country": "AE"
+      },
+      "creditor_bank": {
+        "name": "Desert Rose Bank",
+        "bic": "DRBKAEADXXX",
+        "city": "Dubai",
+        "country": "AE",
+        "code": "DRBK"
+      },
+      "intermediary_bank": null,
+      "remittance_info": "INV DSGT-1120 port handling charges"
+    },
+    "ground_truth": {
+      "root_cause": "SANCTIONS_KNOWN_FALSE_POSITIVE",
+      "pattern_id": "P4",
+      "resolution_note": "Recurring false positive; Compliance released it with CLR-2026-0819-07.",
+      "minutes_spent": 8,
+      "is_repeat": true
+    }
+  }
+]

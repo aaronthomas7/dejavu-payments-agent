@@ -1,0 +1,13 @@
+.env
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+data/dejavu.db
+data/local_memory.json
+data/llm_cache.json
+.DS_Store
+
+# team-only drafts (articles, posts, video script) - not part of the public repo
+content/

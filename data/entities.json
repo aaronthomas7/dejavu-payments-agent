@@ -1,0 +1,136 @@
+{
+  "clients": {
+    "sunrise": {
+      "name": "Sunrise Textiles Pte Ltd",
+      "account": "0721-004512-3",
+      "industry": "Textiles"
+    },
+    "arcadia": {
+      "name": "Arcadia Foods Pte Ltd",
+      "account": "0721-009877-1",
+      "industry": "Food distribution"
+    },
+    "blueharbour": {
+      "name": "Blue Harbour Logistics Pte Ltd",
+      "account": "0721-013340-8",
+      "industry": "Freight & logistics"
+    },
+    "kestrel": {
+      "name": "Kestrel Components Pte Ltd",
+      "account": "0721-006621-5",
+      "industry": "Electronics"
+    },
+    "orchid": {
+      "name": "Orchid Pharma Asia Pte Ltd",
+      "account": "0721-011208-2",
+      "industry": "Pharmaceuticals"
+    },
+    "lotus": {
+      "name": "Lotus Hospitality Group Pte Ltd",
+      "account": "0721-015532-9",
+      "industry": "Hospitality"
+    },
+    "tanjong": {
+      "name": "Tanjong Marine Services Pte Ltd",
+      "account": "0721-003390-4",
+      "industry": "Marine services"
+    },
+    "vantage": {
+      "name": "Vantage Analytics Pte Ltd",
+      "account": "0721-017745-6",
+      "industry": "IT services"
+    }
+  },
+  "banks": {
+    "PDCB": {
+      "name": "Pearl Delta Commercial Bank",
+      "bic": "PDCBCNGZXXX",
+      "city": "Guangzhou",
+      "country": "CN"
+    },
+    "GOLC": {
+      "name": "Golconda Commercial Bank",
+      "bic": "GOLCINHHXXX",
+      "city": "Hyderabad",
+      "country": "IN"
+    },
+    "TUNG": {
+      "name": "Tungabhadra Co-operative Bank",
+      "bic": "TUNGINBBXXX",
+      "city": "Bengaluru",
+      "country": "IN"
+    },
+    "DRBK": {
+      "name": "Desert Rose Bank",
+      "bic": "DRBKAEADXXX",
+      "city": "Dubai",
+      "country": "AE"
+    },
+    "VHBK": {
+      "name": "Victoria Harbour Bank",
+      "bic": "VHBKHKHHXXX",
+      "city": "Hong Kong",
+      "country": "HK"
+    },
+    "NKYS": {
+      "name": "Nordkyst Bank",
+      "bic": "NKYSNOBBXXX",
+      "city": "Bergen",
+      "country": "NO"
+    },
+    "NSBK": {
+      "name": "Nusantara Sentral Bank",
+      "bic": "NSBKIDJAXXX",
+      "city": "Jakarta",
+      "country": "ID"
+    },
+    "SGRB": {
+      "name": "Saigon Riverside Bank",
+      "bic": "SGRBVNVXXXX",
+      "city": "Ho Chi Minh City",
+      "country": "VN"
+    },
+    "MBSB": {
+      "name": "Manila Bay Savings Bank",
+      "bic": "MBSBPHMMXXX",
+      "city": "Manila",
+      "country": "PH"
+    },
+    "RHHB": {
+      "name": "Rheinland Handelsbank",
+      "bic": "RHHBDEFFXXX",
+      "city": "Frankfurt",
+      "country": "DE"
+    },
+    "THUB": {
+      "name": "Thames Union Bank",
+      "bic": "THUBGB2LXXX",
+      "city": "London",
+      "country": "GB"
+    },
+    "STHB": {
+      "name": "Straits Heritage Bank",
+      "bic": "STHBMYKPXXX",
+      "city": "Penang",
+      "country": "MY"
+    }
+  },
+  "intermediaries": {
+    "ACBK": {
+      "name": "Atlantic Clearing Bank, New York",
+      "bic": "ACBKUS33XXX"
+    },
+    "HFBK": {
+      "name": "Hudson Federal Bank, New York",
+      "bic": "HFBKUS33XXX"
+    },
+    "CRMC": {
+      "name": "Coromandel Clearing Bank, Mumbai",
+      "bic": "CRMCINBBXXX"
+    },
+    "ALBN": {
+      "name": "Albion Clearing Bank, London",
+      "bic": "ALBNGB2LXXX"
+    }
+  }
+}

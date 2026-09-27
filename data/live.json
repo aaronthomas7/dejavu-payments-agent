@@ -1,0 +1,464 @@
+[
+  {
+    "case_id": "EXC-260928-01",
+    "created_at": "2026-09-28T09:20:00+08:00",
+    "status": "open",
+    "exception_type": "HELD",
+    "reason_code": "AM05",
+    "reason_text": "Duplication",
+    "counterparty_message": "Duplicate check: identical instruction received at 06:13 and 06:46 SGT (same beneficiary, amount and value date). Second instruction held.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7038702",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-09-28T07:49:00+08:00",
+      "value_date": "2026-09-28",
+      "amount": 12420.0,
+      "currency": "USD",
+      "debtor": {
+        "name": "Arcadia Foods Pte Ltd",
+        "account": "0721-009877-1",
+        "client_id": "arcadia"
+      },
+      "creditor": {
+        "name": "Mekong Delta Seafood JSC",
+        "account": "700177987093",
+        "country": "VN"
+      },
+      "creditor_bank": {
+        "name": "Saigon Riverside Bank",
+        "bic": "SGRBVNVXXXX",
+        "city": "Ho Chi Minh City",
+        "country": "VN",
+        "code": "SGRB"
+      },
+      "intermediary_bank": null,
+      "remittance_info": "INV MDS-4603 frozen seafood"
+    },
+    "ground_truth": {
+      "root_cause": "CLIENT_ERP_DUPLICATE",
+      "pattern_id": "P7",
+      "resolution_note": "Arcadia's ERP re-sent the Monday file again. Cancelled the duplicate and pinged Arcadia IT.",
+      "minutes_spent": null,
+      "is_repeat": true
+    }
+  },
+  {
+    "case_id": "EXC-260928-02",
+    "created_at": "2026-09-28T10:05:00+08:00",
+    "status": "open",
+    "exception_type": "REJECTED",
+    "reason_code": "AC01",
+    "reason_text": "Incorrect account number",
+    "counterparty_message": "Beneficiary account 620152286604 not found. Please verify and resend.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7369508",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-09-28T08:28:00+08:00",
+      "value_date": "2026-09-28",
+      "amount": 38600.0,
+      "currency": "USD",
+      "debtor": {
+        "name": "Orchid Pharma Asia Pte Ltd",
+        "account": "0721-011208-2",
+        "client_id": "orchid"
+      },
+      "creditor": {
+        "name": "Guangzhou Hengtai Chemical Co., Ltd.",
+        "account": "620152286604",
+        "country": "CN"
+      },
+      "creditor_bank": {
+        "name": "Pearl Delta Commercial Bank",
+        "bic": "PDCBCNGZXXX",
+        "city": "Guangzhou",
+        "country": "CN",
+        "code": "PDCB"
+      },
+      "intermediary_bank": null,
+      "remittance_info": "INV GHC-1187 excipients"
+    },
+    "ground_truth": {
+      "root_cause": "ACCOUNT_FORMAT_CHANGED",
+      "pattern_id": "P1",
+      "resolution_note": "Pearl Delta 15-digit account format - prefixed branch code 601 and resent.",
+      "minutes_spent": null,
+      "is_repeat": true
+    }
+  },
+  {
+    "case_id": "EXC-260928-03",
+    "created_at": "2026-09-28T10:40:00+08:00",
+    "status": "open",
+    "exception_type": "NON_RECEIPT_CLAIM",
+    "reason_code": null,
+    "reason_text": null,
+    "counterparty_message": "Client reports the beneficiary did not receive funds on the value date (Fri 25 Sep). Please investigate.",
+    "tracker": "Tracker: delivered to Golconda Commercial Bank 25 Sep 15:24 SGT - status: credit pending",
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7811881",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-09-25T15:20:00+08:00",
+      "value_date": "2026-09-25",
+      "amount": 748000.0,
+      "currency": "INR",
+      "debtor": {
+        "name": "Orchid Pharma Asia Pte Ltd",
+        "account": "0721-011208-2",
+        "client_id": "orchid"
+      },
+      "creditor": {
+        "name": "Hyderabad Organics Private Limited",
+        "account": "502086443864063",
+        "country": "IN"
+      },
+      "creditor_bank": {
+        "name": "Golconda Commercial Bank",
+        "bic": "GOLCINHHXXX",
+        "city": "Hyderabad",
+        "country": "IN",
+        "code": "GOLC"
+      },
+      "intermediary_bank": {
+        "name": "Coromandel Clearing Bank, Mumbai",
+        "bic": "CRMCINBBXXX"
+      },
+      "remittance_info": "INV HO-5671 active ingredients"
+    },
+    "ground_truth": {
+      "root_cause": "MISSED_CUTOFF_NEXT_DAY_CREDIT",
+      "pattern_id": "P2",
+      "resolution_note": "Arrived after Golconda's 14:30 SGT cut-off on Friday, so it credits on Monday morning. Informed Orchid; no trace needed.",
+      "minutes_spent": null,
+      "is_repeat": true
+    }
+  },
+  {
+    "case_id": "EXC-260928-04",
+    "created_at": "2026-09-28T11:30:00+08:00",
+    "status": "open",
+    "exception_type": "SCREENING_HOLD",
+    "reason_code": null,
+    "reason_text": null,
+    "counterparty_message": "Sanctions screening hit: beneficiary 'DESERT STAR GENERAL TRADING LLC' vs list entry 'DESERT STAR SHIPPING FZE' (match score 0.86). Payment held.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7597100",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-09-28T09:56:00+08:00",
+      "value_date": "2026-09-28",
+      "amount": 8660.0,
+      "currency": "USD",
+      "debtor": {
+        "name": "Blue Harbour Logistics Pte Ltd",
+        "account": "0721-013340-8",
+        "client_id": "blueharbour"
+      },
+      "creditor": {
+        "name": "Desert Star General Trading LLC",
+        "account": "AE070336779927207358898",
+        "country": "AE"
+      },
+      "creditor_bank": {
+        "name": "Desert Rose Bank",
+        "bic": "DRBKAEADXXX",
+        "city": "Dubai",
+        "country": "AE",
+        "code": "DRBK"
+      },
+      "intermediary_bank": null,
+      "remittance_info": "INV DSGT-1149 port handling charges"
+    },
+    "ground_truth": {
+      "root_cause": "SANCTIONS_KNOWN_FALSE_POSITIVE",
+      "pattern_id": "P4",
+      "resolution_note": "Known false positive. Routed to Compliance with clearance CLR-2026-0819-07; Compliance released it.",
+      "minutes_spent": null,
+      "is_repeat": true
+    }
+  },
+  {
+    "case_id": "EXC-260928-05",
+    "created_at": "2026-09-28T14:10:00+08:00",
+    "status": "open",
+    "exception_type": "REJECTED",
+    "reason_code": "RC01",
+    "reason_text": "Bank identifier incorrect",
+    "counterparty_message": "Bank identifier incorrect. Payment rejected by intermediary.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7256690",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-09-28T11:24:00+08:00",
+      "value_date": "2026-09-28",
+      "amount": 59680.0,
+      "currency": "USD",
+      "debtor": {
+        "name": "Tanjong Marine Services Pte Ltd",
+        "account": "0721-003390-4",
+        "client_id": "tanjong"
+      },
+      "creditor": {
+        "name": "Stavanger Offshore Supply AS",
+        "account": "NO9396416244375",
+        "country": "NO"
+      },
+      "creditor_bank": {
+        "name": "Nordkyst Bank",
+        "bic": "NKYSNOBBXXX",
+        "city": "Bergen",
+        "country": "NO",
+        "code": "NKYS"
+      },
+      "intermediary_bank": {
+        "name": "Atlantic Clearing Bank, New York",
+        "bic": "ACBKUS33XXX"
+      },
+      "remittance_info": "INV SOS-240 deck equipment"
+    },
+    "ground_truth": {
+      "root_cause": "CORRESPONDENT_ROUTING_CHANGED",
+      "pattern_id": "P6",
+      "resolution_note": "Nordkyst's USD correspondent is Hudson Federal Bank (HFBKUS33) since 1 Sep. Rerouted and resent.",
+      "minutes_spent": null,
+      "is_repeat": true
+    }
+  },
+  {
+    "case_id": "EXC-260928-06",
+    "created_at": "2026-09-28T16:20:00+08:00",
+    "status": "open",
+    "exception_type": "REJECTED",
+    "reason_code": "AC01",
+    "reason_text": "Incorrect account number",
+    "counterparty_message": "Beneficiary IBAN invalid (check digits failed). Payment rejected.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7209910",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-09-28T14:38:00+08:00",
+      "value_date": "2026-09-28",
+      "amount": 31710.0,
+      "currency": "EUR",
+      "debtor": {
+        "name": "Kestrel Components Pte Ltd",
+        "account": "0721-006621-5",
+        "client_id": "kestrel"
+      },
+      "creditor": {
+        "name": "Rhein Elektronik Handels GmbH",
+        "account": "DE89370400930669791702",
+        "country": "DE"
+      },
+      "creditor_bank": {
+        "name": "Rheinland Handelsbank",
+        "bic": "RHHBDEFFXXX",
+        "city": "Frankfurt",
+        "country": "DE",
+        "code": "RHHB"
+      },
+      "intermediary_bank": null,
+      "remittance_info": "INV REH-2210 connectors"
+    },
+    "ground_truth": {
+      "root_cause": "CLIENT_TYPO_IN_DETAILS",
+      "pattern_id": null,
+      "resolution_note": "Typo in the IBAN from the client. Asked Kestrel for the correct IBAN.",
+      "minutes_spent": null,
+      "is_repeat": false
+    }
+  },
+  {
+    "case_id": "EXC-260929-01",
+    "created_at": "2026-09-29T09:50:00+08:00",
+    "status": "open",
+    "exception_type": "HELD",
+    "reason_code": "AM04",
+    "reason_text": "Insufficient funds",
+    "counterparty_message": "Payment held: AM04 Insufficient funds on the IDR settlement account. Client debit account balance check: passed.",
+    "tracker": null,
+    "debtor_balance_check": "passed",
+    "payment": {
+      "payment_ref": "PAY-7832433",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-09-29T08:25:00+08:00",
+      "value_date": "2026-09-29",
+      "amount": 995000000.0,
+      "currency": "IDR",
+      "debtor": {
+        "name": "Lotus Hospitality Group Pte Ltd",
+        "account": "0721-015532-9",
+        "client_id": "lotus"
+      },
+      "creditor": {
+        "name": "PT Bali Villas Management",
+        "account": "1270529858544",
+        "country": "ID"
+      },
+      "creditor_bank": {
+        "name": "Nusantara Sentral Bank",
+        "bic": "NSBKIDJAXXX",
+        "city": "Jakarta",
+        "country": "ID",
+        "code": "NSBK"
+      },
+      "intermediary_bank": null,
+      "remittance_info": "Villa lease Oct"
+    },
+    "ground_truth": {
+      "root_cause": "NOSTRO_FUNDING_SHORTFALL",
+      "pattern_id": "P8",
+      "resolution_note": "Month-end again - IDR nostro short. Asked Treasury for a top-up, will release after funding.",
+      "minutes_spent": null,
+      "is_repeat": true
+    }
+  },
+  {
+    "case_id": "EXC-260929-02",
+    "created_at": "2026-09-29T11:15:00+08:00",
+    "status": "open",
+    "exception_type": "REJECTED",
+    "reason_code": "BE01",
+    "reason_text": "Inconsistent with end customer",
+    "counterparty_message": "Beneficiary name does not match the account holder name. Payment rejected.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7663816",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-09-29T09:38:00+08:00",
+      "value_date": "2026-09-29",
+      "amount": 1511000.0,
+      "currency": "INR",
+      "debtor": {
+        "name": "Arcadia Foods Pte Ltd",
+        "account": "0721-009877-1",
+        "client_id": "arcadia"
+      },
+      "creditor": {
+        "name": "Coorg Coffee Exports Pvt Ltd",
+        "account": "11845949089012",
+        "country": "IN"
+      },
+      "creditor_bank": {
+        "name": "Tungabhadra Co-operative Bank",
+        "bic": "TUNGINBBXXX",
+        "city": "Bengaluru",
+        "country": "IN",
+        "code": "TUNG"
+      },
+      "intermediary_bank": {
+        "name": "Coromandel Clearing Bank, Mumbai",
+        "bic": "CRMCINBBXXX"
+      },
+      "remittance_info": "INV CCE-0319 green coffee beans"
+    },
+    "ground_truth": {
+      "root_cause": "NAME_LEGAL_SUFFIX_MISMATCH",
+      "pattern_id": "P3",
+      "resolution_note": "Tungabhadra exact name matching - amended to 'COORG COFFEE EXPORTS PRIVATE LIMITED'.",
+      "minutes_spent": null,
+      "is_repeat": true
+    }
+  },
+  {
+    "case_id": "EXC-260929-03",
+    "created_at": "2026-09-29T13:40:00+08:00",
+    "status": "open",
+    "exception_type": "SCREENING_HOLD",
+    "reason_code": null,
+    "reason_text": null,
+    "counterparty_message": "Sanctions screening hit: beneficiary 'RED SEA STAR LOGISTICS LLC' vs list entry 'RED SEA STAR SHIPPING CO' (match score 0.89). Payment held.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7958490",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-09-29T11:20:00+08:00",
+      "value_date": "2026-09-29",
+      "amount": 13110.0,
+      "currency": "USD",
+      "debtor": {
+        "name": "Blue Harbour Logistics Pte Ltd",
+        "account": "0721-013340-8",
+        "client_id": "blueharbour"
+      },
+      "creditor": {
+        "name": "Red Sea Star Logistics LLC",
+        "account": "AE070333517275027509525",
+        "country": "AE"
+      },
+      "creditor_bank": {
+        "name": "Desert Rose Bank",
+        "bic": "DRBKAEADXXX",
+        "city": "Dubai",
+        "country": "AE",
+        "code": "DRBK"
+      },
+      "intermediary_bank": null,
+      "remittance_info": "INV RSSL-044 container haulage"
+    },
+    "ground_truth": {
+      "root_cause": "SANCTIONS_POTENTIAL_MATCH",
+      "pattern_id": null,
+      "resolution_note": "New beneficiary, new hit - not the Desert Star false positive. Escalated to Compliance for a full review.",
+      "minutes_spent": null,
+      "is_repeat": false
+    }
+  },
+  {
+    "case_id": "EXC-260929-04",
+    "created_at": "2026-09-29T15:05:00+08:00",
+    "status": "open",
+    "exception_type": "REJECTED",
+    "reason_code": "RR04",
+    "reason_text": "Regulatory reason",
+    "counterparty_message": "Payment rejected. Reason: RR04 Regulatory reason.",
+    "tracker": null,
+    "debtor_balance_check": null,
+    "payment": {
+      "payment_ref": "PAY-7068563",
+      "channel": "SWIFT pacs.008 (ISO 20022)",
+      "submitted_at": "2026-09-29T13:27:00+08:00",
+      "value_date": "2026-09-29",
+      "amount": 13400.0,
+      "currency": "USD",
+      "debtor": {
+        "name": "Kestrel Components Pte Ltd",
+        "account": "0721-006621-5",
+        "client_id": "kestrel"
+      },
+      "creditor": {
+        "name": "Kowloon Circuit Supplies Ltd",
+        "account": "933-293486-462",
+        "country": "HK"
+      },
+      "creditor_bank": {
+        "name": "Victoria Harbour Bank",
+        "bic": "VHBKHKHHXXX",
+        "city": "Hong Kong",
+        "country": "HK",
+        "code": "VHBK"
+      },
+      "intermediary_bank": {
+        "name": "Atlantic Clearing Bank, New York",
+        "bic": "ACBKUS33XXX"
+      },
+      "remittance_info": "Components Sep"
+    },
+    "ground_truth": {
+      "root_cause": "MISSING_INVOICE_REFERENCE",
+      "pattern_id": "P5",
+      "resolution_note": "Victoria Harbour invoice-number rule; asked Kestrel for the invoice number and resubmitted.",
+      "minutes_spent": null,
+      "is_repeat": true
+    }
+  }
+]
