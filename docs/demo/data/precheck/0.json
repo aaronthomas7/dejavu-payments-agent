@@ -1,0 +1,108 @@
+{
+ "risk_level": "high",
+ "summary": "The pending INR 2,150,000.00 payment from Orchid Pharma Asia Pte Ltd to Hyderabad Organics Private Limited faces potential delays and rejections due to strict cut-off times at Golconda Commercial Bank, beneficiary name discrepancies, and missing RBI purpose codes.",
+ "warnings": [
+  {
+   "title": "Missed Cut-off Time",
+   "detail": "The payment must be submitted before the 12:00 IST (14:30 SGT) cut-off at Golconda Commercial Bank to avoid next-day credit. The planned submission at 15:10 SGT will trigger a delay.",
+   "severity": "high",
+   "fix": "Reschedule the submission to before 14:30 SGT."
+  },
+  {
+   "title": "Beneficiary Name Mismatch",
+   "detail": "Past rejections for this client involved legal suffix discrepancies, as clearing entities maintain a strict policy of rejecting payments that do not feature the precise legal suffix of the beneficiary.",
+   "severity": "medium",
+   "fix": "Ensure the beneficiary name exactly matches the registered legal name of Hyderabad Organics Private Limited."
+  },
+  {
+   "title": "Missing Purpose Code",
+   "detail": "Missing RBI purpose codes have caused rejections for INR payments routed through the intermediary.",
+   "severity": "medium",
+   "fix": "Ensure the RBI purpose code is explicitly included in the payment instruction."
+  }
+ ],
+ "evidence": [
+  {
+   "id": "5ce26189-d552-46a5-8486-9a0e90917dec",
+   "text": "Payment exception EXC-260910-02 for Vantage Analytics Pte Ltd involving an INR 2,594,000.00 transfer to Srinivasa Infotech Private Limited at Golconda Commercial Bank was rejected on 2026-09-10 due to a missing RBI purpose code.",
+   "type": "observation",
+   "occurred_start": "2026-09-10T02:59:00+00:00",
+   "occurred_end": "2026-09-10T04:40:00+00:00",
+   "context": null
+  },
+  {
+   "id": "718bbaf8-3c5e-4d33-ba5c-52004904e0c4",
+   "text": "Payment exception EXC-260923-01 for INR 1,390,000.00 from Vantage Analytics Pte Ltd to Mysuru Software Services Pvt Ltd at Tungabhadra Co-operative Bank was rejected on 2026-09-23 due to a beneficiary name mismatch.",
+   "type": "observation",
+   "occurred_start": "2026-09-23T00:27:00+00:00",
+   "occurred_end": "2026-09-23T02:30:00+00:00",
+   "context": null
+  },
+  {
+   "id": "992bca3b-b31c-4787-8626-714925f7c062",
+   "text": "Payment exception EXC-260828-01 occurred on 2026-08-28 due to a NOSTRO_FUNDING_SHORTFALL in the IDR nostro account at Nusantara Sentral Bank, which was caused by month-end outflows.",
+   "type": "observation",
+   "occurred_start": "2026-08-28T02:05:00.010000+00:00",
+   "occurred_end": "2026-08-28T02:05:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "cd94c415-09de-4406-b97e-2e7923472ec7",
+   "text": "Payment EXC-260911-01 was resolved by amending the beneficiary name to 'DECCAN BIO LABS PRIVATE LIMITED' and requesting the client to update their beneficiary master data.",
+   "type": "observation",
+   "occurred_start": "2026-09-11T02:15:00.020000+00:00",
+   "occurred_end": "2026-09-11T02:15:00.020000+00:00",
+   "context": null
+  },
+  {
+   "id": "5187c3e2-50a7-4055-8d30-4f8fd0c92e31",
+   "text": "Payment exception EXC-260826-02 was returned by MBSB with reason code AC04 (Closed account number).",
+   "type": "observation",
+   "occurred_start": "2026-08-26T08:20:00.010000+00:00",
+   "occurred_end": "2026-08-26T08:20:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "cd35f01f-35bb-4e8d-a520-b0f815939f7b",
+   "text": "Payment exception EXC-260831-02 was resolved by a Treasury top-up requested at 11:30 SGT and released at 14:05 SGT on 2026-08-31.",
+   "type": "observation",
+   "occurred_start": "2026-08-31T03:30:00.010000+00:00",
+   "occurred_end": "2026-08-31T06:05:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "a4f8b41b-cea6-457c-b7ee-ffb7f12cab90",
+   "text": "Orchid Pharma Asia Pte Ltd submitted an INR 1,975,000.00 payment to Hyderabad Organics Private Limited on 2026-08-26 via Coromandel Clearing Bank to Golconda Commercial Bank.",
+   "type": "observation",
+   "occurred_start": "2026-08-26T08:05:00+00:00",
+   "occurred_end": "2026-08-26T08:05:00+00:00",
+   "context": null
+  },
+  {
+   "id": "bb86ddb7-d2af-4c8c-95bd-626b699e10ee",
+   "text": "Orchid Pharma Asia Pte Ltd submitted an INR 1,918,000.00 payment to Hyderabad Organics Private Limited on 2026-09-10 via Coromandel Clearing Bank to Golconda Commercial Bank.",
+   "type": "observation",
+   "occurred_start": "2026-09-10T07:40:00+00:00",
+   "occurred_end": "2026-09-11T08:00:00+00:00",
+   "context": null
+  }
+ ],
+ "directives": [
+  {
+   "id": "9646ff2b-0a35-41fc-bdd7-a6a1a4d5b787",
+   "name": "Sanctions holds are human-only",
+   "content": "Never recommend releasing, auto-approving or bypassing a payment held by sanctions screening, even if the beneficiary was cleared before. Always route sanctions hits to the Compliance team for human review; a prior clearance reference may be cited only as supporting context."
+  },
+  {
+   "id": "6d8a66af-a0f9-46e0-8dd1-fd88b0ba9da7",
+   "name": "Mask account numbers",
+   "content": "Never write a full bank account number or IBAN in an answer. Show only the last 4 characters, e.g. ****0913."
+  },
+  {
+   "id": "b00baa59-a49d-49db-8bb1-18e51bcea4eb",
+   "name": "Cite evidence",
+   "content": "When you state a pattern, cite the dates or case IDs of the past exceptions it is based on. If memory has no relevant evidence, say so explicitly instead of guessing."
+  }
+ ],
+ "latency_ms": 11085
+}

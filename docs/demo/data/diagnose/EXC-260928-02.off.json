@@ -1,0 +1,20 @@
+{
+ "case_id": "EXC-260928-02",
+ "used_memory": false,
+ "root_cause": "CLIENT_TYPO_IN_DETAILS",
+ "root_cause_label": "Client keyed wrong details",
+ "confidence": 0.55,
+ "reasoning": "The SWIFT reject code AC01 indicates the beneficiary account number could not be located. The account number length (12 digits) matches the bank's format, so a format change is unlikely. The most plausible explanation is a one‑off data entry error in the account number provided by the client.",
+ "recommended_action": "Ask the client to confirm the beneficiary account number with Guangzhou Hengtai Chemical Co., Ltd. and resend the payment with the corrected details.",
+ "draft_message": "Dear Orchid Pharma Asia,\n\nOur system could not locate the beneficiary account ending in 6604 at Pearl Delta Commercial Bank. Please verify the account number with Guangzhou Hengtai Chemical Co., Ltd. and resend the payment.\n\nThank you.",
+ "prevention_tip": "Implement a validation check against the beneficiary bank's account number format before submission.",
+ "evidence": [],
+ "recalled": [],
+ "requires_human_approval": false,
+ "auto_fix_eligible": false,
+ "guardrail_notes": [],
+ "model": "openai/gpt-oss-120b",
+ "latency_ms": 1099,
+ "degraded": false,
+ "warnings": []
+}

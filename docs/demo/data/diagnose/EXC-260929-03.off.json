@@ -1,0 +1,22 @@
+{
+ "case_id": "EXC-260929-03",
+ "used_memory": false,
+ "root_cause": "SANCTIONS_POTENTIAL_MATCH",
+ "root_cause_label": "Potential sanctions match",
+ "confidence": 0.55,
+ "reasoning": "The payment triggered a sanctions screening hold because the beneficiary name closely matches a listed entity (score 0.89). No prior clearance as a false positive is indicated, so it must be treated as a potential match. This requires compliance to review the hit before release. The other details (amount, format, cut‑off) are unrelated to the hold.",
+ "recommended_action": "Escalate the case to the Sanctions Compliance team for a full review of the screening hit and obtain a decision before releasing the payment.",
+ "draft_message": "Dear Blue Harbour Logistics,\\n\\nWe wanted to let you know that your payment of USD 13,110.00 to Red Sea Star Logistics LLC is currently on hold due to a sanctions screening match. Our compliance team is reviewing the hit and will update you as soon as possible. Thank you for your patience.\\n\\nBest regards,\\nPayments Operations",
+ "prevention_tip": "Verify the exact beneficiary name against sanctions lists before submitting payments to avoid future holds.",
+ "evidence": [],
+ "recalled": [],
+ "requires_human_approval": true,
+ "auto_fix_eligible": false,
+ "guardrail_notes": [
+  "Sanctions rule: DejaVu never releases a screening hold. Routed to Compliance for a human decision."
+ ],
+ "model": "openai/gpt-oss-120b",
+ "latency_ms": 1803,
+ "degraded": false,
+ "warnings": []
+}

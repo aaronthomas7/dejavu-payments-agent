@@ -1,0 +1,20 @@
+{
+ "case_id": "EXC-260929-02",
+ "used_memory": false,
+ "root_cause": "NAME_LEGAL_SUFFIX_MISMATCH",
+ "root_cause_label": "Name must match registered legal name",
+ "confidence": 0.55,
+ "reasoning": "The BE01 reject code indicates the beneficiary name on the payment does not match the account holder name. The bank is known to enforce strict name matching and often rejects abbreviated suffixes like \"Pvt Ltd\". The provided name \"Coorg Coffee Exports Pvt Ltd\" likely differs from the exact legal name on file, causing the reject.",
+ "recommended_action": "Contact the client to verify the exact legal name of Coorg Coffee Exports as registered with Tungabhadra Co-operative Bank and resend the payment with the corrected name.",
+ "draft_message": "Dear Arcadia Foods, your recent payment of INR 1,511,000 to Coorg Coffee Exports was rejected because the beneficiary name does not exactly match the account holder name on file (account ending 9012). Please confirm the full legal name as per the bank records and resend the payment.",
+ "prevention_tip": "Always use the beneficiary's full legal name, including the complete suffix, as provided by the receiving bank.",
+ "evidence": [],
+ "recalled": [],
+ "requires_human_approval": false,
+ "auto_fix_eligible": false,
+ "guardrail_notes": [],
+ "model": "openai/gpt-oss-120b",
+ "latency_ms": 50073,
+ "degraded": false,
+ "warnings": []
+}

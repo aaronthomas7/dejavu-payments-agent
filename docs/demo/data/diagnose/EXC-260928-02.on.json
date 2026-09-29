@@ -1,0 +1,166 @@
+{
+ "case_id": "EXC-260928-02",
+ "used_memory": true,
+ "root_cause": "CLIENT_TYPO_IN_DETAILS",
+ "root_cause_label": "Client keyed wrong details",
+ "confidence": 0.7,
+ "reasoning": "The SWIFT reject code AC01 indicates the beneficiary account number is not recognized. Similar past cases (M4) involved the client providing an account number with the wrong length, and a recent world case (M6) was a typo in the account number. The submitted number is 12 digits, but Pearl Delta expects a specific format, suggesting a data‑entry error.",
+ "recommended_action": "Contact Orchid Pharma Asia to confirm the correct beneficiary account number and request a corrected payment file. Verify the account number against the beneficiary bank's directory before resubmission.",
+ "draft_message": "Dear Orchid Pharma Asia,\n\nYour USD 38,600 payment to Guangzhou Hengtai Chemical Co., Ltd. was rejected (reason AC01 – incorrect account number). Please verify the beneficiary account number (currently shown as 6201‑****‑6604) with the bank and resend the payment with the correct details.\n\nThank you.",
+ "prevention_tip": "Implement a validation check in the client’s ERP to match the beneficiary bank’s required account‑number length and format before file submission.",
+ "evidence": [
+  {
+   "memory_ref": "M4",
+   "why_relevant": "Rejected for AC01 due to an 11‑digit number instead of the required 12‑digit format at the same beneficiary bank.",
+   "case_id": null,
+   "text": "Payment exception EXC-260818-01 for Kestrel Components Pte Ltd involving a USD 19,040.00 transfer to Dongguan Precision Parts Co., Ltd. at Pearl Delta Commercial Bank was rejected on 2026-08-18 due to an incorrect beneficiary account number (reason code AC01), as the client provided an 11-digit number instead of the required 12-digit number.",
+   "occurred": "2026-08-18T03:05:00+00:00",
+   "type": "observation"
+  },
+  {
+   "memory_ref": "M6",
+   "why_relevant": "Recent example of a client typo causing an AC01 reject.",
+   "case_id": "EXC-260922-02",
+   "text": "The payment exception was caused by a client typo where an extra digit was added to the beneficiary account number (16 digits instead of 15). | When: 2026-09-22 | Involving: Vantage Analytics Pte Ltd",
+   "occurred": "2026-09-22T06:50:00.010000+00:00",
+   "type": "world"
+  }
+ ],
+ "recalled": [
+  {
+   "ref": "M1",
+   "id": "bb86ddb7-d2af-4c8c-95bd-626b699e10ee",
+   "text": "Orchid Pharma Asia Pte Ltd submitted an INR 1,918,000.00 payment to Hyderabad Organics Private Limited on 2026-09-10 via Coromandel Clearing Bank to Golconda Commercial Bank.",
+   "type": "observation",
+   "occurred": "2026-09-11T08:00:00+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "bank:GOLC",
+    "client:orchid",
+    "code:NON_RECEIPT_CLAIM",
+    "ccy:INR"
+   ],
+   "score": 1.0829690097491695
+  },
+  {
+   "ref": "M2",
+   "id": "a4f8b41b-cea6-457c-b7ee-ffb7f12cab90",
+   "text": "Orchid Pharma Asia Pte Ltd submitted an INR 1,975,000.00 payment to Hyderabad Organics Private Limited on 2026-08-26 via Coromandel Clearing Bank to Golconda Commercial Bank.",
+   "type": "observation",
+   "occurred": "2026-08-27T06:10:00+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "bank:GOLC",
+    "client:orchid",
+    "code:NON_RECEIPT_CLAIM",
+    "ccy:INR"
+   ],
+   "score": 1.0784345368437134
+  },
+  {
+   "ref": "M3",
+   "id": "518df304-ce63-4a45-a927-188a50456762",
+   "text": "Payment exception EXC-260909-01 for Sunrise Textiles Pte Ltd was rejected with reason code AC01 due to an incorrect account number for beneficiary Zhongshan Weaving Co., Ltd. at Pearl Delta Commercial Bank.",
+   "type": "observation",
+   "occurred": "2026-09-09T02:05:00+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "code:AC01",
+    "bank:PDCB",
+    "client:sunrise",
+    "ccy:USD"
+   ],
+   "score": 1.049625266928078
+  },
+  {
+   "ref": "M4",
+   "id": "75d695e7-fd59-4c4d-9f5e-ac5331e46733",
+   "text": "Payment exception EXC-260818-01 for Kestrel Components Pte Ltd involving a USD 19,040.00 transfer to Dongguan Precision Parts Co., Ltd. at Pearl Delta Commercial Bank was rejected on 2026-08-18 due to an incorrect beneficiary account number (reason code AC01), as the client provided an 11-digit number instead of the required 12-digit number.",
+   "type": "observation",
+   "occurred": "2026-08-18T03:05:00+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "bank:PDCB",
+    "code:AC01",
+    "ccy:USD",
+    "client:kestrel"
+   ],
+   "score": 1.0486642952928995
+  },
+  {
+   "ref": "M5",
+   "id": "b0c30020-40c9-4942-a77d-8d5876d3901e",
+   "text": "Payment exception EXC-260909-02 was opened on September 9, 2026, because Orchid Pharma Asia Pte Ltd's funds were held at Albion Clearing Bank for a compliance check; the issue was resolved by DejaVu via an MT199 trace, leading to the release of funds.",
+   "type": "observation",
+   "occurred": "2026-09-09T06:40:00.020000+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "code:NON_RECEIPT_CLAIM",
+    "bank:THUB",
+    "ccy:GBP",
+    "client:orchid"
+   ],
+   "score": 1.0386522693027522
+  },
+  {
+   "ref": "M6",
+   "id": "521d2b1b-33c7-453b-8de5-6bfc1f89c694",
+   "text": "The payment exception was caused by a client typo where an extra digit was added to the beneficiary account number (16 digits instead of 15). | When: 2026-09-22 | Involving: Vantage Analytics Pte Ltd",
+   "type": "world",
+   "occurred": "2026-09-22T06:50:00.010000+00:00",
+   "case_id": "EXC-260922-02",
+   "root_cause": "CLIENT_TYPO_IN_DETAILS",
+   "tags": [
+    "client:vantage",
+    "ccy:INR",
+    "bank:GOLC",
+    "code:AC01"
+   ],
+   "score": 1.0858117945493815
+  },
+  {
+   "ref": "M7",
+   "id": "112d5bf8-de91-4b9f-9954-8cf278d799c1",
+   "text": "Orchid Pharma Asia Pte Ltd submitted an INR 1,975,000.00 payment to Hyderabad Organics Private Limited via Coromandel Clearing Bank (CRMCINBB) to Golconda Commercial Bank (GOLCINHH). | When: 2026-08-26 | Involving: Orchid Pharma Asia Pte Ltd (client), Hyderabad Organics Private Limited (beneficiary), Golconda Commercial Bank (beneficiary bank), Coromandel Clearing Bank (intermediary)",
+   "type": "world",
+   "occurred": "2026-08-27T06:10:00+00:00",
+   "case_id": "EXC-260827-02",
+   "root_cause": "MISSED_CUTOFF_NEXT_DAY_CREDIT",
+   "tags": [
+    "bank:GOLC",
+    "client:orchid",
+    "code:NON_RECEIPT_CLAIM",
+    "ccy:INR"
+   ],
+   "score": 1.0820547945205479
+  },
+  {
+   "ref": "M8",
+   "id": "7e68dee7-baf9-4d48-97c2-eee83de083e2",
+   "text": "Payment exception EXC-260918-01 for Tanjong Marine Services Pte Ltd involving a USD 27,610.00 transfer to Bergen Subsea Services AS at Nordkyst Bank (NKYSNOBB) was rejected with reason code RC01 due to incorrect bank identifier. | When: 2026-09-18 | Involving: Tanjong Marine Services Pte Ltd (client), Bergen Subsea Services AS (beneficiary), Nordkyst Bank (beneficiary bank), Atlantic Clearing Bank (original intermediary)",
+   "type": "world",
+   "occurred": "2026-09-18T02:40:00+00:00",
+   "case_id": "EXC-260918-01",
+   "root_cause": "CORRESPONDENT_ROUTING_CHANGED",
+   "tags": [
+    "ccy:USD",
+    "code:RC01",
+    "client:tanjong",
+    "bank:NKYS"
+   ],
+   "score": 1.0762021191571467
+  }
+ ],
+ "requires_human_approval": false,
+ "auto_fix_eligible": false,
+ "guardrail_notes": [],
+ "model": "openai/gpt-oss-120b",
+ "latency_ms": 1930,
+ "degraded": false,
+ "warnings": []
+}

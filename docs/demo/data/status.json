@@ -1,0 +1,15 @@
+{
+ "memory_backend": "hindsight",
+ "llm_backend": "groq",
+ "offline": false,
+ "bank_id": "dejavu-payments-desk",
+ "model": "openai/gpt-oss-120b",
+ "setup_error": null,
+ "memory_counts": {
+  "world": 96,
+  "experience": 56,
+  "observation": 118
+ },
+ "recorded_at": "2026-09-29T05:21:51.462692+00:00",
+ "repo_url": "https://github.com/aaronthomas7/dejavu-payments-agent"
+}

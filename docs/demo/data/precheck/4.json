@@ -1,0 +1,108 @@
+{
+ "risk_level": "high",
+ "summary": "Orchid Pharma Asia Pte Ltd has a history of payment rejections due to transposed IBAN digits and beneficiary naming mismatches. While there are no current sanctions concerns, manual verification of payment details is required to prevent recurring errors.",
+ "warnings": [
+  {
+   "title": "Invalid IBAN / Formatting",
+   "detail": "Previous payments to this beneficiary failed due to transposed digits in the IBAN.",
+   "severity": "high",
+   "fix": "Verify the IBAN against the beneficiary's latest invoice or official banking details. Ensure no digits are transposed."
+  },
+  {
+   "title": "Client Typo in Details",
+   "detail": "Orchid Pharma has a history of payment rejections due to typos in beneficiary details.",
+   "severity": "medium",
+   "fix": "Perform a manual review of all beneficiary fields (Name, Bank, Account/IBAN) before final submission."
+  },
+  {
+   "title": "Legal Entity Mismatch",
+   "detail": "Orchid Pharma has encountered repeated failures with other beneficiaries due to legal suffix mismatches.",
+   "severity": "medium",
+   "fix": "Confirm the exact registered legal name of Rhein Chemie Vertrieb GmbH and match it precisely in the payment instruction."
+  }
+ ],
+ "evidence": [
+  {
+   "id": "0879c8ac-7564-40ca-ac9b-5ed6e516b5cb",
+   "text": "Payment exception EXC-260915-01 for Kestrel Components Pte Ltd, involving a USD 16,750.00 transfer to Kowloon Circuit Supplies Ltd, was rejected by Victoria Harbour Bank with reason code RR04 due to a missing invoice reference.",
+   "type": "observation",
+   "occurred_start": "2026-09-15T02:22:00+00:00",
+   "occurred_end": "2026-09-15T03:00:00+00:00",
+   "context": null
+  },
+  {
+   "id": "7f695cf3-6f87-4fc2-8e2a-90bf6bcfe83e",
+   "text": "Payment exception for Arcadia Foods Pte Ltd involving a USD 59,130.00 transfer to Mekong Delta Seafood JSC at Saigon Riverside Bank was held on 2026-08-31 due to a duplication error (AM05) and subsequently cancelled by an operations analyst.",
+   "type": "observation",
+   "occurred_start": "2026-08-30T23:14:00+00:00",
+   "occurred_end": "2026-08-31T01:30:00.020000+00:00",
+   "context": null
+  },
+  {
+   "id": "5ce26189-d552-46a5-8486-9a0e90917dec",
+   "text": "Payment exception EXC-260910-02 for Vantage Analytics Pte Ltd involving an INR 2,594,000.00 transfer to Srinivasa Infotech Private Limited at Golconda Commercial Bank was rejected on 2026-09-10 due to a missing RBI purpose code.",
+   "type": "observation",
+   "occurred_start": "2026-09-10T02:59:00+00:00",
+   "occurred_end": "2026-09-10T04:40:00+00:00",
+   "context": null
+  },
+  {
+   "id": "dc31612a-5439-40ab-ba2a-ada998df6121",
+   "text": "Payment exception EXC-260914-01 for Arcadia Foods Pte Ltd involving a USD 36,570.00 transfer to Mekong Delta Seafood JSC at Saigon Riverside Bank was held on 2026-09-14 due to a duplication error (AM05) caused by duplicate instructions from the client's ERP system.",
+   "type": "observation",
+   "occurred_start": "2026-09-13T22:11:00.010000+00:00",
+   "occurred_end": "2026-09-14T01:25:00+00:00",
+   "context": null
+  },
+  {
+   "id": "8a9d2966-b145-469f-baf3-5eb652bccb98",
+   "text": "Payment EXC-260904-01 from Sunrise Textiles Pte Ltd to Tsuen Wan Garment Accessories Ltd was rejected by Victoria Harbour Bank with reason code RR04 due to a missing invoice reference.",
+   "type": "observation",
+   "occurred_start": "2026-09-04T00:29:00.010000+00:00",
+   "occurred_end": "2026-09-04T02:40:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "5d907b32-67f6-440f-8e48-79e78fbf1951",
+   "text": "The root cause of payment exception EXC-260817-01 was identified as CLIENT_ERP_DUPLICATE, resulting from Arcadia Foods Pte Ltd's ERP system re-running a weekend batch and re-sending the payment file.",
+   "type": "observation",
+   "occurred_start": "2026-08-16T22:12:00.010000+00:00",
+   "occurred_end": "2026-08-16T22:47:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "63221d52-1752-4cd3-867d-51dbf902fdbc",
+   "text": "Payment exception EXC-260915-02 for Kestrel Components Pte Ltd involving a USD 56,080.00 transfer to Orient Star Maritime Co at Saigon Riverside Bank was held due to a sanctions screening match (score 0.91) against Orient Star Marine Ltd.",
+   "type": "observation",
+   "occurred_start": "2026-09-15T05:08:00+00:00",
+   "occurred_end": "2026-09-15T07:45:00+00:00",
+   "context": null
+  },
+  {
+   "id": "718bbaf8-3c5e-4d33-ba5c-52004904e0c4",
+   "text": "Payment exception EXC-260923-01 for INR 1,390,000.00 from Vantage Analytics Pte Ltd to Mysuru Software Services Pvt Ltd at Tungabhadra Co-operative Bank was rejected on 2026-09-23 due to a beneficiary name mismatch.",
+   "type": "observation",
+   "occurred_start": "2026-09-23T00:27:00+00:00",
+   "occurred_end": "2026-09-23T02:30:00+00:00",
+   "context": null
+  }
+ ],
+ "directives": [
+  {
+   "id": "9646ff2b-0a35-41fc-bdd7-a6a1a4d5b787",
+   "name": "Sanctions holds are human-only",
+   "content": "Never recommend releasing, auto-approving or bypassing a payment held by sanctions screening, even if the beneficiary was cleared before. Always route sanctions hits to the Compliance team for human review; a prior clearance reference may be cited only as supporting context."
+  },
+  {
+   "id": "6d8a66af-a0f9-46e0-8dd1-fd88b0ba9da7",
+   "name": "Mask account numbers",
+   "content": "Never write a full bank account number or IBAN in an answer. Show only the last 4 characters, e.g. ****0913."
+  },
+  {
+   "id": "b00baa59-a49d-49db-8bb1-18e51bcea4eb",
+   "name": "Cite evidence",
+   "content": "When you state a pattern, cite the dates or case IDs of the past exceptions it is based on. If memory has no relevant evidence, say so explicitly instead of guessing."
+  }
+ ],
+ "latency_ms": 8632
+}

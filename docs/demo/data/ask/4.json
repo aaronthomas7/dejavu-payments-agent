@@ -1,0 +1,910 @@
+{
+ "answer": "Based on the desk's history, several categories of recurring payment exceptions have proven to be the most time-consuming due to their frequency, the manual effort required for remediation, and the tendency for initial diagnoses to be incorrect.\n\n### Top Categories of Time-Consuming Exceptions\n\n1.  **Sanctions Screening Holds (Code: SCREENING_HOLD)**\n    *   **Context**: These cases involve high-frequency manual intervention by the Compliance team. A recurring issue for **Blue Harbour Logistics Pte Ltd** regarding payments to **Desert Star General Trading LLC** has resulted in multiple holds due to a name match against the sanctioned entity **Desert Star Shipping FZE** (Case occurrences: 2026-08-19, 2026-09-07, 2026-09-16, and 2026-09-25).\n    *   **Operational Note**: While a clearance reference (**CLR-2026-0819-07**) was established on 2026-08-21, these payments continue to trigger holds, requiring constant vigilance.\n    *   **Directive**: As per desk policy, all sanctions hits must be routed to Compliance for human review. Never auto-approve these, regardless of prior clearance.\n\n2.  **ERP-Driven Duplicate Payments (Code: AM05)**\n    *   **Context**: Frequent, repetitive failures for **Arcadia Foods Pte Ltd** occur when their ERP system re-sends weekend or Monday batches. These have been recorded across several instances (e.g., 2026-08-17, 2026-08-24, 2026-08-31, 2026-09-07, 2026-09-14, and 2026-09-21).\n    *   **Operational Note**: These require manual verification and cancellation of instructions. While a permanent fix has been proposed by the client for October 2026, the current volume of these exceptions consumes significant desk resources.\n\n3.  **Account Format Migrations (Code: AC01)**\n    *   **Context**: Banks frequently update their account number formats, leading to clusters of rejections. A major recurring issue involves **Pearl Delta Commercial Bank**, where clients (specifically **Kestrel Components Pte Ltd**, **Sunrise Textiles Pte Ltd**, and **Blue Harbour Logistics Pte Ltd**) have had multiple payments rejected due to account format changes (e.g., 2026-08-18, 2026-08-26, 2026-08-31, 2026-09-09, 2026-09-17, and 2026-09-24).\n    *   **Operational Note**: These are time-consuming because they often involve initial incorrect diagnoses (e.g., **DejaVu** incorrectly identified these as \"Client Typo\" or \"Purpose Code Missing\" in cases on 2026-08-18 and 2026-08-26 before the format change was confirmed).\n\n4.  **Cut-off Time Misses (Code: NON_RECEIPT_CLAIM)**\n    *   **Context**: Payments for **Vantage Analytics Pte Ltd** and **Orchid Pharma Asia Pte Ltd** to **Golconda Commercial Bank** frequently miss the 12:00 IST (14:30 SGT) cut-off, leading to non-receipt claims and subsequent manual tracing (e.g., 2026-08-20, 2026-08-27, 2026-09-03, 2026-09-11, 2026-09-16, and 2026-09-22).\n    *   **Operational Note**: These require issuing MT199 traces and managing client dissatisfaction regarding value dating.\n\n### Summary of Diagnostic Challenges\nThe history shows that the desk often spends additional time correcting its own initial assessments. Notably:\n*   **Incorrect Diagnoses**: The desk has a history of misdiagnosing **RR04** (Missing Invoice Reference) as **PURPOSE_CODE_MISSING** (e.g., on 2026-08-24 and 2026-09-04).\n*   **Data Entry Errors**: Similar to the account migrations, **BE01** (Legal Suffix Mismatch) rejections for **Orchid Pharma Asia Pte Ltd** and **Vantage Analytics Pte Ltd** have been recurring, requiring consistent follow-up to ensure clients update their master beneficiary data.\n\nWhen investigating these, please ensure you are checking the latest account digits for accounts ending in ****80917 (as identified in the 2026-09-24 **Kestrel Components** case) and referencing the specific bank-side changes documented in our memory bank to avoid repeating past diagnostic errors.",
+ "memories": [
+  {
+   "id": "2931a3ea-1d60-4095-bd6d-0f145a8c07c4",
+   "text": "DejaVu diagnosed payment exception EXC-260826-02 as BENEFICIARY_ACCOUNT_CLOSED with 60% confidence.",
+   "type": "observation",
+   "occurred_start": "2026-08-26T08:20:00.020000+00:00",
+   "occurred_end": "2026-08-26T08:20:00.020000+00:00",
+   "context": null
+  },
+  {
+   "id": "b801856a-8fd8-4149-a226-cb90a6de1063",
+   "text": "DejaVu diagnosed payment exception EXC-260910-01 as CLIENT_INSUFFICIENT_FUNDS with 92% confidence.",
+   "type": "observation",
+   "occurred_start": "2026-09-10T03:35:00.010000+00:00",
+   "occurred_end": "2026-09-10T03:35:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "3333f2a5-9908-4b0e-ae8a-7375ee77cbb7",
+   "text": "Payment exception EXC-260910-02 was resolved on 2026-09-10 by resubmitting the payment with RBI purpose code P0802 for software services.",
+   "type": "observation",
+   "occurred_start": "2026-09-10T04:40:00.010000+00:00",
+   "occurred_end": "2026-09-10T04:40:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "08aa0605-6218-4aec-8dc0-34c882388152",
+   "text": "DejaVu incorrectly diagnosed the root cause of payment exception EXC-260824-02 as PURPOSE_CODE_MISSING instead of MISSING_INVOICE_REFERENCE.",
+   "type": "observation",
+   "occurred_start": "2026-08-24T07:30:00.020000+00:00",
+   "occurred_end": "2026-08-24T07:30:00.020000+00:00",
+   "context": null
+  },
+  {
+   "id": "50545402-4616-41df-ac90-8dfe29c53b00",
+   "text": "DejaVu diagnosed the root cause of payment exception EXC-260914-02 as CLIENT_TYPO_IN_DETAILS with 55% confidence.",
+   "type": "observation",
+   "context": null,
+   "occurred_start": null,
+   "occurred_end": null
+  },
+  {
+   "id": "718bbaf8-3c5e-4d33-ba5c-52004904e0c4",
+   "text": "Payment exception EXC-260923-01 for INR 1,390,000.00 from Vantage Analytics Pte Ltd to Mysuru Software Services Pvt Ltd at Tungabhadra Co-operative Bank was rejected on 2026-09-23 due to a beneficiary name mismatch.",
+   "type": "observation",
+   "occurred_start": "2026-09-23T00:27:00+00:00",
+   "occurred_end": "2026-09-23T02:30:00+00:00",
+   "context": null
+  },
+  {
+   "id": "7f695cf3-6f87-4fc2-8e2a-90bf6bcfe83e",
+   "text": "Payment exception for Arcadia Foods Pte Ltd involving a USD 59,130.00 transfer to Mekong Delta Seafood JSC at Saigon Riverside Bank was held on 2026-08-31 due to a duplication error (AM05) and subsequently cancelled by an operations analyst.",
+   "type": "observation",
+   "occurred_start": "2026-08-30T23:14:00+00:00",
+   "occurred_end": "2026-08-31T01:30:00.020000+00:00",
+   "context": null
+  },
+  {
+   "id": "992bca3b-b31c-4787-8626-714925f7c062",
+   "text": "Payment exception EXC-260828-01 occurred on 2026-08-28 due to a NOSTRO_FUNDING_SHORTFALL in the IDR nostro account at Nusantara Sentral Bank, which was caused by month-end outflows.",
+   "type": "observation",
+   "occurred_start": "2026-08-28T02:05:00.010000+00:00",
+   "occurred_end": "2026-08-28T02:05:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "ddaec1ba-4a01-4bfe-87d7-1f06e9fb94d1",
+   "text": "DejaVu diagnosed the root cause of payment exception EXC-260910-02 as PURPOSE_CODE_MISSING with 55% confidence.",
+   "type": "observation",
+   "context": null,
+   "occurred_start": null,
+   "occurred_end": null
+  },
+  {
+   "id": "0879c8ac-7564-40ca-ac9b-5ed6e516b5cb",
+   "text": "Payment exception EXC-260915-01 for Kestrel Components Pte Ltd, involving a USD 16,750.00 transfer to Kowloon Circuit Supplies Ltd, was rejected by Victoria Harbour Bank with reason code RR04 due to a missing invoice reference.",
+   "type": "observation",
+   "occurred_start": "2026-09-15T02:22:00+00:00",
+   "occurred_end": "2026-09-15T03:00:00+00:00",
+   "context": null
+  },
+  {
+   "id": "dc31612a-5439-40ab-ba2a-ada998df6121",
+   "text": "Payment exception EXC-260914-01 for Arcadia Foods Pte Ltd involving a USD 36,570.00 transfer to Mekong Delta Seafood JSC at Saigon Riverside Bank was held on 2026-09-14 due to a duplication error (AM05) caused by duplicate instructions from the client's ERP system.",
+   "type": "observation",
+   "occurred_start": "2026-09-13T22:11:00.010000+00:00",
+   "occurred_end": "2026-09-14T01:25:00+00:00",
+   "context": null
+  },
+  {
+   "id": "b0c30020-40c9-4942-a77d-8d5876d3901e",
+   "text": "Payment exception EXC-260909-02 was opened on September 9, 2026, because Orchid Pharma Asia Pte Ltd's funds were held at Albion Clearing Bank for a compliance check; the issue was resolved by DejaVu via an MT199 trace, leading to the release of funds.",
+   "type": "observation",
+   "occurred_start": "2026-09-09T06:40:00.010000+00:00",
+   "occurred_end": "2026-09-09T06:40:00.020000+00:00",
+   "context": null
+  },
+  {
+   "id": "6fe8a7b0-a7bb-4922-9b60-4c8f569973a6",
+   "text": "DejaVu correctly diagnosed the root cause of a payment exception as ACCOUNT_FORMAT_CHANGED with 80% confidence.",
+   "type": "observation",
+   "context": null,
+   "occurred_start": null,
+   "occurred_end": null
+  },
+  {
+   "id": "31ed3365-56fb-41ff-bb24-4667f0eeda34",
+   "text": "The agent DejaVu diagnosed the root cause of payment exception EXC-260817-01 as CLIENT_ERP_DUPLICATE with 60% confidence.",
+   "type": "observation",
+   "occurred_start": "2026-08-17T01:40:00.020000+00:00",
+   "occurred_end": "2026-08-17T01:40:00.020000+00:00",
+   "context": null
+  },
+  {
+   "id": "75d695e7-fd59-4c4d-9f5e-ac5331e46733",
+   "text": "Payment exception EXC-260818-01 for Kestrel Components Pte Ltd involving a USD 19,040.00 transfer to Dongguan Precision Parts Co., Ltd. at Pearl Delta Commercial Bank was rejected on 2026-08-18 due to an incorrect beneficiary account number (reason code AC01), as the client provided an 11-digit number instead of the required 12-digit number.",
+   "type": "observation",
+   "occurred_start": "2026-08-18T00:47:00+00:00",
+   "occurred_end": "2026-08-18T03:05:00+00:00",
+   "context": null
+  },
+  {
+   "id": "eb4679d6-9f58-41a9-b2fe-8cdb72b8addd",
+   "text": "DejaVu correctly diagnosed the root cause of payment exception EXC-260915-01 as MISSING_INVOICE_REFERENCE with 85% confidence.",
+   "type": "observation",
+   "context": null,
+   "occurred_start": null,
+   "occurred_end": null
+  },
+  {
+   "id": "ed7b7a9d-663e-4ddc-a551-bd900587dd4e",
+   "text": "DejaVu diagnosed payment exception EXC-260827-02 as a missed cut-off with 55% confidence and advised Orchid Pharma Asia Pte Ltd to submit INR payments before 14:00 SGT for same-day value.",
+   "type": "observation",
+   "occurred_start": "2026-08-27T06:10:00.020000+00:00",
+   "occurred_end": "2026-08-27T06:10:00.020000+00:00",
+   "context": null
+  },
+  {
+   "id": "c1e2cf6f-8447-4b49-b71d-90b721ffa716",
+   "text": "DejaVu diagnosed the root cause of the payment exception as ACCOUNT_FORMAT_CHANGED with 75% confidence.",
+   "type": "observation",
+   "context": null,
+   "occurred_start": null,
+   "occurred_end": null
+  },
+  {
+   "id": "38242209-156e-498a-afdb-67856505a34c",
+   "text": "Payment exception EXC-260917-02 for Blue Harbour Logistics Pte Ltd involving a USD 12,460.00 transfer to Guangzhou Harbour Freight Agency Co., Ltd. at Pearl Delta Commercial Bank was rejected on 2026-09-17 due to an incorrect account number (reason code AC01).",
+   "type": "observation",
+   "occurred_start": "2026-09-17T04:56:00+00:00",
+   "occurred_end": "2026-09-17T07:20:00+00:00",
+   "context": null
+  },
+  {
+   "id": "4c365be9-8534-4a29-8f63-4272a7c57cce",
+   "text": "DejaVu diagnosed payment exception EXC-260911-02 as a missed cut-off with 85% confidence.",
+   "type": "observation",
+   "occurred_start": "2026-09-11T08:00:00.020000+00:00",
+   "occurred_end": "2026-09-11T08:00:00.020000+00:00",
+   "context": null
+  },
+  {
+   "id": "73140648-b08a-4402-b974-1f8500ad5400",
+   "text": "DejaVu correctly diagnosed the payment exception as a known sanctions false positive with 90% confidence.",
+   "type": "observation",
+   "context": null,
+   "occurred_start": null,
+   "occurred_end": null
+  },
+  {
+   "id": "a7960ca8-0bdc-4aa5-8bda-d142d4ca7a0f",
+   "text": "The root cause of the 2026-08-31 payment duplication for Arcadia Foods Pte Ltd was identified as CLIENT_ERP_DUPLICATE, as their ERP system re-sent the file for the third consecutive Monday.",
+   "type": "observation",
+   "context": null,
+   "occurred_start": null,
+   "occurred_end": null
+  },
+  {
+   "id": "29386a65-dc30-4114-aab6-30db04d45dc5",
+   "text": "Payment exception EXC-260831-02 occurred on 2026-08-31 due to a NOSTRO_FUNDING_SHORTFALL on the IDR settlement account, causing an AM04 hold for a transaction between Blue Harbour Logistics Pte Ltd and PT Surabaya Port Logistics.",
+   "type": "observation",
+   "occurred_start": "2026-08-31T00:36:00+00:00",
+   "occurred_end": "2026-08-31T06:05:00+00:00",
+   "context": null
+  },
+  {
+   "id": "739e41cb-1912-49d9-93a2-b266d11b7b6a",
+   "text": "The agent DejaVu diagnosed the root cause of the 2026-08-31 payment exception as CLIENT_ERP_DUPLICATE with 90% confidence.",
+   "type": "observation",
+   "context": null,
+   "occurred_start": null,
+   "occurred_end": null
+  },
+  {
+   "id": "8a9d2966-b145-469f-baf3-5eb652bccb98",
+   "text": "Payment EXC-260904-01 from Sunrise Textiles Pte Ltd to Tsuen Wan Garment Accessories Ltd was rejected by Victoria Harbour Bank with reason code RR04 due to a missing invoice reference.",
+   "type": "observation",
+   "occurred_start": "2026-09-04T00:29:00.010000+00:00",
+   "occurred_end": "2026-09-04T02:40:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "ff1b9e85-4d9e-4925-a7b4-e1dadc1d0867",
+   "text": "A duplicate payment attempt from Arcadia Foods Pte Ltd was identified and cancelled due to the client's ERP re-sending its weekend batch, resulting in identical instructions received at 06:15 and 06:40 SGT (reason code AM05).",
+   "type": "observation",
+   "occurred_start": "2026-08-24T01:15:00.010000+00:00",
+   "occurred_end": "2026-08-24T01:15:00.020000+00:00",
+   "context": null
+  },
+  {
+   "id": "a470222d-2fb3-418b-ad41-0c520dc9b01c",
+   "text": "Payment exception EXC-260911-02 occurred for an Orchid Pharma Asia Pte Ltd transaction because it reached Golconda Commercial Bank after the cut-off time, resulting in next-day credit.",
+   "type": "observation",
+   "occurred_start": "2026-09-10T07:40:00+00:00",
+   "occurred_end": "2026-09-11T08:00:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "44983148-5c2d-4f72-a13a-7cde54e35b95",
+   "text": "Kestrel Components Pte Ltd attempted a USD 9,670.00 payment to Foshan Metalworks Co., Ltd. at Pearl Delta Commercial Bank on 2026-08-31, which was rejected (reason code AC01) due to an incorrect account number; the payment was later successfully credited after prefixing the account number 620177312045 with branch code 601, following the bank's migration to a 15-digit account format.",
+   "type": "observation",
+   "occurred_start": "2026-08-31T05:41:00+00:00",
+   "occurred_end": "2026-08-31T06:45:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "6be4ce0f-09a3-4906-a4dc-e7a7845d83cc",
+   "text": "DejaVu diagnosed payment exception EXC-260909-01 as ACCOUNT_FORMAT_CHANGED with 85% confidence.",
+   "type": "observation",
+   "occurred_start": "2026-09-09T10:05:00.010000+00:00",
+   "occurred_end": "2026-09-09T10:05:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "b2c78a19-9aa6-42a6-8021-c76e01ddb28d",
+   "text": "Arcadia Foods Pte Ltd submitted a duplicate MYR 26,690.00 payment to Penang Spice Traders Sdn Bhd at Straits Heritage Bank (STHBMYKP).",
+   "type": "observation",
+   "occurred_start": "2026-09-06T23:41:00+00:00",
+   "occurred_end": "2026-09-06T23:41:00+00:00",
+   "context": null
+  },
+  {
+   "id": "63221d52-1752-4cd3-867d-51dbf902fdbc",
+   "text": "Payment exception EXC-260915-02 for Kestrel Components Pte Ltd involving a USD 56,080.00 transfer to Orient Star Maritime Co at Saigon Riverside Bank was held due to a sanctions screening match (score 0.91) against Orient Star Marine Ltd.",
+   "type": "observation",
+   "occurred_start": "2026-09-15T05:08:00+00:00",
+   "occurred_end": "2026-09-15T07:45:00+00:00",
+   "context": null
+  },
+  {
+   "id": "5187c3e2-50a7-4055-8d30-4f8fd0c92e31",
+   "text": "Payment exception EXC-260826-02 was returned by MBSB with reason code AC04 (Closed account number).",
+   "type": "observation",
+   "occurred_start": "2026-08-26T08:20:00.010000+00:00",
+   "occurred_end": "2026-08-26T08:20:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "1b25966b-631c-4b8d-89af-b3e35bc24c06",
+   "text": "Nusantara Sentral Bank held a payment on 2026-08-27 due to a suspected duplication (reason code AM05) caused by two instructions with identical beneficiary and amount; the payment was later released after the client confirmed they were for separate invoices.",
+   "type": "observation",
+   "occurred_start": "2026-08-27T02:02:00.010000+00:00",
+   "occurred_end": "2026-08-27T03:30:00.020000+00:00",
+   "context": null
+  },
+  {
+   "id": "36ef753c-e74b-4c82-a00e-ddd2aa6bdd85",
+   "text": "The agent DejaVu diagnosed the root cause of the 2026-09-14 payment exception as CLIENT_ERP_DUPLICATE with 86% confidence.",
+   "type": "observation",
+   "context": null,
+   "occurred_start": null,
+   "occurred_end": null
+  },
+  {
+   "id": "9dc52a57-d04a-4181-9131-bc67186c0d72",
+   "text": "Compliance has requested ownership documents for Orient Star Maritime Co regarding the held payment exception EXC-260915-02.",
+   "type": "observation",
+   "occurred_start": "2026-09-15T07:45:00.010000+00:00",
+   "occurred_end": "2026-09-15T07:45:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "492519fe-fd9a-4487-be85-27aace6e6dc8",
+   "text": "The payment delay for the Vantage Analytics Pte Ltd transfer (EXC-260922-01) was caused by a MISSED_CUTOFF_NEXT_DAY_CREDIT at Golconda Commercial Bank; DejaVu correctly diagnosed this with 85% confidence.",
+   "type": "observation",
+   "occurred_start": "2026-09-21T07:18:00.020000+00:00",
+   "occurred_end": "2026-09-22T03:15:00.030000+00:00",
+   "context": null
+  },
+  {
+   "id": "cd94c415-09de-4406-b97e-2e7923472ec7",
+   "text": "Payment EXC-260911-01 was resolved by amending the beneficiary name to 'DECCAN BIO LABS PRIVATE LIMITED' and requesting the client to update their beneficiary master data.",
+   "type": "observation",
+   "occurred_start": "2026-09-11T02:15:00.020000+00:00",
+   "occurred_end": "2026-09-11T02:15:00.020000+00:00",
+   "context": null
+  },
+  {
+   "id": "a9ae2cc3-9fc0-4023-89bd-7ec6a45ad445",
+   "text": "DejaVu diagnosed the payment rejection as a NAME_LEGAL_SUFFIX_MISMATCH with 85% confidence.",
+   "type": "observation",
+   "occurred_start": "2026-09-01T02:25:00.010000+00:00",
+   "occurred_end": "2026-09-01T02:25:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "7ecc7729-f6ef-42c2-ac0a-ba5af022bd1a",
+   "text": "Payment exception EXC-260915-01 for Kestrel Components Pte Ltd was resolved by adding invoice number KCS-56120 to the remittance information.",
+   "type": "observation",
+   "occurred_start": "2026-08-24T06:36:00.010000+00:00",
+   "occurred_end": "2026-09-15T03:00:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "beee58a0-adb8-477c-aaeb-fabfcf1c2f0e",
+   "text": "DejaVu incorrectly diagnosed the root cause of a payment exception as CLIENT_TYPO_IN_DETAILS, when the actual cause was ACCOUNT_FORMAT_CHANGED.",
+   "type": "observation",
+   "context": null,
+   "occurred_start": null,
+   "occurred_end": null
+  },
+  {
+   "id": "00b30212-eb4c-47dd-bf81-cc02c26279bb",
+   "text": "DejaVu incorrectly diagnosed the root cause of a payment rejection as PURPOSE_CODE_MISSING, when the actual cause was MISSING_INVOICE_REFERENCE.",
+   "type": "observation",
+   "occurred_start": "2026-09-04T02:40:00.020000+00:00",
+   "occurred_end": "2026-09-04T02:40:00.020000+00:00",
+   "context": null
+  },
+  {
+   "id": "63bb1447-ffe6-4a84-82e7-3f1170c73d99",
+   "text": "DejaVu incorrectly diagnosed the root cause of payment exception EXC-260826-01 as CLIENT_TYPO_IN_DETAILS; the actual cause was ACCOUNT_FORMAT_CHANGED.",
+   "type": "observation",
+   "occurred_start": "2026-08-26T10:50:00.020000+00:00",
+   "occurred_end": "2026-08-26T10:50:00.020000+00:00",
+   "context": null
+  },
+  {
+   "id": "f3d85efb-404e-40dd-814b-de09792a9beb",
+   "text": "Payment exception EXC-260826-01 for Sunrise Textiles Pte Ltd was rejected with reason code AC01 due to an outdated beneficiary account number format.",
+   "type": "observation",
+   "occurred_start": "2026-08-26T10:50:00.010000+00:00",
+   "occurred_end": "2026-08-26T10:50:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "4b0522c2-dbee-454a-9231-5cadb934477f",
+   "text": "DejaVu incorrectly diagnosed the exception as SANCTIONS_POTENTIAL_MATCH; the correct root cause is SANCTIONS_KNOWN_FALSE_POSITIVE.",
+   "type": "observation",
+   "context": null,
+   "occurred_start": null,
+   "occurred_end": null
+  },
+  {
+   "id": "7679e417-8d65-4148-a595-0ff58dee27d1",
+   "text": "Arcadia Foods Pte Ltd cancelled the duplicate payment instruction for the 2026-09-14 exception and plans to deploy an ERP scheduler fix in October 2026.",
+   "type": "observation",
+   "occurred_start": "2026-09-30T16:00:00.020000+00:00",
+   "occurred_end": "2026-10-31T15:59:59.020000+00:00",
+   "context": null
+  },
+  {
+   "id": "cd35f01f-35bb-4e8d-a520-b0f815939f7b",
+   "text": "Payment exception EXC-260831-02 was resolved by a Treasury top-up requested at 11:30 SGT and released at 14:05 SGT on 2026-08-31.",
+   "type": "observation",
+   "occurred_start": "2026-08-31T03:30:00.010000+00:00",
+   "occurred_end": "2026-08-31T06:05:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "5d907b32-67f6-440f-8e48-79e78fbf1951",
+   "text": "The root cause of payment exception EXC-260817-01 was identified as CLIENT_ERP_DUPLICATE, resulting from Arcadia Foods Pte Ltd's ERP system re-running a weekend batch and re-sending the payment file.",
+   "type": "observation",
+   "occurred_start": "2026-08-16T22:12:00.010000+00:00",
+   "occurred_end": "2026-08-16T22:47:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "827b5bdf-123a-45cd-842c-e87e323a97b3",
+   "text": "Payment exception EXC-260907-01 was triggered by reason code AM05 due to duplicate instructions received at 06:08 and 07:41 SGT, caused by Arcadia Foods Pte Ltd's ERP system re-sending the file; the exception was resolved by cancelling the duplicate instruction.",
+   "type": "observation",
+   "occurred_start": "2026-09-07T01:30:00.010000+00:00",
+   "occurred_end": "2026-09-07T01:30:00.020000+00:00",
+   "context": null
+  },
+  {
+   "id": "850929fd-9073-40dc-8809-2bf66a41afbb",
+   "text": "Payment exception EXC-260914-02 for Blue Harbour Logistics Pte Ltd involving a GBP 17,090.00 transfer to Felixstowe Freight Ltd at Thames Union Bank was rejected on 2026-09-14 due to an incorrect BIC (THUBGB2X instead of THUBGB2L).",
+   "type": "observation",
+   "occurred_start": "2026-09-14T02:42:00+00:00",
+   "occurred_end": "2026-09-14T04:30:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "24c2160d-1041-404f-8acb-c84c7fb2d1ea",
+   "text": "DejaVu diagnosed the root cause of the payment exception as NOSTRO_FUNDING_SHORTFALL with 90% confidence.",
+   "type": "observation",
+   "context": null,
+   "occurred_start": null,
+   "occurred_end": null
+  },
+  {
+   "id": "365fd1c1-e340-44bc-8241-81cf59d3d02b",
+   "text": "The payment delay for the Vantage Analytics Pte Ltd transfer (EXC-260916-01) was caused by an INTERMEDIARY_DELAY at Coromandel Clearing Bank due to a purpose-code query; DejaVu correctly diagnosed this with 70% confidence.",
+   "type": "observation",
+   "occurred_start": "2026-09-16T02:20:00.030000+00:00",
+   "occurred_end": "2026-09-16T09:00:00.020000+00:00",
+   "context": null
+  },
+  {
+   "id": "f19d6b69-d839-4d59-a774-12c4b5fe453d",
+   "text": "The payment delay for the Vantage Analytics Pte Ltd transfer (EXC-260903-01) was caused by a MISSED_CUTOFF_NEXT_DAY_CREDIT at Golconda Commercial Bank, as the payment was submitted at 14:52 SGT, missing the 14:30 SGT cut-off; DejaVu correctly diagnosed this.",
+   "type": "observation",
+   "occurred_start": "2026-09-02T06:52:00.010000+00:00",
+   "occurred_end": "2026-09-03T08:30:00.020000+00:00",
+   "context": null
+  },
+  {
+   "id": "618d4a38-3078-4794-a332-065cc32a1f6d",
+   "text": "Golconda Commercial Bank enforces a same-day cut-off time of 12:00 IST (14:30 SGT), after which payments are credited the next business day.",
+   "type": "observation",
+   "context": null,
+   "occurred_start": null,
+   "occurred_end": null
+  },
+  {
+   "id": "a5b3ba5b-46ad-4cc6-b2a9-e3b4ef9f3b09",
+   "text": "DejaVu diagnosed the payment rejection of EXC-260911-01 as NAME_LEGAL_SUFFIX_MISMATCH with 95% confidence.",
+   "type": "observation",
+   "context": null,
+   "occurred_start": null,
+   "occurred_end": null
+  },
+  {
+   "id": "ffd03332-fe47-4d0a-8959-c9bb6d83c2a5",
+   "text": "DejaVu correctly diagnosed the root cause of a payment exception as POSSIBLE_DUPLICATE_VERIFY with 58% confidence on 2026-09-17, demonstrating the effectiveness of its verification process at Nusantara Sentral Bank.",
+   "type": "observation",
+   "context": null,
+   "occurred_start": null,
+   "occurred_end": null
+  },
+  {
+   "id": "49b857d8-d6ce-4f5a-b9f8-315240900793",
+   "text": "Victoria Harbour Bank requires an invoice number in the remittance information for all trade payments exceeding USD 10,000.",
+   "type": "observation",
+   "occurred_start": "2026-09-15T02:22:00+00:00",
+   "occurred_end": "2026-09-15T03:00:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "3712debe-1595-4406-93e8-a0816ba941d3",
+   "text": "Payment exception EXC-260916-01 was opened on 2026-09-16 following a non-receipt claim by Srinivasa Infotech Private Limited regarding the 2026-09-15 transfer.",
+   "type": "observation",
+   "occurred_start": "2026-09-16T02:20:00.010000+00:00",
+   "occurred_end": "2026-09-16T02:20:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "d9d4a8c5-b66e-4594-bf56-8b445455037e",
+   "text": "Payment of USD 11,050.00 from Sunrise Textiles Pte Ltd to Tsuen Wan Garment Accessories Ltd was rejected by Victoria Harbour Bank with reason code RR04 due to a missing invoice reference, then resolved by adding invoice reference 'TWG-7802'.",
+   "type": "observation",
+   "occurred_start": "2026-09-23T06:01:00+00:00",
+   "occurred_end": "2026-09-23T07:30:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "5116155d-d219-454c-8267-c23aec080a42",
+   "text": "DejaVu diagnosed the payment rejection of EXC-260821-01 as NAME_LEGAL_SUFFIX_MISMATCH with 60% confidence.",
+   "type": "observation",
+   "occurred_start": "2026-08-21T02:30:00.020000+00:00",
+   "occurred_end": "2026-08-21T02:30:00.020000+00:00",
+   "context": null
+  },
+  {
+   "id": "7718bdc3-1af6-4d46-90dc-65f5679fb990",
+   "text": "DejaVu diagnosed the payment exception for Hanoi Electronics Assembly JSC as BENEFICIARY_ACCOUNT_CLOSED with 92% confidence.",
+   "type": "observation",
+   "occurred_start": "2026-09-21T08:05:00.010000+00:00",
+   "occurred_end": "2026-09-21T08:05:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "8eea248c-c497-4e0a-9c21-ad5930945cc5",
+   "text": "The payment delay for the Vantage Analytics Pte Ltd transfer was caused by a MISSED_CUTOFF_NEXT_DAY_CREDIT at Golconda Commercial Bank, as the funds arrived after the 12:00 IST cut-off; DejaVu's initial diagnosis of INTERMEDIARY_DELAY was incorrect.",
+   "type": "observation",
+   "occurred_start": "2026-08-20T08:10:00.030000+00:00",
+   "occurred_end": "2026-08-20T08:10:00.030000+00:00",
+   "context": null
+  },
+  {
+   "id": "dc6c7a36-ff6b-4882-aa3b-c1647cfd52a6",
+   "text": "The payment exception EXC-260922-02 was rejected with reason code AC01 because the beneficiary account number contained 16 digits instead of the required 15, a client typo identified by DejaVu with 78% confidence.",
+   "type": "observation",
+   "occurred_start": "2026-09-22T05:37:00+00:00",
+   "occurred_end": "2026-09-22T06:50:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "28f2ae3c-9732-428b-a039-0b8e2b56d408",
+   "text": "Payment exception EXC-260922-01 was opened on 2026-09-22 following a non-receipt claim by Srinivasa Infotech Private Limited regarding the 2026-09-21 transfer.",
+   "type": "observation",
+   "occurred_start": "2026-09-22T03:15:00.010000+00:00",
+   "occurred_end": "2026-09-22T03:15:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "f62565b6-787c-424b-9994-6add533c9c45",
+   "text": "DejaVu incorrectly diagnosed the root cause of payment exception EXC-260818-01 as ACCOUNT_FORMAT_CHANGED, whereas the actual cause was a client typo.",
+   "type": "observation",
+   "occurred_start": "2026-08-18T03:05:00.010000+00:00",
+   "occurred_end": "2026-08-18T03:05:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "bb7aaead-bce6-4508-bfd0-37fae72b842d",
+   "text": "Victoria Harbour Bank requires an invoice number for trade payments exceeding USD 10,000.",
+   "type": "observation",
+   "context": null,
+   "occurred_start": null,
+   "occurred_end": null
+  },
+  {
+   "id": "6d1c55e3-79f1-4232-adfa-2ff5b032c90b",
+   "text": "Arcadia Foods Pte Ltd initiated a payment of MYR 79,200.00 to Penang Spice Traders Sdn Bhd at Straits Heritage Bank (STHBMYKP).",
+   "type": "observation",
+   "occurred_start": "2026-08-23T22:53:00+00:00",
+   "occurred_end": "2026-08-23T22:53:00+00:00",
+   "context": null
+  },
+  {
+   "id": "bcee8026-0320-4b6b-a4b0-aa80d5c00c8c",
+   "text": "Tanjong Marine Services Pte Ltd attempted to send USD 23,580.00 to Bergen Subsea Services AS at Nordkyst Bank on 2026-08-25, but the payment was rejected with code RC01 due to an incorrect BIC (NKYSNOBX instead of NKYSNOBB).",
+   "type": "observation",
+   "occurred_start": "2026-08-25T02:09:00+00:00",
+   "occurred_end": "2026-08-25T03:45:00.020000+00:00",
+   "context": null
+  },
+  {
+   "id": "2eb586a9-e066-4d51-9487-9ef5111f8fa1",
+   "text": "DejaVu correctly diagnosed the root cause as CORRESPONDENT_ROUTING_CHANGED with 85% confidence for the 2026-09-18 exception, following previous incorrect diagnoses of CLIENT_TYPO_IN_DETAILS for similar Nordkyst Bank routing issues.",
+   "type": "observation",
+   "occurred_start": "2026-09-02T00:00:00.020000+00:00",
+   "occurred_end": "2026-09-02T00:00:00.020000+00:00",
+   "context": null
+  },
+  {
+   "id": "6b66c9ed-9676-49f0-b81c-ec3db49fe470",
+   "text": "DejaVu diagnosed the root cause of the payment exception as a NOSTRO_FUNDING_SHORTFALL with 60% confidence.",
+   "type": "observation",
+   "context": null,
+   "occurred_start": null,
+   "occurred_end": null
+  },
+  {
+   "id": "0e7c47ee-b10a-4fc7-af67-6bc47328c24b",
+   "text": "Payment exception EXC-260903-01 was opened on 2026-09-03 following a non-receipt claim by Srinivasa Infotech Private Limited regarding the 2026-09-02 transfer.",
+   "type": "observation",
+   "occurred_start": "2026-09-03T08:30:00+00:00",
+   "occurred_end": "2026-09-03T08:30:00+00:00",
+   "context": null
+  },
+  {
+   "id": "3c6642c7-19fd-43b2-8305-9694bc7650ea",
+   "text": "The agent DejaVu incorrectly diagnosed a payment rejection as a NAME_LEGAL_SUFFIX_MISMATCH, while the actual root cause was a client typo in the beneficiary details.",
+   "type": "observation",
+   "occurred_start": "2026-09-02T07:05:00.010000+00:00",
+   "occurred_end": "2026-09-02T07:05:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "2795eeca-b430-4b99-bcf4-d5e3be5fdb69",
+   "text": "Orchid Pharma Asia Pte Ltd attempted a payment of EUR 37,890.00 to Rhein Chemie Vertrieb GmbH at Rheinland Handelsbank (RHHBDEFF), which was rejected with reason code AC01 due to an invalid IBAN containing two transposed digits.",
+   "type": "observation",
+   "occurred_start": "2026-09-08T01:22:00+00:00",
+   "occurred_end": "2026-09-08T03:20:00+00:00",
+   "context": null
+  },
+  {
+   "id": "14c7e318-7c14-47c6-b11e-2f62b0514863",
+   "text": "DejaVu correctly diagnosed the root cause of a payment rejection as MISSING_INVOICE_REFERENCE with 92% confidence.",
+   "type": "observation",
+   "context": null,
+   "occurred_start": null,
+   "occurred_end": null
+  },
+  {
+   "id": "fd3f8f32-2759-489b-a0a0-9128610d0073",
+   "text": "Payment exception EXC-260817-01 for Arcadia Foods Pte Ltd involving a USD 27,450.00 transfer to Mekong Delta Seafood JSC at Saigon Riverside Bank was held due to a duplication error (AM05).",
+   "type": "observation",
+   "occurred_start": "2026-08-17T00:04:00+00:00",
+   "occurred_end": "2026-08-17T01:40:00+00:00",
+   "context": null
+  },
+  {
+   "id": "518df304-ce63-4a45-a927-188a50456762",
+   "text": "Payment exception EXC-260909-01 for Sunrise Textiles Pte Ltd was rejected with reason code AC01 due to an incorrect account number for beneficiary Zhongshan Weaving Co., Ltd. at Pearl Delta Commercial Bank.",
+   "type": "observation",
+   "occurred_start": "2026-09-09T08:17:00+00:00",
+   "occurred_end": "2026-09-09T10:05:00+00:00",
+   "context": null
+  },
+  {
+   "id": "2e8e2db3-ea4e-4f56-9cfc-260efe0dfacc",
+   "text": "The payment of USD 37,090.00 was held due to a sanctions screening hit (0.86 match score) against Desert Star Shipping FZE, but was resolved as a known false positive by Compliance under clearance CLR-2026-0819-07; future payments to this beneficiary require attaching this reference. The most recent occurrence was on 2026-09-25.",
+   "type": "observation",
+   "occurred_start": "2026-08-28T07:40:00.010000+00:00",
+   "occurred_end": "2026-09-25T02:10:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "44c426a9-f1b7-4e78-b38c-45404f63a40d",
+   "text": "DejaVu diagnosed the root cause of the payment exception as a potential sanctions match with 55% confidence.",
+   "type": "observation",
+   "context": null,
+   "occurred_start": null,
+   "occurred_end": null
+  },
+  {
+   "id": "e5334835-a13f-4b50-9b63-6b53df60a1c1",
+   "text": "Payment exception EXC-260820-01 was opened on 2026-08-20 following a non-receipt claim by Srinivasa Infotech Private Limited regarding the 2026-08-19 transfer.",
+   "type": "observation",
+   "occurred_start": "2026-08-20T08:10:00.010000+00:00",
+   "occurred_end": "2026-08-20T08:10:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "77b92484-c028-482a-ab2d-af155f15d76f",
+   "text": "Kestrel Components Pte Ltd payment of USD 16,900.00 to Dongguan Precision Parts Co., Ltd. at Pearl Delta Commercial Bank was rejected on 2026-09-24 with reason code AC01 due to the bank's migration to a 15-digit account format; the issue was resolved by prefixing the beneficiary account number 620144880917 with 601.",
+   "type": "observation",
+   "occurred_start": "2026-09-24T00:57:00+00:00",
+   "occurred_end": "2026-09-24T03:40:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "486120ac-79d1-4db7-9995-3807efe3998b",
+   "text": "Payment exception EXC-260827-02 occurred for an Orchid Pharma Asia Pte Ltd transaction because it reached Golconda Commercial Bank after the 12:00 IST cut-off, resulting in next-day credit.",
+   "type": "observation",
+   "occurred_start": "2026-08-27T06:10:00.010000+00:00",
+   "occurred_end": "2026-08-27T06:10:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "b2ddc606-38ad-43f9-8839-e3dd3017b655",
+   "text": "Payment exception EXC-260921-01 was triggered by reason code AM05 due to duplicate MYR 38,940.00 transfer instructions from Arcadia Foods Pte Ltd to Penang Spice Traders Sdn Bhd at Straits Heritage Bank, caused by the client's ERP system re-sending the file; DejaVu diagnosed this as CLIENT_ERP_DUPLICATE with 92% confidence.",
+   "type": "observation",
+   "occurred_start": "2026-09-21T01:35:00+00:00",
+   "occurred_end": "2026-09-21T01:35:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "5ce26189-d552-46a5-8486-9a0e90917dec",
+   "text": "Payment exception EXC-260910-02 for Vantage Analytics Pte Ltd involving an INR 2,594,000.00 transfer to Srinivasa Infotech Private Limited at Golconda Commercial Bank was rejected on 2026-09-10 due to a missing RBI purpose code.",
+   "type": "observation",
+   "occurred_start": "2026-09-10T02:59:00+00:00",
+   "occurred_end": "2026-09-10T04:40:00+00:00",
+   "context": null
+  },
+  {
+   "id": "233bf533-01bc-4514-9aef-a119c6d5f502",
+   "text": "A payment of USD 55,730.00 from Blue Harbour Logistics Pte Ltd to Desert Star General Trading LLC at Desert Rose Bank (DRBKAEAD) was held on 2026-09-25 due to a 0.86 sanctions match score against Desert Star Shipping FZE.",
+   "type": "observation",
+   "occurred_start": "2026-09-25T00:27:00+00:00",
+   "occurred_end": "2026-09-25T02:10:00+00:00",
+   "context": null
+  },
+  {
+   "id": "6fcddc29-32f0-4b4f-922a-505f2c0e3b72",
+   "text": "Tanjong Marine Services Pte Ltd attempted to send USD 41,000.00 to Bergen Subsea Services AS on 2026-09-02, but the payment was rejected with code RC01 because it used the outdated intermediary Atlantic Clearing Bank instead of the new correspondent, Hudson Federal Bank.",
+   "type": "observation",
+   "occurred_start": "2026-09-02T00:00:00.010000+00:00",
+   "occurred_end": "2026-09-02T00:00:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "6aa79f44-2261-4804-bec5-0ccca80fde7c",
+   "text": "Tanjong Marine Services Pte Ltd attempted to send USD 28,640.00 to Stavanger Offshore Supply AS at Nordkyst Bank on 2026-09-08, but the payment was rejected with code RC01 because it used the outdated intermediary Atlantic Clearing Bank instead of the new correspondent, Hudson Federal Bank.",
+   "type": "observation",
+   "occurred_start": "2026-09-08T05:51:00+00:00",
+   "occurred_end": "2026-09-08T07:10:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "aaad614c-2652-42dd-8477-04f0136a1178",
+   "text": "Tanjong Marine Services Pte Ltd attempted to send USD 27,610.00 to Bergen Subsea Services AS at Nordkyst Bank on 2026-09-18, but the payment was rejected with code RC01 because it used the obsolete intermediary Atlantic Clearing Bank instead of the new correspondent, Hudson Federal Bank.",
+   "type": "observation",
+   "occurred_start": "2026-09-18T01:42:00+00:00",
+   "occurred_end": "2026-09-18T02:40:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "0be6058c-323b-4701-844d-ce1c86e1a5df",
+   "text": "Payment exception EXC-260922-02 occurred on 2026-09-22 for a transfer of INR 1,889,000.00 from Vantage Analytics Pte Ltd to Srinivasa Infotech Private Limited at Golconda Commercial Bank (GOLCINHH), involving Coromandel Clearing Bank as an intermediary.",
+   "type": "observation",
+   "occurred_start": "2026-09-22T05:37:00+00:00",
+   "occurred_end": "2026-09-22T06:50:00+00:00",
+   "context": null
+  },
+  {
+   "id": "bdf54ad6-e0c6-4cfe-b02a-0a38d09ee905",
+   "text": "DejaVu diagnosed the payment exception for Orchid Pharma Asia Pte Ltd as CLIENT_TYPO_IN_DETAILS with 65% confidence.",
+   "type": "observation",
+   "occurred_start": "2026-09-08T03:20:00.010000+00:00",
+   "occurred_end": "2026-09-08T03:20:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "a4f8b41b-cea6-457c-b7ee-ffb7f12cab90",
+   "text": "Orchid Pharma Asia Pte Ltd submitted an INR 1,975,000.00 payment to Hyderabad Organics Private Limited on 2026-08-26 via Coromandel Clearing Bank to Golconda Commercial Bank.",
+   "type": "observation",
+   "occurred_start": "2026-08-26T08:05:00+00:00",
+   "occurred_end": "2026-08-26T08:05:00+00:00",
+   "context": null
+  },
+  {
+   "id": "bb86ddb7-d2af-4c8c-95bd-626b699e10ee",
+   "text": "Orchid Pharma Asia Pte Ltd submitted an INR 1,918,000.00 payment to Hyderabad Organics Private Limited on 2026-09-10 via Coromandel Clearing Bank to Golconda Commercial Bank.",
+   "type": "observation",
+   "occurred_start": "2026-09-10T07:40:00+00:00",
+   "occurred_end": "2026-09-11T08:00:00+00:00",
+   "context": null
+  },
+  {
+   "id": "2190ca9d-bc5f-4bca-a79f-424c0df6929b",
+   "text": "A payment of USD 59,540.00 from Kestrel Components Pte Ltd to Hanoi Electronics Assembly JSC at Saigon Riverside Bank was returned on 2026-09-21 because the beneficiary closed their account.",
+   "type": "observation",
+   "occurred_start": "2026-09-21T06:50:00+00:00",
+   "occurred_end": "2026-09-21T08:05:00+00:00",
+   "context": null
+  },
+  {
+   "id": "d049694c-529b-4780-841a-29305a29c6a2",
+   "text": "Vantage Analytics Pte Ltd initiated a payment of INR 1,959,000.00 to Srinivasa Infotech Private Limited on 2026-09-21, routed through Coromandel Clearing Bank to Golconda Commercial Bank.",
+   "type": "observation",
+   "occurred_start": "2026-09-21T07:15:00+00:00",
+   "occurred_end": "2026-09-21T07:15:00+00:00",
+   "context": null
+  },
+  {
+   "id": "8e703a9a-1b19-4b2d-97a7-31623272e323",
+   "text": "Tungabhadra Co-operative Bank requires exact legal name matches for beneficiaries, specifically rejecting 'Pvt Ltd' in favor of 'PRIVATE LIMITED'.",
+   "type": "observation",
+   "occurred_start": "2026-09-01T01:10:00+00:00",
+   "occurred_end": "2026-09-23T02:30:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "9495b8a1-1e68-4389-b09e-7ac2969138b0",
+   "text": "Lotus Hospitality Group Pte Ltd initiated a payment of IDR 465,000,000.00 to PT Bali Villas Management via Nusantara Sentral Bank on 2026-08-27.",
+   "type": "observation",
+   "occurred_start": "2026-08-27T01:20:00+00:00",
+   "occurred_end": "2026-08-27T01:20:00+00:00",
+   "context": null
+  },
+  {
+   "id": "dd67fc5f-3296-4c40-85b7-ee73d429b75b",
+   "text": "Lotus Hospitality Group Pte Ltd had a payment of PHP 1,458,000.00 to Manila Harbour Laundry Services Inc held on 2026-09-10 due to insufficient funds caused by earlier payroll processing.",
+   "type": "observation",
+   "occurred_start": "2026-09-10T02:31:00+00:00",
+   "occurred_end": "2026-09-10T07:00:00+00:00",
+   "context": null
+  },
+  {
+   "id": "d0ed9daf-37ff-49f7-bd64-d35e33b13918",
+   "text": "A payment of INR 563,000.00 from Vantage Analytics Pte Ltd to Mysuru Software Services Pvt. Ltd. at Tungabhadra Co-operative Bank was rejected on 2026-09-01 with reason code BE01.",
+   "type": "observation",
+   "occurred_start": "2026-09-01T01:10:00+00:00",
+   "occurred_end": "2026-09-01T02:25:00+00:00",
+   "context": null
+  },
+  {
+   "id": "6c5904a9-950e-423f-bab2-c3a5cec57982",
+   "text": "Vantage Analytics Pte Ltd initiated a payment of INR 2,132,000.00 to Srinivasa Infotech Private Limited on 2026-09-02, routed through Coromandel Clearing Bank to Golconda Commercial Bank.",
+   "type": "observation",
+   "occurred_start": "2026-09-03T08:30:00+00:00",
+   "occurred_end": "2026-09-03T08:30:00+00:00",
+   "context": null
+  },
+  {
+   "id": "c88f541c-b6e8-4863-b69a-474b02d43685",
+   "text": "Treasury resolved the IDR nostro account funding shortfall on 2026-08-28 by topping it up with IDR 5bn, enabling the release of the held payment.",
+   "type": "observation",
+   "occurred_start": "2026-08-28T05:00:00.020000+00:00",
+   "occurred_end": "2026-08-28T05:00:00.020000+00:00",
+   "context": null
+  },
+  {
+   "id": "e40044df-c46e-42ea-9026-3b7d95855c88",
+   "text": "Payment EXC-260911-01 for INR 1,499,000.00 from Orchid Pharma Asia Pte Ltd to Deccan Bio Labs Pvt Ltd was rejected on 2026-09-11 by Tungabhadra Co-operative Bank due to a beneficiary name mismatch (reason code BE01), specifically an abbreviation instead of the registered legal name 'DECCAN BIO LABS PRIVATE LIMITED'.",
+   "type": "observation",
+   "occurred_start": "2026-09-10T23:51:00+00:00",
+   "occurred_end": "2026-09-11T02:15:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "e17d453e-a603-4f6b-bee2-3df72a71d637",
+   "text": "Nusantara Sentral Bank held a payment on 2026-09-17 due to a suspected duplication (reason code AM05) caused by two instructions with identical beneficiary and amount; the payment was released after Lotus Hospitality Group Pte Ltd confirmed the second instruction was a genuine second instalment.",
+   "type": "observation",
+   "occurred_start": "2026-09-17T03:10:00.010000+00:00",
+   "occurred_end": "2026-09-17T03:10:00.020000+00:00",
+   "context": null
+  },
+  {
+   "id": "a3c63ed2-5d12-4cf3-bd58-39c4a0df3392",
+   "text": "A payment of USD 55,750.00 from Blue Harbour Logistics Pte Ltd to Desert Star General Trading LLC at Desert Rose Bank (DRBKAEAD) was held on 2026-09-07 due to a 0.86 sanctions match score against Desert Star Shipping FZE.",
+   "type": "observation",
+   "occurred_start": "2026-09-07T03:45:00+00:00",
+   "occurred_end": "2026-09-07T05:15:00+00:00",
+   "context": null
+  },
+  {
+   "id": "bcb3f3a5-758a-48b3-a5ef-c502daec4a3f",
+   "text": "Vantage Analytics Pte Ltd initiated a payment of INR 487,000.00 to Srinivasa Infotech Private Limited on 2026-08-19, routed through Coromandel Clearing Bank to Golconda Commercial Bank.",
+   "type": "observation",
+   "occurred_start": "2026-08-19T07:05:00+00:00",
+   "occurred_end": "2026-08-19T07:05:00+00:00",
+   "context": null
+  },
+  {
+   "id": "a4190ca5-49d0-4036-adab-c118c9e77687",
+   "text": "A payment of USD 44,940.00 from Blue Harbour Logistics Pte Ltd to Desert Star General Trading LLC at Desert Rose Bank (DRBKAEAD) was held on 2026-09-16 due to a 0.86 sanctions match score against Desert Star Shipping FZE.",
+   "type": "observation",
+   "occurred_start": "2026-09-16T05:27:00+00:00",
+   "occurred_end": "2026-09-16T06:30:00+00:00",
+   "context": null
+  },
+  {
+   "id": "b50ca1e4-4d9c-4a2f-8904-f4ea670ea267",
+   "text": "Payment EXC-260821-01 for Orchid Pharma Asia Pte Ltd was rejected by Tungabhadra Co-operative Bank on 2026-08-21 due to a legal suffix mismatch between the beneficiary name 'Deccan Bio Labs Pvt Ltd' and the registered 'DECCAN BIO LABS PRIVATE LIMITED'.",
+   "type": "observation",
+   "occurred_start": "2026-08-21T00:25:00.010000+00:00",
+   "occurred_end": "2026-08-21T02:30:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "009c2309-fab5-4d38-9fc9-05058c49372d",
+   "text": "Vantage Analytics Pte Ltd initiated a payment of INR 777,000.00 to Srinivasa Infotech Private Limited on 2026-09-15 for invoice SI-8960, routed through Coromandel Clearing Bank to Golconda Commercial Bank.",
+   "type": "observation",
+   "occurred_start": "2026-09-15T02:20:00+00:00",
+   "occurred_end": "2026-09-15T02:20:00+00:00",
+   "context": null
+  },
+  {
+   "id": "42ad64f0-4f1b-4498-a7e8-3e518e9ffa13",
+   "text": "A payment of IDR 1,210,000,000.00 from Lotus Hospitality Group Pte Ltd to PT Bali Villas Management at Nusantara Sentral Bank was held on 2026-08-28 due to insufficient funds (AM04).",
+   "type": "observation",
+   "occurred_start": "2026-08-28T01:22:00+00:00",
+   "occurred_end": "2026-08-28T01:22:00+00:00",
+   "context": null
+  },
+  {
+   "id": "8803d78b-ab2b-477c-8b54-2f5fdd30dfd7",
+   "text": "The beneficiary account number for Guangzhou Harbour Freight Agency Co., Ltd. at Pearl Delta Commercial Bank was updated from 12 to 15 digits by adding a 601 prefix due to a change in the bank's account format.",
+   "type": "observation",
+   "occurred_start": "2026-09-17T07:20:00.010000+00:00",
+   "occurred_end": "2026-09-17T07:20:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "a24873a9-7f66-4173-ba6e-0ef779f1e73f",
+   "text": "Compliance cleared the payment to Desert Star General Trading LLC on 2026-08-21 after verifying the beneficiary's credentials and confirming it is distinct from the sanctioned entity Desert Star Shipping FZE.",
+   "type": "observation",
+   "occurred_start": "2026-08-20T16:00:00.010000+00:00",
+   "occurred_end": "2026-08-21T15:59:59.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "23332d26-2ff5-41e0-976a-683b7bb4fb37",
+   "text": "A payment of USD 43,020.00 from Blue Harbour Logistics Pte Ltd to Desert Star General Trading LLC at Desert Rose Bank (DRBKAEAD) was held on 2026-08-19 due to a 0.86 sanctions match score against Desert Star Shipping FZE.",
+   "type": "observation",
+   "occurred_start": "2026-08-19T04:50:00+00:00",
+   "occurred_end": "2026-08-19T06:20:00+00:00",
+   "context": null
+  },
+  {
+   "id": "8eedd47a-8206-471d-a011-1f8b53a16918",
+   "text": "A payment of PHP 585,000.00 from Lotus Hospitality Group Pte Ltd to Iloilo Food Distributors Inc was rejected by Manila Bay Savings Bank on 2026-09-02 due to a beneficiary name misspelling where 'Iloilo' was written as 'Illoilo'.",
+   "type": "observation",
+   "occurred_start": "2026-09-02T04:21:00+00:00",
+   "occurred_end": "2026-09-02T07:05:00+00:00",
+   "context": null
+  }
+ ],
+ "mental_models": [
+  {
+   "id": "exception-playbook",
+   "text": "Payment Exception Playbook: Generating content...\n",
+   "context": "concept (structural)"
+  }
+ ],
+ "directives": [
+  {
+   "id": "9646ff2b-0a35-41fc-bdd7-a6a1a4d5b787",
+   "name": "Sanctions holds are human-only",
+   "content": "Never recommend releasing, auto-approving or bypassing a payment held by sanctions screening, even if the beneficiary was cleared before. Always route sanctions hits to the Compliance team for human review; a prior clearance reference may be cited only as supporting context."
+  },
+  {
+   "id": "6d8a66af-a0f9-46e0-8dd1-fd88b0ba9da7",
+   "name": "Mask account numbers",
+   "content": "Never write a full bank account number or IBAN in an answer. Show only the last 4 characters, e.g. ****0913."
+  },
+  {
+   "id": "b00baa59-a49d-49db-8bb1-18e51bcea4eb",
+   "name": "Cite evidence",
+   "content": "When you state a pattern, cite the dates or case IDs of the past exceptions it is based on. If memory has no relevant evidence, say so explicitly instead of guessing."
+  }
+ ],
+ "latency_ms": 11357
+}

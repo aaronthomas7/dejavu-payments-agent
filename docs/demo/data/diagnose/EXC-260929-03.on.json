@@ -1,0 +1,151 @@
+{
+ "case_id": "EXC-260929-03",
+ "used_memory": true,
+ "root_cause": "SANCTIONS_POTENTIAL_MATCH",
+ "root_cause_label": "Potential sanctions match",
+ "confidence": 0.6,
+ "reasoning": "The payment was blocked by the sanctions screening engine with a high match score (0.89) to a similarly named entity. While the client and bank have had prior false‑positive hits, this specific beneficiary name has not been cleared before, so it must be treated as a potential sanctions match.",
+ "recommended_action": "Escalate the case to the Compliance team for a full sanctions review, providing all payment details and the screening hit information. Do not release the payment until compliance gives a clearance or further instructions.",
+ "draft_message": "Dear Blue Harbour Logistics,\\n\\nYour payment of USD 13,110.00 to Red Sea Star Logistics LLC (account ending 5250) has been placed on hold pending a sanctions screening review. We will notify you as soon as the review is completed.\\n\\nThank you for your understanding.\\n\\nBest regards,\\nPayments Operations",
+ "prevention_tip": "Verify the exact legal name of the beneficiary against sanctions lists before submitting the payment to avoid future holds.",
+ "evidence": [],
+ "recalled": [
+  {
+   "ref": "M1",
+   "id": "a3c63ed2-5d12-4cf3-bd58-39c4a0df3392",
+   "text": "A payment of USD 55,750.00 from Blue Harbour Logistics Pte Ltd to Desert Star General Trading LLC at Desert Rose Bank (DRBKAEAD) was held on 2026-09-07 due to a 0.86 sanctions match score against Desert Star Shipping FZE.",
+   "type": "observation",
+   "occurred": "2026-09-07T05:15:00+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "client:blueharbour",
+    "bank:DRBK",
+    "code:SCREENING_HOLD",
+    "ccy:USD"
+   ],
+   "score": 1.0733421701097134
+  },
+  {
+   "ref": "M2",
+   "id": "233bf533-01bc-4514-9aef-a119c6d5f502",
+   "text": "A payment of USD 55,730.00 from Blue Harbour Logistics Pte Ltd to Desert Star General Trading LLC at Desert Rose Bank (DRBKAEAD) was held on 2026-09-25 due to a 0.86 sanctions match score against Desert Star Shipping FZE.",
+   "type": "observation",
+   "occurred": "2026-09-25T02:10:00+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "bank:DRBK",
+    "client:blueharbour",
+    "code:SCREENING_HOLD",
+    "ccy:USD"
+   ],
+   "score": 1.0646360248227553
+  },
+  {
+   "ref": "M3",
+   "id": "a4190ca5-49d0-4036-adab-c118c9e77687",
+   "text": "A payment of USD 44,940.00 from Blue Harbour Logistics Pte Ltd to Desert Star General Trading LLC at Desert Rose Bank (DRBKAEAD) was held on 2026-09-16 due to a 0.86 sanctions match score against Desert Star Shipping FZE.",
+   "type": "observation",
+   "occurred": "2026-09-16T06:30:00+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "bank:DRBK",
+    "client:blueharbour",
+    "code:SCREENING_HOLD",
+    "ccy:USD"
+   ],
+   "score": 1.0636201793100326
+  },
+  {
+   "ref": "M4",
+   "id": "23332d26-2ff5-41e0-976a-683b7bb4fb37",
+   "text": "A payment of USD 43,020.00 from Blue Harbour Logistics Pte Ltd to Desert Star General Trading LLC at Desert Rose Bank (DRBKAEAD) was held on 2026-08-19 due to a 0.86 sanctions match score against Desert Star Shipping FZE.",
+   "type": "observation",
+   "occurred": "2026-08-19T06:20:00+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "bank:DRBK",
+    "client:blueharbour",
+    "code:SCREENING_HOLD",
+    "ccy:USD"
+   ],
+   "score": 1.059489873141971
+  },
+  {
+   "ref": "M5",
+   "id": "a24873a9-7f66-4173-ba6e-0ef779f1e73f",
+   "text": "Compliance cleared the payment to Desert Star General Trading LLC on 2026-08-21 after verifying the beneficiary's credentials and confirming it is distinct from the sanctioned entity Desert Star Shipping FZE.",
+   "type": "observation",
+   "occurred": "2026-08-19T06:20:00.010000+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "bank:DRBK",
+    "client:blueharbour",
+    "code:SCREENING_HOLD",
+    "ccy:USD"
+   ],
+   "score": 1.035025043487964
+  },
+  {
+   "ref": "M6",
+   "id": "574b244d-fd42-4a1c-bac9-dd71bbf4aabc",
+   "text": "Blue Harbour Logistics Pte Ltd sent USD 37,090.00 to Desert Star General Trading LLC at Desert Rose Bank on 2026-08-28 for port handling charges.",
+   "type": "observation",
+   "occurred": "2026-08-28T07:40:00+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "bank:DRBK",
+    "client:blueharbour",
+    "ccy:USD",
+    "code:SCREENING_HOLD"
+   ],
+   "score": 1.020919890031856
+  },
+  {
+   "ref": "M7",
+   "id": "c3551338-d2df-4fe1-a59a-4e0d6528a3c4",
+   "text": "Payment of USD 44,940.00 from Blue Harbour Logistics Pte Ltd to Desert Star General Trading LLC at Desert Rose Bank (DRBKAEAD) was held due to a sanctions screening hit. | When: 2026-09-16 | Involving: Blue Harbour Logistics Pte Ltd (client), Desert Star General Trading LLC (beneficiary), Desert Rose Bank (bank) | Sanctions screening hit against 'DESERT STAR SHIPPING FZE' with a match score of 0.86.",
+   "type": "world",
+   "occurred": "2026-09-16T06:30:00+00:00",
+   "case_id": "EXC-260916-02",
+   "root_cause": "SANCTIONS_KNOWN_FALSE_POSITIVE",
+   "tags": [
+    "bank:DRBK",
+    "client:blueharbour",
+    "code:SCREENING_HOLD",
+    "ccy:USD"
+   ],
+   "score": 1.0928717656012177
+  },
+  {
+   "ref": "M8",
+   "id": "0a645b29-7169-4956-899b-1e343200123f",
+   "text": "Payment of USD 55,730.00 from Blue Harbour Logistics Pte Ltd to Desert Star General Trading LLC at Desert Rose Bank (DRBKAEAD) was held due to a sanctions screening hit against 'DESERT STAR SHIPPING FZE' with a match score of 0.86. | When: 2026-09-25 | Involving: Blue Harbour Logistics Pte Ltd (client), Desert Star General Trading LLC (beneficiary), Desert Rose Bank (bank)",
+   "type": "world",
+   "occurred": "2026-09-25T02:10:00+00:00",
+   "case_id": "EXC-260925-01",
+   "root_cause": "SANCTIONS_KNOWN_FALSE_POSITIVE",
+   "tags": [
+    "bank:DRBK",
+    "client:blueharbour",
+    "code:SCREENING_HOLD",
+    "ccy:USD"
+   ],
+   "score": 1.0866714197405125
+  }
+ ],
+ "requires_human_approval": true,
+ "auto_fix_eligible": false,
+ "guardrail_notes": [
+  "Sanctions rule: DejaVu never releases a screening hold. Routed to Compliance for a human decision."
+ ],
+ "model": "openai/gpt-oss-120b",
+ "latency_ms": 2329,
+ "degraded": false,
+ "warnings": []
+}

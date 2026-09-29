@@ -1,0 +1,20 @@
+{
+ "case_id": "EXC-260929-01",
+ "used_memory": false,
+ "root_cause": "NOSTRO_FUNDING_SHORTFALL",
+ "root_cause_label": "Our nostro account is short",
+ "confidence": 0.6,
+ "reasoning": "The hold code AM04 indicates insufficient funds on the bank's IDR settlement (nostro) account, while the client’s debit account passed the balance check. This points to a shortfall in our own IDR liquidity rather than a client error.",
+ "recommended_action": "Verify the current balance of the IDR nostro account, arrange funding (e.g., intra‑bank transfer, FX conversion, or borrowing) to cover the IDR 995,000,000.00, and then release the payment. Update the settlement account balance monitoring thresholds.",
+ "draft_message": "Dear Lotus Hospitality Group, we are currently holding your payment of IDR 995,000,000.00 to PT Bali Villas Management (account ****9854) due to a temporary shortfall in our IDR settlement account. We are arranging funding and will process the payment as soon as possible. Thank you for your patience.",
+ "prevention_tip": "Implement real‑time alerts for nostro account balances to pre‑emptively fund large outgoing payments.",
+ "evidence": [],
+ "recalled": [],
+ "requires_human_approval": false,
+ "auto_fix_eligible": false,
+ "guardrail_notes": [],
+ "model": "openai/gpt-oss-120b",
+ "latency_ms": 1821,
+ "degraded": false,
+ "warnings": []
+}

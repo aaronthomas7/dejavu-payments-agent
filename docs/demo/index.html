@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DejaVu · Payment Exceptions Desk</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%230f766e'/><text x='32' y='43' font-size='30' text-anchor='middle' fill='white' font-family='Arial' font-weight='700'>DV</text></svg>">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">DV</div>
+      <div>
+        <div class="brand-name">DejaVu</div>
+        <div class="brand-tag">The payments ops agent that has seen this before</div>
+      </div>
+    </div>
+    <nav class="tabs" role="tablist">
+      <button class="tab active" data-tab="desk" role="tab">Exception desk</button>
+      <button class="tab" data-tab="curve" role="tab">Learning curve</button>
+      <button class="tab" data-tab="learned" role="tab">What it learned</button>
+      <button class="tab" data-tab="precheck" role="tab">Pre-flight check</button>
+    </nav>
+    <div class="status" id="status"></div>
+  </header>
+  <div id="offline-banner" class="banner hidden"></div>
+
+  <main>
+    <!-- ================= DESK ================= -->
+    <section id="tab-desk" class="tab-panel active">
+      <aside class="queue">
+        <div class="queue-head">
+          <div class="seg" role="group" aria-label="Queue filter">
+            <button class="seg-btn active" data-filter="open">Open <span id="count-open"></span></button>
+            <button class="seg-btn" data-filter="resolved">Resolved <span id="count-resolved"></span></button>
+          </div>
+        </div>
+        <div id="queue-list" class="queue-list"></div>
+      </aside>
+      <section class="case" id="case-panel">
+        <div class="empty">Select an exception from the queue.</div>
+      </section>
+    </section>
+
+    <!-- ================= LEARNING CURVE ================= -->
+    <section id="tab-curve" class="tab-panel">
+      <div class="panel-wrap" id="curve-panel"></div>
+    </section>
+
+    <!-- ================= WHAT IT LEARNED ================= -->
+    <section id="tab-learned" class="tab-panel">
+      <div class="panel-wrap learned-grid">
+        <div class="card">
+          <div class="card-head">
+            <h2>Lessons <span class="muted small">Hindsight observations, consolidated automatically</span></h2>
+            <button class="btn ghost" id="reload-lessons">Reload</button>
+          </div>
+          <div id="lessons"></div>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <h2>Playbook <span class="muted small">a mental model that rewrites itself</span></h2>
+            <button class="btn ghost" id="refresh-playbook">Refresh now</button>
+          </div>
+          <div id="playbook-meta" class="muted small"></div>
+          <div id="playbook" class="markdown"></div>
+        </div>
+        <div class="card span-2">
+          <div class="card-head"><h2>Ask DejaVu <span class="muted small">Hindsight reflect, with the desk's hard rules applied</span></h2></div>
+          <form id="ask-form" class="ask-row">
+            <input id="ask-input" type="text" placeholder="e.g. What goes wrong with payments to Golconda Commercial Bank?" autocomplete="off">
+            <button class="btn primary" type="submit">Ask</button>
+          </form>
+          <div class="chips" id="ask-suggestions"></div>
+          <div id="ask-answer"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= PRE-FLIGHT ================= -->
+    <section id="tab-precheck" class="tab-panel">
+      <div class="panel-wrap precheck-grid">
+        <div class="card">
+          <div class="card-head"><h2>Check a payment before it is sent</h2></div>
+          <p class="muted">DejaVu reflects over every exception the desk has resolved and warns you about what is likely to go wrong.</p>
+          <div class="chips" id="precheck-presets"></div>
+          <form id="precheck-form" class="form-grid">
+            <label>Client<select name="client" id="pc-client"></select></label>
+            <label>Beneficiary<input name="beneficiary" required></label>
+            <label>Beneficiary bank<select name="beneficiary_bank" id="pc-bank"></select></label>
+            <label>Intermediary (optional)<select name="intermediary" id="pc-inter"></select></label>
+            <label>Currency<select name="currency">
+              <option>USD</option><option>INR</option><option>IDR</option><option>EUR</option><option>GBP</option>
+              <option>MYR</option><option>PHP</option><option>AED</option></select></label>
+            <label>Amount<input name="amount" type="number" min="1" step="0.01" required></label>
+            <label>Submit time (SGT)<input name="submit_time_sgt" type="time" value="10:00" required></label>
+            <label>Submit date<input name="submit_date" type="date"></label>
+            <label>Beneficiary account<input name="beneficiary_account"></label>
+            <label class="span-2">Remittance info<input name="remittance_info"></label>
+            <div class="span-2"><button class="btn primary" type="submit">Run pre-flight check</button></div>
+          </form>
+        </div>
+        <div class="card" id="precheck-result">
+          <div class="empty small">Results appear here.</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+  <script src="vendor/chart.umd.min.js"></script>
+  <script src="vendor/marked.min.js"></script>
+  <script src="vendor/purify.min.js"></script>
+  <script>window.DEJAVU_STATIC = true;</script>
+  <script src="app.js"></script>
+</body>
+</html>

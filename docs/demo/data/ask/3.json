@@ -1,0 +1,62 @@
+{
+ "answer": "Nordkyst Bank (NKYS) has made the following change:\n\n*   **Correspondent Bank Update:** Effective September 1, 2026, Nordkyst Bank changed its USD correspondent bank from Atlantic Clearing Bank (ACBKUS33) to Hudson Federal Bank (HFBKUS33).\n\nThis change has led to several payment rejections (reason code RC01) for clients who continued to use the outdated Atlantic Clearing Bank as the intermediary after the September 1 deadline.\n\n**Evidence:**\n*   **Observation e4f40691:** Documents the change of the USD correspondent bank to Hudson Federal Bank effective September 1, 2026.\n*   **Observation 6aa79f44:** Tanjong Marine Services Pte Ltd payment (2026-09-08) rejected due to use of obsolete intermediary.\n*   **Observation aaad614c:** Tanjong Marine Services Pte Ltd payment (2026-09-18) rejected due to use of obsolete intermediary.\n*   **Observation 6fcddc29:** Tanjong Marine Services Pte Ltd payment (2026-09-02) rejected due to use of obsolete intermediary.\n*   **Observation 2eb586a9:** Confirms DejaVu correctly diagnosed these routing issues as `CORRESPONDENT_ROUTING_CHANGED`.",
+ "memories": [
+  {
+   "id": "e4f40691-7d09-436a-a88f-3cbbaa3c46e0",
+   "text": "Nordkyst Bank (NKYS) changed its USD correspondent bank from Atlantic Clearing Bank (ACBKUS33) to Hudson Federal Bank (HFBKUS33), effective September 1, 2026.",
+   "type": "observation",
+   "occurred_start": "2026-09-01T00:00:00+00:00",
+   "occurred_end": "2026-09-01T00:00:00+00:00",
+   "context": null
+  },
+  {
+   "id": "6aa79f44-2261-4804-bec5-0ccca80fde7c",
+   "text": "Tanjong Marine Services Pte Ltd attempted to send USD 28,640.00 to Stavanger Offshore Supply AS at Nordkyst Bank on 2026-09-08, but the payment was rejected with code RC01 because it used the outdated intermediary Atlantic Clearing Bank instead of the new correspondent, Hudson Federal Bank.",
+   "type": "observation",
+   "occurred_start": "2026-09-08T05:51:00+00:00",
+   "occurred_end": "2026-09-08T07:10:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "aaad614c-2652-42dd-8477-04f0136a1178",
+   "text": "Tanjong Marine Services Pte Ltd attempted to send USD 27,610.00 to Bergen Subsea Services AS at Nordkyst Bank on 2026-09-18, but the payment was rejected with code RC01 because it used the obsolete intermediary Atlantic Clearing Bank instead of the new correspondent, Hudson Federal Bank.",
+   "type": "observation",
+   "occurred_start": "2026-09-18T01:42:00+00:00",
+   "occurred_end": "2026-09-18T02:40:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "6fcddc29-32f0-4b4f-922a-505f2c0e3b72",
+   "text": "Tanjong Marine Services Pte Ltd attempted to send USD 41,000.00 to Bergen Subsea Services AS on 2026-09-02, but the payment was rejected with code RC01 because it used the outdated intermediary Atlantic Clearing Bank instead of the new correspondent, Hudson Federal Bank.",
+   "type": "observation",
+   "occurred_start": "2026-09-02T00:00:00.010000+00:00",
+   "occurred_end": "2026-09-02T00:00:00.010000+00:00",
+   "context": null
+  }
+ ],
+ "mental_models": [
+  {
+   "id": "exception-playbook",
+   "text": "Payment Exception Playbook: Generating content...\n",
+   "context": "concept (structural)"
+  }
+ ],
+ "directives": [
+  {
+   "id": "9646ff2b-0a35-41fc-bdd7-a6a1a4d5b787",
+   "name": "Sanctions holds are human-only",
+   "content": "Never recommend releasing, auto-approving or bypassing a payment held by sanctions screening, even if the beneficiary was cleared before. Always route sanctions hits to the Compliance team for human review; a prior clearance reference may be cited only as supporting context."
+  },
+  {
+   "id": "6d8a66af-a0f9-46e0-8dd1-fd88b0ba9da7",
+   "name": "Mask account numbers",
+   "content": "Never write a full bank account number or IBAN in an answer. Show only the last 4 characters, e.g. ****0913."
+  },
+  {
+   "id": "b00baa59-a49d-49db-8bb1-18e51bcea4eb",
+   "name": "Cite evidence",
+   "content": "When you state a pattern, cite the dates or case IDs of the past exceptions it is based on. If memory has no relevant evidence, say so explicitly instead of guessing."
+  }
+ ],
+ "latency_ms": 4575
+}

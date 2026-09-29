@@ -1,0 +1,16 @@
+{
+  "suggestions": [
+    "What goes wrong with payments to Golconda Commercial Bank, and how do we avoid it?",
+    "Which clients send duplicate payment files, and when?",
+    "Can we auto-release the Desert Star General Trading sanctions hit this time?",
+    "What changed at Nordkyst Bank recently?",
+    "Which recurring exceptions cost the desk the most time?"
+  ],
+  "presets": [
+    {"label": "Late INR payment to Golconda", "v": {"client": "Orchid Pharma Asia Pte Ltd", "beneficiary": "Hyderabad Organics Private Limited", "beneficiary_bank": "Golconda Commercial Bank", "intermediary": "Coromandel Clearing Bank, Mumbai", "currency": "INR", "amount": 2150000, "submit_time_sgt": "15:10", "submit_date": "2026-09-29", "remittance_info": "INV HO-5702 active ingredients"}},
+    {"label": "No invoice no. to Victoria Harbour", "v": {"client": "Kestrel Components Pte Ltd", "beneficiary": "Kowloon Circuit Supplies Ltd", "beneficiary_bank": "Victoria Harbour Bank", "intermediary": "Atlantic Clearing Bank, New York", "currency": "USD", "amount": 18000, "submit_time_sgt": "11:00", "submit_date": "2026-09-29", "remittance_info": "Components"}},
+    {"label": "USD to Nordkyst via old route", "v": {"client": "Tanjong Marine Services Pte Ltd", "beneficiary": "Bergen Subsea Services AS", "beneficiary_bank": "Nordkyst Bank", "intermediary": "Atlantic Clearing Bank, New York", "currency": "USD", "amount": 27500, "submit_time_sgt": "10:30", "submit_date": "2026-09-29", "remittance_info": "INV BSS-760 ROV hire"}},
+    {"label": "Old 12-digit account at Pearl Delta", "v": {"client": "Sunrise Textiles Pte Ltd", "beneficiary": "Guangzhou Hengtai Trading Co., Ltd.", "beneficiary_bank": "Pearl Delta Commercial Bank", "intermediary": "", "currency": "USD", "amount": 15200, "submit_time_sgt": "09:45", "submit_date": "2026-09-29", "beneficiary_account": "620144880913", "remittance_info": "INV HT-21190 cotton yarn"}},
+    {"label": "Routine EUR payment", "v": {"client": "Orchid Pharma Asia Pte Ltd", "beneficiary": "Rhein Chemie Vertrieb GmbH", "beneficiary_bank": "Rheinland Handelsbank", "intermediary": "", "currency": "EUR", "amount": 12000, "submit_time_sgt": "10:00", "submit_date": "2026-09-29", "remittance_info": "INV RCV-44310 reagents"}}
+  ]
+}

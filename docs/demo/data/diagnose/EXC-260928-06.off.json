@@ -1,0 +1,20 @@
+{
+ "case_id": "EXC-260928-06",
+ "used_memory": false,
+ "root_cause": "CLIENT_TYPO_IN_DETAILS",
+ "root_cause_label": "Client keyed wrong details",
+ "confidence": 0.55,
+ "reasoning": "The AC01 reject indicates an incorrect account number and the system flagged the IBAN check digits as failing, which is typical of a data entry mistake. No evidence of format changes or other issues is present. Therefore a client typo is the most likely cause.",
+ "recommended_action": "Contact the client to verify the beneficiary IBAN (******************1702) and request a corrected payment file. Once corrected, resubmit the payment.",
+ "draft_message": "Dear Kestrel Components, the payment to Rhein Elektronik Handels GmbH was rejected because the IBAN provided (…9170**2**) failed the check‑digit validation. Please confirm the correct IBAN and resend the payment. Thank you.",
+ "prevention_tip": "Implement an IBAN validation check in the client’s payment entry system to catch digit errors before submission.",
+ "evidence": [],
+ "recalled": [],
+ "requires_human_approval": false,
+ "auto_fix_eligible": false,
+ "guardrail_notes": [],
+ "model": "openai/gpt-oss-120b",
+ "latency_ms": 1372,
+ "degraded": false,
+ "warnings": []
+}

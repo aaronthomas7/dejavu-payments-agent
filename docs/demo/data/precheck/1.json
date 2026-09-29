@@ -1,0 +1,102 @@
+{
+ "risk_level": "high",
+ "summary": "The payment of USD 18,000.00 to Kestrel Components Pte Ltd faces potential failure or delays due to missing mandatory invoice references for large trade payments and potential issues with outdated correspondent bank routing.",
+ "warnings": [
+  {
+   "title": "Missing Invoice Reference",
+   "detail": "Victoria Harbour Bank requires an invoice number in the remittance information for all trade payments exceeding USD 10,000.",
+   "severity": "high",
+   "fix": "Ensure the remittance information includes the specific invoice number before submitting the instruction."
+  },
+  {
+   "title": "Outdated Correspondent Bank",
+   "detail": "Historical data indicates that payments routed through the incorrect correspondent bank, specifically using Atlantic Clearing Bank for certain institutions, are subject to rejection.",
+   "severity": "medium",
+   "fix": "Confirm with the Treasury or Settlement team if Victoria Harbour Bank still accepts Atlantic Clearing Bank as an intermediary or if a new correspondent bank is required."
+  }
+ ],
+ "evidence": [
+  {
+   "id": "a470222d-2fb3-418b-ad41-0c520dc9b01c",
+   "text": "Payment exception EXC-260911-02 occurred for an Orchid Pharma Asia Pte Ltd transaction because it reached Golconda Commercial Bank after the cut-off time, resulting in next-day credit.",
+   "type": "observation",
+   "occurred_start": "2026-09-10T07:40:00+00:00",
+   "occurred_end": "2026-09-11T08:00:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "e4f40691-7d09-436a-a88f-3cbbaa3c46e0",
+   "text": "Nordkyst Bank (NKYS) changed its USD correspondent bank from Atlantic Clearing Bank (ACBKUS33) to Hudson Federal Bank (HFBKUS33), effective September 1, 2026.",
+   "type": "observation",
+   "occurred_start": "2026-09-01T00:00:00+00:00",
+   "occurred_end": "2026-09-01T00:00:00+00:00",
+   "context": null
+  },
+  {
+   "id": "486120ac-79d1-4db7-9995-3807efe3998b",
+   "text": "Payment exception EXC-260827-02 occurred for an Orchid Pharma Asia Pte Ltd transaction because it reached Golconda Commercial Bank after the 12:00 IST cut-off, resulting in next-day credit.",
+   "type": "observation",
+   "occurred_start": "2026-08-27T06:10:00.010000+00:00",
+   "occurred_end": "2026-08-27T06:10:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "b0c30020-40c9-4942-a77d-8d5876d3901e",
+   "text": "Payment exception EXC-260909-02 was opened on September 9, 2026, because Orchid Pharma Asia Pte Ltd's funds were held at Albion Clearing Bank for a compliance check; the issue was resolved by DejaVu via an MT199 trace, leading to the release of funds.",
+   "type": "observation",
+   "occurred_start": "2026-09-09T06:40:00.010000+00:00",
+   "occurred_end": "2026-09-09T06:40:00.020000+00:00",
+   "context": null
+  },
+  {
+   "id": "8eedd47a-8206-471d-a011-1f8b53a16918",
+   "text": "A payment of PHP 585,000.00 from Lotus Hospitality Group Pte Ltd to Iloilo Food Distributors Inc was rejected by Manila Bay Savings Bank on 2026-09-02 due to a beneficiary name misspelling where 'Iloilo' was written as 'Illoilo'.",
+   "type": "observation",
+   "occurred_start": "2026-09-02T04:21:00+00:00",
+   "occurred_end": "2026-09-02T07:05:00+00:00",
+   "context": null
+  },
+  {
+   "id": "38242209-156e-498a-afdb-67856505a34c",
+   "text": "Payment exception EXC-260917-02 for Blue Harbour Logistics Pte Ltd involving a USD 12,460.00 transfer to Guangzhou Harbour Freight Agency Co., Ltd. at Pearl Delta Commercial Bank was rejected on 2026-09-17 due to an incorrect account number (reason code AC01).",
+   "type": "observation",
+   "occurred_start": "2026-09-17T04:56:00+00:00",
+   "occurred_end": "2026-09-17T07:20:00+00:00",
+   "context": null
+  },
+  {
+   "id": "0be6058c-323b-4701-844d-ce1c86e1a5df",
+   "text": "Payment exception EXC-260922-02 occurred on 2026-09-22 for a transfer of INR 1,889,000.00 from Vantage Analytics Pte Ltd to Srinivasa Infotech Private Limited at Golconda Commercial Bank (GOLCINHH), involving Coromandel Clearing Bank as an intermediary.",
+   "type": "observation",
+   "occurred_start": "2026-09-22T05:37:00+00:00",
+   "occurred_end": "2026-09-22T06:50:00+00:00",
+   "context": null
+  },
+  {
+   "id": "992bca3b-b31c-4787-8626-714925f7c062",
+   "text": "Payment exception EXC-260828-01 occurred on 2026-08-28 due to a NOSTRO_FUNDING_SHORTFALL in the IDR nostro account at Nusantara Sentral Bank, which was caused by month-end outflows.",
+   "type": "observation",
+   "occurred_start": "2026-08-28T02:05:00.010000+00:00",
+   "occurred_end": "2026-08-28T02:05:00.010000+00:00",
+   "context": null
+  }
+ ],
+ "directives": [
+  {
+   "id": "9646ff2b-0a35-41fc-bdd7-a6a1a4d5b787",
+   "name": "Sanctions holds are human-only",
+   "content": "Never recommend releasing, auto-approving or bypassing a payment held by sanctions screening, even if the beneficiary was cleared before. Always route sanctions hits to the Compliance team for human review; a prior clearance reference may be cited only as supporting context."
+  },
+  {
+   "id": "6d8a66af-a0f9-46e0-8dd1-fd88b0ba9da7",
+   "name": "Mask account numbers",
+   "content": "Never write a full bank account number or IBAN in an answer. Show only the last 4 characters, e.g. ****0913."
+  },
+  {
+   "id": "b00baa59-a49d-49db-8bb1-18e51bcea4eb",
+   "name": "Cite evidence",
+   "content": "When you state a pattern, cite the dates or case IDs of the past exceptions it is based on. If memory has no relevant evidence, say so explicitly instead of guessing."
+  }
+ ],
+ "latency_ms": 8502
+}

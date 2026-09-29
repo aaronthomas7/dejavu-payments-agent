@@ -1,0 +1,158 @@
+{
+ "case_id": "EXC-260929-02",
+ "used_memory": true,
+ "root_cause": "NAME_LEGAL_SUFFIX_MISMATCH",
+ "root_cause_label": "Name must match registered legal name",
+ "confidence": 0.85,
+ "reasoning": "The BE01 code indicates the beneficiary name does not match the account holder name. Memory M5 shows the same bank rejecting payments when the legal suffix is abbreviated (Pvt Ltd vs Private Limited). The current beneficiary name uses \"Pvt Ltd\", likely causing the mismatch.",
+ "recommended_action": "Contact the client to verify the exact legal name registered with Tungabhadra Co‑operative Bank and request a resubmission with the full name (e.g., \"Coorg Coffee Exports Private Limited\").",
+ "draft_message": "Dear Arcadia Foods,\n\nYour recent INR 1,511,000 payment to Coorg Coffee Exports was rejected (BE01) because the beneficiary name on the instruction (\"Coorg Coffee Exports Pvt Ltd\") does not match the account holder name on file. Please confirm the full legal name as registered with Tungabhadra Co‑operative Bank and resend the payment using that exact name.\n\nThank you.",
+ "prevention_tip": "Always use the beneficiary's full legal name, including the correct suffix, as recorded by the receiving bank.",
+ "evidence": [
+  {
+   "memory_ref": "M5",
+   "why_relevant": "Same beneficiary bank (Tungabhadra Co-operative Bank) and same BE01 name‑mismatch rejection due to abbreviated suffix.",
+   "case_id": null,
+   "text": "Payment EXC-260911-01 for INR 1,499,000.00 from Orchid Pharma Asia Pte Ltd to Deccan Bio Labs Pvt Ltd was rejected on 2026-09-11 by Tungabhadra Co-operative Bank due to a beneficiary name mismatch (reason code BE01), specifically an abbreviation instead of the registered legal name 'DECCAN BIO LABS PRIVATE LIMITED'.",
+   "occurred": "2026-09-11T02:15:00.010000+00:00",
+   "type": "observation"
+  }
+ ],
+ "recalled": [
+  {
+   "ref": "M1",
+   "id": "0be6058c-323b-4701-844d-ce1c86e1a5df",
+   "text": "Payment exception EXC-260922-02 occurred on 2026-09-22 for a transfer of INR 1,889,000.00 from Vantage Analytics Pte Ltd to Srinivasa Infotech Private Limited at Golconda Commercial Bank (GOLCINHH), involving Coromandel Clearing Bank as an intermediary.",
+   "type": "observation",
+   "occurred": "2026-09-22T06:50:00+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "client:vantage",
+    "ccy:INR",
+    "bank:GOLC",
+    "code:AC01"
+   ],
+   "score": 1.063209609693719
+  },
+  {
+   "ref": "M2",
+   "id": "d0ed9daf-37ff-49f7-bd64-d35e33b13918",
+   "text": "A payment of INR 563,000.00 from Vantage Analytics Pte Ltd to Mysuru Software Services Pvt. Ltd. at Tungabhadra Co-operative Bank was rejected on 2026-09-01 with reason code BE01.",
+   "type": "observation",
+   "occurred": "2026-09-01T02:25:00+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "client:vantage",
+    "code:BE01",
+    "ccy:INR",
+    "bank:TUNG"
+   ],
+   "score": 1.059208323431391
+  },
+  {
+   "ref": "M3",
+   "id": "718bbaf8-3c5e-4d33-ba5c-52004904e0c4",
+   "text": "Payment exception EXC-260923-01 for INR 1,390,000.00 from Vantage Analytics Pte Ltd to Mysuru Software Services Pvt Ltd at Tungabhadra Co-operative Bank was rejected on 2026-09-23 due to a beneficiary name mismatch.",
+   "type": "observation",
+   "occurred": "2026-09-23T02:30:00+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "code:BE01",
+    "client:vantage",
+    "bank:TUNG",
+    "ccy:INR"
+   ],
+   "score": 1.056288479231383
+  },
+  {
+   "ref": "M4",
+   "id": "bb86ddb7-d2af-4c8c-95bd-626b699e10ee",
+   "text": "Orchid Pharma Asia Pte Ltd submitted an INR 1,918,000.00 payment to Hyderabad Organics Private Limited on 2026-09-10 via Coromandel Clearing Bank to Golconda Commercial Bank.",
+   "type": "observation",
+   "occurred": "2026-09-11T08:00:00+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "bank:GOLC",
+    "client:orchid",
+    "code:NON_RECEIPT_CLAIM",
+    "ccy:INR"
+   ],
+   "score": 1.045940247435397
+  },
+  {
+   "ref": "M5",
+   "id": "e40044df-c46e-42ea-9026-3b7d95855c88",
+   "text": "Payment EXC-260911-01 for INR 1,499,000.00 from Orchid Pharma Asia Pte Ltd to Deccan Bio Labs Pvt Ltd was rejected on 2026-09-11 by Tungabhadra Co-operative Bank due to a beneficiary name mismatch (reason code BE01), specifically an abbreviation instead of the registered legal name 'DECCAN BIO LABS PRIVATE LIMITED'.",
+   "type": "observation",
+   "occurred": "2026-09-11T02:15:00.010000+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "code:BE01",
+    "client:orchid",
+    "bank:TUNG",
+    "ccy:INR"
+   ],
+   "score": 1.0353537794299874
+  },
+  {
+   "ref": "M6",
+   "id": "b2c78a19-9aa6-42a6-8021-c76e01ddb28d",
+   "text": "Arcadia Foods Pte Ltd submitted a duplicate MYR 26,690.00 payment to Penang Spice Traders Sdn Bhd at Straits Heritage Bank (STHBMYKP).",
+   "type": "observation",
+   "occurred": "2026-09-07T01:30:00+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "bank:STHB",
+    "ccy:MYR",
+    "code:AM05",
+    "client:arcadia"
+   ],
+   "score": 0.9823126798617122
+  },
+  {
+   "ref": "M7",
+   "id": "2684f2fa-a053-4eb7-a1d0-7456af5733c8",
+   "text": "Payment exception EXC-260911-02 for Orchid Pharma Asia Pte Ltd involving an INR 1,918,000.00 transfer to Hyderabad Organics Private Limited at Golconda Commercial Bank (GOLCINHH) via intermediary Coromandel Clearing Bank (CRMCINBB). | When: 2026-09-10 | Involving: Orchid Pharma Asia Pte Ltd (client), Hyderabad Organics Private Limited (beneficiary), Golconda Commercial Bank (bank), Coromandel Clearing Bank (intermediary) | Non-receipt claim reported by beneficiary.",
+   "type": "world",
+   "occurred": "2026-09-11T08:00:00+00:00",
+   "case_id": "EXC-260911-02",
+   "root_cause": "MISSED_CUTOFF_NEXT_DAY_CREDIT",
+   "tags": [
+    "bank:GOLC",
+    "client:orchid",
+    "code:NON_RECEIPT_CLAIM",
+    "ccy:INR"
+   ],
+   "score": 1.089689878234399
+  },
+  {
+   "ref": "M8",
+   "id": "b8b19054-8137-4470-946c-31b87474941e",
+   "text": "The payment exception was resolved by adjusting the beneficiary account number from 12 to 15 digits by adding a 601 prefix, following a change in the beneficiary bank's account format. | When: 2026-09-17 | Beneficiary bank changed account format.",
+   "type": "world",
+   "occurred": "2026-09-17T07:20:00.010000+00:00",
+   "case_id": "EXC-260917-02",
+   "root_cause": "ACCOUNT_FORMAT_CHANGED",
+   "tags": [
+    "bank:PDCB",
+    "ccy:USD",
+    "client:blueharbour",
+    "code:AC01"
+   ],
+   "score": 1.0862006643418791
+  }
+ ],
+ "requires_human_approval": false,
+ "auto_fix_eligible": true,
+ "guardrail_notes": [],
+ "model": "openai/gpt-oss-120b",
+ "latency_ms": 3436,
+ "degraded": false,
+ "warnings": []
+}

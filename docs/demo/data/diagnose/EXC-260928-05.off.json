@@ -1,0 +1,20 @@
+{
+ "case_id": "EXC-260928-05",
+ "used_memory": false,
+ "root_cause": "CLIENT_TYPO_IN_DETAILS",
+ "root_cause_label": "Client keyed wrong details",
+ "confidence": 0.55,
+ "reasoning": "RC01 indicates the bank identifier (BIC) was rejected by the intermediary, which usually means the BIC supplied is wrong. The rest of the details (amount, account number) are valid, so a one‑off data‑entry error is most likely.",
+ "recommended_action": "Ask the client to confirm the beneficiary bank's SWIFT code (NKYSNOBBXXX) and correct any typo, then resubmit the payment.",
+ "draft_message": "Dear Tanjong Marine Services, we attempted to process your payment to Stavanger Offshore Supply AS but it was rejected due to an incorrect bank identifier (SWIFT code). Please verify the beneficiary bank's SWIFT code and provide the correct value so we can re‑submit the payment. Thank you.",
+ "prevention_tip": "Validate all BIC/SWIFT codes against an official directory before sending the payment file.",
+ "evidence": [],
+ "recalled": [],
+ "requires_human_approval": false,
+ "auto_fix_eligible": false,
+ "guardrail_notes": [],
+ "model": "openai/gpt-oss-120b",
+ "latency_ms": 1422,
+ "degraded": false,
+ "warnings": []
+}

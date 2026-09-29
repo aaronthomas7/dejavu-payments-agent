@@ -1,0 +1,22 @@
+{
+ "case_id": "EXC-260928-04",
+ "used_memory": false,
+ "root_cause": "SANCTIONS_POTENTIAL_MATCH",
+ "root_cause_label": "Potential sanctions match",
+ "confidence": 0.6,
+ "reasoning": "The payment was placed on SCREENING_HOLD because the beneficiary name closely matches a sanctioned entity (match score 0.86). There is no record of a prior false‑positive clearance, so it must be treated as a new potential sanctions match. No memory patterns apply.",
+ "recommended_action": "Escalate the payment to the Compliance team for a full sanctions review and clearance before any further processing.",
+ "draft_message": "Dear Blue Harbour Logistics,\\n\\nYour payment of USD 8,660.00 to Desert Star General Trading LLC (account ending 8898) has been placed on hold pending a sanctions screening review. We will update you once compliance has completed its assessment. Thank you for your patience.\\n\\nBest regards,\\nPayments Operations",
+ "prevention_tip": "Run a pre‑submission sanctions check on beneficiary names and account details to catch potential matches early.",
+ "evidence": [],
+ "recalled": [],
+ "requires_human_approval": true,
+ "auto_fix_eligible": false,
+ "guardrail_notes": [
+  "Sanctions rule: DejaVu never releases a screening hold. Routed to Compliance for a human decision."
+ ],
+ "model": "openai/gpt-oss-120b",
+ "latency_ms": 1380,
+ "degraded": false,
+ "warnings": []
+}

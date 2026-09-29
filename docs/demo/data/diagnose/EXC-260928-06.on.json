@@ -1,0 +1,158 @@
+{
+ "case_id": "EXC-260928-06",
+ "used_memory": true,
+ "root_cause": "CLIENT_TYPO_IN_DETAILS",
+ "root_cause_label": "Client keyed wrong details",
+ "confidence": 0.72,
+ "reasoning": "The AC01 rejection indicates an invalid account number; the IBAN’s check digits failed, which is typical of a data‑entry mistake. German IBAN formats have not changed, so a format migration is unlikely. A past case (M1) with the same rejection was caused by a transposed digit, supporting a typo explanation.",
+ "recommended_action": "Contact the client to verify the IBAN ******************1702, correct any digit errors, and resubmit the payment. If the client confirms the IBAN is correct, request a confirmation from the beneficiary bank.",
+ "draft_message": "Dear Kestrel Components, the EUR 31,710 payment to Rhein Elektronik Handels GmbH was rejected because the IBAN you provided (…91702) failed the check‑digit validation. Please review the IBAN and resend with the correct digits. Thank you.",
+ "prevention_tip": "Implement an automated IBAN validation check in the payment entry system to catch digit errors before submission.",
+ "evidence": [
+  {
+   "memory_ref": "M1",
+   "why_relevant": "Both cases were rejected with AC01 due to an invalid IBAN/check‑digit failure, and M1 was diagnosed as a client typo.",
+   "case_id": null,
+   "text": "Orchid Pharma Asia Pte Ltd attempted a payment of EUR 37,890.00 to Rhein Chemie Vertrieb GmbH at Rheinland Handelsbank (RHHBDEFF), which was rejected with reason code AC01 due to an invalid IBAN containing two transposed digits.",
+   "occurred": "2026-09-08T03:20:00+00:00",
+   "type": "observation"
+  }
+ ],
+ "recalled": [
+  {
+   "ref": "M1",
+   "id": "2795eeca-b430-4b99-bcf4-d5e3be5fdb69",
+   "text": "Orchid Pharma Asia Pte Ltd attempted a payment of EUR 37,890.00 to Rhein Chemie Vertrieb GmbH at Rheinland Handelsbank (RHHBDEFF), which was rejected with reason code AC01 due to an invalid IBAN containing two transposed digits.",
+   "type": "observation",
+   "occurred": "2026-09-08T03:20:00+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "bank:RHHB",
+    "ccy:EUR",
+    "client:orchid",
+    "code:AC01"
+   ],
+   "score": 1.0743096405311967
+  },
+  {
+   "ref": "M2",
+   "id": "dc6c7a36-ff6b-4882-aa3b-c1647cfd52a6",
+   "text": "The payment exception EXC-260922-02 was rejected with reason code AC01 because the beneficiary account number contained 16 digits instead of the required 15, a client typo identified by DejaVu with 78% confidence.",
+   "type": "observation",
+   "occurred": "2026-09-22T06:50:00.020000+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "client:vantage",
+    "ccy:INR",
+    "bank:GOLC",
+    "code:AC01"
+   ],
+   "score": 1.0489521313223902
+  },
+  {
+   "ref": "M3",
+   "id": "75d695e7-fd59-4c4d-9f5e-ac5331e46733",
+   "text": "Payment exception EXC-260818-01 for Kestrel Components Pte Ltd involving a USD 19,040.00 transfer to Dongguan Precision Parts Co., Ltd. at Pearl Delta Commercial Bank was rejected on 2026-08-18 due to an incorrect beneficiary account number (reason code AC01), as the client provided an 11-digit number instead of the required 12-digit number.",
+   "type": "observation",
+   "occurred": "2026-08-18T03:05:00+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "bank:PDCB",
+    "code:AC01",
+    "ccy:USD",
+    "client:kestrel"
+   ],
+   "score": 1.0485254205496426
+  },
+  {
+   "ref": "M4",
+   "id": "77b92484-c028-482a-ab2d-af155f15d76f",
+   "text": "Kestrel Components Pte Ltd payment of USD 16,900.00 to Dongguan Precision Parts Co., Ltd. at Pearl Delta Commercial Bank was rejected on 2026-09-24 with reason code AC01 due to the bank's migration to a 15-digit account format; the issue was resolved by prefixing the beneficiary account number 620144880917 with 601.",
+   "type": "observation",
+   "occurred": "2026-09-24T03:40:00.010000+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "bank:PDCB",
+    "code:AC01",
+    "ccy:USD",
+    "client:kestrel"
+   ],
+   "score": 1.0462260455036694
+  },
+  {
+   "ref": "M5",
+   "id": "44983148-5c2d-4f72-a13a-7cde54e35b95",
+   "text": "Kestrel Components Pte Ltd attempted a USD 9,670.00 payment to Foshan Metalworks Co., Ltd. at Pearl Delta Commercial Bank on 2026-08-31, which was rejected (reason code AC01) due to an incorrect account number; the payment was later successfully credited after prefixing the account number 620177312045 with branch code 601, following the bank's migration to a 15-digit account format.",
+   "type": "observation",
+   "occurred": "2026-08-31T06:45:00.010000+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "bank:PDCB",
+    "code:AC01",
+    "ccy:USD",
+    "client:kestrel"
+   ],
+   "score": 1.0446806356198333
+  },
+  {
+   "ref": "M6",
+   "id": "6fe8a7b0-a7bb-4922-9b60-4c8f569973a6",
+   "text": "DejaVu correctly diagnosed the root cause of a payment exception as ACCOUNT_FORMAT_CHANGED with 80% confidence.",
+   "type": "observation",
+   "occurred": "2026-09-24T03:40:00.020000+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "bank:PDCB",
+    "code:AC01",
+    "ccy:USD",
+    "client:kestrel"
+   ],
+   "score": 0.6129174405035657
+  },
+  {
+   "ref": "M7",
+   "id": "b8b19054-8137-4470-946c-31b87474941e",
+   "text": "The payment exception was resolved by adjusting the beneficiary account number from 12 to 15 digits by adding a 601 prefix, following a change in the beneficiary bank's account format. | When: 2026-09-17 | Beneficiary bank changed account format.",
+   "type": "world",
+   "occurred": "2026-09-17T07:20:00.010000+00:00",
+   "case_id": "EXC-260917-02",
+   "root_cause": "ACCOUNT_FORMAT_CHANGED",
+   "tags": [
+    "bank:PDCB",
+    "ccy:USD",
+    "client:blueharbour",
+    "code:AC01"
+   ],
+   "score": 1.0939497717529174
+  },
+  {
+   "ref": "M8",
+   "id": "9885e252-8447-4459-9cc2-b9279df9dfac",
+   "text": "Payment exception EXC-260914-02 for Blue Harbour Logistics Pte Ltd involving a GBP 17,090.00 transfer to Felixstowe Freight Ltd at Thames Union Bank was rejected due to an incorrect BIC. | When: 2026-09-14 | Involving: Blue Harbour Logistics Pte Ltd (client), Felixstowe Freight Ltd (beneficiary), Thames Union Bank (beneficiary bank), Albion Clearing Bank (intermediary)",
+   "type": "world",
+   "occurred": "2026-09-14T04:30:00+00:00",
+   "case_id": "EXC-260914-02",
+   "root_cause": "CLIENT_TYPO_IN_DETAILS",
+   "tags": [
+    "bank:THUB",
+    "client:blueharbour",
+    "ccy:GBP",
+    "code:RC01"
+   ],
+   "score": 1.0885459509542643
+  }
+ ],
+ "requires_human_approval": false,
+ "auto_fix_eligible": false,
+ "guardrail_notes": [],
+ "model": "openai/gpt-oss-120b",
+ "latency_ms": 3483,
+ "degraded": false,
+ "warnings": []
+}

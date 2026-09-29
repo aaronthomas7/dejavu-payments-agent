@@ -61,6 +61,29 @@ async def diagnose_reliably(agent, case, use_memory):
     raise SystemExit(f"Could not get a clean diagnosis for {case['case_id']} - check your keys/limits and run again.")
 
 
+def playbook_ready(pb: dict) -> bool:
+    text = (pb.get("content") or "").strip()
+    return len(text) > 200 and not text.lower().startswith("generating")
+
+
+async def record_playbook(memory, offline: bool) -> dict:
+    """Fetch the playbook; if Hindsight is still writing it, ask for a refresh and wait (up to ~4 min)."""
+    playbook = await memory.playbook()
+    if offline or playbook_ready(playbook):
+        return playbook
+    try:
+        await memory.refresh_playbook()
+    except Exception as exc:  # already refreshing is fine
+        print(f"  (refresh request: {exc})")
+    for i in range(24):
+        await asyncio.sleep(10)
+        playbook = await memory.playbook()
+        if playbook_ready(playbook):
+            break
+        print(f"  waiting for Hindsight to finish the playbook ... {(i + 1) * 10}s")
+    return playbook
+
+
 def build_site(out: Path) -> None:
     """Copy the UI next to the recorded data, switched into static mode with relative paths."""
     out.mkdir(parents=True, exist_ok=True)
@@ -85,6 +108,7 @@ async def main() -> None:
     ap.add_argument("--out", default=str(ROOT / "docs" / "demo"), help="output folder (default docs/demo)")
     ap.add_argument("--repo", default=DEFAULT_REPO, help="repo link shown in the demo banner")
     ap.add_argument("--allow-offline", action="store_true", help="testing only: export using the offline stand-ins")
+    ap.add_argument("--only", choices=["playbook"], help="re-record just the playbook and lessons (no model calls)")
     args = ap.parse_args()
 
     mem_mode, llm_mode = settings.resolved_modes()
@@ -93,11 +117,25 @@ async def main() -> None:
         raise SystemExit("Add HINDSIGHT_API_KEY and GROQ_API_KEY to .env first - the demo must show real answers.")
     out = Path(args.out)
     data = out / "data"
-    if data.exists():
-        shutil.rmtree(data)
 
     memory = build_memory(settings, mem_mode)
     await memory.setup()
+    if args.only == "playbook":
+        if not (data / "status.json").exists():
+            raise SystemExit("No recorded demo yet. Run  python scripts/export_demo.py  first.")
+        print("Re-recording the playbook and lessons ...")
+        playbook = await record_playbook(memory, offline)
+        write(data / "playbook.json", playbook)
+        write(data / "lessons.json", {"items": await memory.lessons(limit=40)})
+        status = json.loads((data / "status.json").read_text(encoding="utf-8"))
+        status["memory_counts"] = await memory.stats()
+        write(data / "status.json", status)
+        await memory.close()
+        print(f"Done: playbook {'ready' if playbook_ready(playbook) else 'STILL NOT READY - run this again in a few minutes'}"
+              f" ({len((playbook.get('content') or '').strip())} characters).")
+        return
+    if data.exists():
+        shutil.rmtree(data)
     agent = DejaVuAgent(settings, memory, build_reasoner(settings, llm_mode), store=None)
     if await memory.count() == 0:
         raise SystemExit("The memory bank is empty. Run  python scripts/replay.py --fresh  first.")
@@ -116,15 +154,7 @@ async def main() -> None:
 
     print("Recording lessons and playbook ...")
     write(data / "lessons.json", {"items": await memory.lessons(limit=40)})
-    playbook = await memory.playbook()
-    if not playbook.get("content") and not offline:
-        await memory.refresh_playbook()
-        for _ in range(12):
-            await asyncio.sleep(10)
-            playbook = await memory.playbook()
-            if playbook.get("content"):
-                break
-    write(data / "playbook.json", playbook)
+    write(data / "playbook.json", await record_playbook(memory, offline))
 
     print("Recording Ask DejaVu answers ...")
     for i, q in enumerate(inputs["suggestions"]):

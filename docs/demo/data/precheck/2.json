@@ -1,0 +1,78 @@
+{
+ "risk_level": "high",
+ "summary": "Tanjong Marine Services Pte Ltd faces payment rejection risks due to the use of an outdated intermediary bank and incorrect BIC codes for Nordkyst Bank.",
+ "warnings": [
+  {
+   "title": "Use of Outdated Intermediary Bank",
+   "detail": "Tanjong Marine Services has repeatedly used Atlantic Clearing Bank for USD payments to Nordkyst Bank, which has switched its correspondent to Hudson Federal Bank as of September 1, 2026.",
+   "severity": "high",
+   "fix": "Update payment instructions to route via Hudson Federal Bank instead of Atlantic Clearing Bank."
+  },
+  {
+   "title": "BIC / Routing Detail Errors",
+   "detail": "Past payments have been rejected due to incorrect BIC codes for Nordkyst Bank, such as using NKYSNOBX instead of NKYSNOBB.",
+   "severity": "medium",
+   "fix": "Verify that the correct BIC for Nordkyst Bank (NKYSNOBB) is used before submission."
+  }
+ ],
+ "evidence": [
+  {
+   "id": "aaad614c-2652-42dd-8477-04f0136a1178",
+   "text": "Tanjong Marine Services Pte Ltd attempted to send USD 27,610.00 to Bergen Subsea Services AS at Nordkyst Bank on 2026-09-18, but the payment was rejected with code RC01 because it used the obsolete intermediary Atlantic Clearing Bank instead of the new correspondent, Hudson Federal Bank.",
+   "type": "observation",
+   "occurred_start": "2026-09-18T01:42:00+00:00",
+   "occurred_end": "2026-09-18T02:40:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "6fcddc29-32f0-4b4f-922a-505f2c0e3b72",
+   "text": "Tanjong Marine Services Pte Ltd attempted to send USD 41,000.00 to Bergen Subsea Services AS on 2026-09-02, but the payment was rejected with code RC01 because it used the outdated intermediary Atlantic Clearing Bank instead of the new correspondent, Hudson Federal Bank.",
+   "type": "observation",
+   "occurred_start": "2026-09-02T00:00:00.010000+00:00",
+   "occurred_end": "2026-09-02T00:00:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "6aa79f44-2261-4804-bec5-0ccca80fde7c",
+   "text": "Tanjong Marine Services Pte Ltd attempted to send USD 28,640.00 to Stavanger Offshore Supply AS at Nordkyst Bank on 2026-09-08, but the payment was rejected with code RC01 because it used the outdated intermediary Atlantic Clearing Bank instead of the new correspondent, Hudson Federal Bank.",
+   "type": "observation",
+   "occurred_start": "2026-09-08T05:51:00+00:00",
+   "occurred_end": "2026-09-08T07:10:00.010000+00:00",
+   "context": null
+  },
+  {
+   "id": "bcee8026-0320-4b6b-a4b0-aa80d5c00c8c",
+   "text": "Tanjong Marine Services Pte Ltd attempted to send USD 23,580.00 to Bergen Subsea Services AS at Nordkyst Bank on 2026-08-25, but the payment was rejected with code RC01 due to an incorrect BIC (NKYSNOBX instead of NKYSNOBB).",
+   "type": "observation",
+   "occurred_start": "2026-08-25T02:09:00+00:00",
+   "occurred_end": "2026-08-25T03:45:00.020000+00:00",
+   "context": null
+  },
+  {
+   "id": "e4f40691-7d09-436a-a88f-3cbbaa3c46e0",
+   "text": "Nordkyst Bank (NKYS) changed its USD correspondent bank from Atlantic Clearing Bank (ACBKUS33) to Hudson Federal Bank (HFBKUS33), effective September 1, 2026.",
+   "type": "observation",
+   "occurred_start": "2026-09-01T00:00:00+00:00",
+   "occurred_end": "2026-09-01T00:00:00+00:00",
+   "context": null
+  }
+ ],
+ "directives": [
+  {
+   "id": "9646ff2b-0a35-41fc-bdd7-a6a1a4d5b787",
+   "name": "Sanctions holds are human-only",
+   "content": "Never recommend releasing, auto-approving or bypassing a payment held by sanctions screening, even if the beneficiary was cleared before. Always route sanctions hits to the Compliance team for human review; a prior clearance reference may be cited only as supporting context."
+  },
+  {
+   "id": "6d8a66af-a0f9-46e0-8dd1-fd88b0ba9da7",
+   "name": "Mask account numbers",
+   "content": "Never write a full bank account number or IBAN in an answer. Show only the last 4 characters, e.g. ****0913."
+  },
+  {
+   "id": "b00baa59-a49d-49db-8bb1-18e51bcea4eb",
+   "name": "Cite evidence",
+   "content": "When you state a pattern, cite the dates or case IDs of the past exceptions it is based on. If memory has no relevant evidence, say so explicitly instead of guessing."
+  }
+ ],
+ "latency_ms": 5628
+}

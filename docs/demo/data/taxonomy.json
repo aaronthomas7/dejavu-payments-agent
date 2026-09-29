@@ -1,0 +1,107 @@
+[
+ {
+  "code": "ACCOUNT_FORMAT_CHANGED",
+  "label": "Beneficiary bank changed account format",
+  "description": "The beneficiary bank migrated to a new account-number format; old-format numbers are rejected.",
+  "default_fix": "Convert the account number to the bank's new format and resend.",
+  "human_only": false
+ },
+ {
+  "code": "CLIENT_TYPO_IN_DETAILS",
+  "label": "Client keyed wrong details",
+  "description": "One-off data-entry error by the client (account number, IBAN, BIC or name typo).",
+  "default_fix": "Ask the client for the correct details, repair and resend.",
+  "human_only": false
+ },
+ {
+  "code": "MISSED_CUTOFF_NEXT_DAY_CREDIT",
+  "label": "Arrived after bank cut-off",
+  "description": "The payment reached the beneficiary bank after its same-day cut-off, so it credits the next business day.",
+  "default_fix": "Confirm next-day credit to the client; no trace needed. Advise earlier submission.",
+  "human_only": false
+ },
+ {
+  "code": "INTERMEDIARY_DELAY",
+  "label": "Held at an intermediary bank",
+  "description": "Funds are held or delayed at an intermediary/correspondent bank.",
+  "default_fix": "Send a trace (MT199 / camt.027) to the intermediary and follow up.",
+  "human_only": false
+ },
+ {
+  "code": "NAME_LEGAL_SUFFIX_MISMATCH",
+  "label": "Name must match registered legal name",
+  "description": "The beneficiary bank does exact name matching; abbreviated company suffixes (Pvt Ltd) are rejected.",
+  "default_fix": "Amend the beneficiary name to the full registered legal name and resend.",
+  "human_only": false
+ },
+ {
+  "code": "SANCTIONS_KNOWN_FALSE_POSITIVE",
+  "label": "Known sanctions false positive",
+  "description": "Screening hit on a beneficiary that Compliance has previously cleared as a false positive.",
+  "default_fix": "Route to Compliance with the prior clearance reference. Never auto-release.",
+  "human_only": true
+ },
+ {
+  "code": "SANCTIONS_POTENTIAL_MATCH",
+  "label": "Potential sanctions match",
+  "description": "New screening hit that has not been cleared before; needs full Compliance review.",
+  "default_fix": "Escalate to Compliance for full review. Never auto-release.",
+  "human_only": true
+ },
+ {
+  "code": "MISSING_INVOICE_REFERENCE",
+  "label": "Invoice number required",
+  "description": "The beneficiary bank requires an invoice number in the remittance information for trade payments.",
+  "default_fix": "Get the invoice number from the client and resubmit with it in the remittance info.",
+  "human_only": false
+ },
+ {
+  "code": "PURPOSE_CODE_MISSING",
+  "label": "Regulatory purpose code missing",
+  "description": "A regulatory purpose code or reporting field is required for this corridor and was missing.",
+  "default_fix": "Get the purpose code from the client and resubmit.",
+  "human_only": false
+ },
+ {
+  "code": "CORRESPONDENT_ROUTING_CHANGED",
+  "label": "Correspondent / routing changed",
+  "description": "The beneficiary bank changed its correspondent bank; the payment went via the old route.",
+  "default_fix": "Update standard settlement instructions and resend via the new correspondent.",
+  "human_only": false
+ },
+ {
+  "code": "CLIENT_ERP_DUPLICATE",
+  "label": "Client system re-sent a file",
+  "description": "A duplicate caused by the client's ERP/system re-sending a payment file (known recurring behaviour).",
+  "default_fix": "Cancel the duplicate instruction and notify the client's IT team.",
+  "human_only": false
+ },
+ {
+  "code": "POSSIBLE_DUPLICATE_VERIFY",
+  "label": "Possible duplicate - verify",
+  "description": "Looks like a duplicate but may be intentional (e.g. two invoices with the same amount).",
+  "default_fix": "Verify with the client before releasing or cancelling.",
+  "human_only": false
+ },
+ {
+  "code": "NOSTRO_FUNDING_SHORTFALL",
+  "label": "Our nostro account is short",
+  "description": "Our own nostro account in that currency lacks funds (e.g. heavy month-end outflows).",
+  "default_fix": "Ask Treasury to top up the nostro, then release the payment.",
+  "human_only": false
+ },
+ {
+  "code": "CLIENT_INSUFFICIENT_FUNDS",
+  "label": "Client account lacks funds",
+  "description": "The client's own debit account does not have enough balance.",
+  "default_fix": "Hold the payment and ask the client to fund the account.",
+  "human_only": false
+ },
+ {
+  "code": "BENEFICIARY_ACCOUNT_CLOSED",
+  "label": "Beneficiary account closed",
+  "description": "The beneficiary's account has been closed.",
+  "default_fix": "Return funds and ask the client for the beneficiary's new account.",
+  "human_only": false
+ }
+]

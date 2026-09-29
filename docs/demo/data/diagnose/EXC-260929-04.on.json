@@ -1,0 +1,174 @@
+{
+ "case_id": "EXC-260929-04",
+ "used_memory": true,
+ "root_cause": "MISSING_INVOICE_REFERENCE",
+ "root_cause_label": "Invoice number required",
+ "confidence": 0.85,
+ "reasoning": "The payment of USD 13,400 was sent to Victoria Harbour Bank, which rejects trade payments over USD 10,000 without an invoice number. The remittance info only contains \"Components Sep\" and no invoice reference. Past cases M1, M5 and M8 show the same RR04 code for the same bank caused by missing invoice references.",
+ "recommended_action": "Ask the client to resend the payment with a proper invoice number (e.g., KCS-xxxx) added to the remittance information and ensure the format meets Victoria Harbour Bank's requirements.",
+ "draft_message": "Dear Kestrel Components, your USD 13,400 payment to Kowloon Circuit Supplies Ltd was rejected by Victoria Harbour Bank (RR04) because the remittance information did not include an invoice reference. Please resend the payment with the appropriate invoice number (e.g., KCS-xxxx) included. Thank you.",
+ "prevention_tip": "Always include the invoice number in remittance info for trade payments over USD 10,000 to Victoria Harbour Bank.",
+ "evidence": [
+  {
+   "memory_ref": "M1",
+   "why_relevant": "Same client, same beneficiary bank, same RR04 code, missing invoice reference",
+   "case_id": null,
+   "text": "Payment exception EXC-260915-01 for Kestrel Components Pte Ltd, involving a USD 16,750.00 transfer to Kowloon Circuit Supplies Ltd, was rejected by Victoria Harbour Bank with reason code RR04 due to a missing invoice reference.",
+   "occurred": "2026-09-15T03:00:00+00:00",
+   "type": "observation"
+  },
+  {
+   "memory_ref": "M5",
+   "why_relevant": "World‑level rule: VHBKHKHH requires invoice number for trade payments > USD10k",
+   "case_id": "EXC-260904-01",
+   "text": "Victoria Harbour Bank requires an invoice number for trade payments exceeding USD 10,000. | Involving: Victoria Harbour Bank",
+   "occurred": "2026-09-04T02:40:00+00:00",
+   "type": "world"
+  },
+  {
+   "memory_ref": "M8",
+   "why_relevant": "Exact prior case with Kestrel Components, same amount range, resolved by adding invoice number",
+   "case_id": "EXC-260915-01",
+   "text": "Payment of USD 16,750.00 from Kestrel Components Pte Ltd to Kowloon Circuit Supplies Ltd at Victoria Harbour Bank (VHBKHKHH) was rejected with reason code RR04. | When: 2026-09-15 | Involving: Kestrel Components Pte Ltd (client), Kowloon Circuit Supplies Ltd (beneficiary), Victoria Harbour Bank (beneficiary bank), Atlantic Clearing Bank (intermediary) | Regulatory requirement for trade payments over USD 10,000 at Victoria Harbour Bank.",
+   "occurred": "2026-09-15T03:00:00+00:00",
+   "type": "world"
+  }
+ ],
+ "recalled": [
+  {
+   "ref": "M1",
+   "id": "0879c8ac-7564-40ca-ac9b-5ed6e516b5cb",
+   "text": "Payment exception EXC-260915-01 for Kestrel Components Pte Ltd, involving a USD 16,750.00 transfer to Kowloon Circuit Supplies Ltd, was rejected by Victoria Harbour Bank with reason code RR04 due to a missing invoice reference.",
+   "type": "observation",
+   "occurred": "2026-09-15T03:00:00+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "client:kestrel",
+    "code:RR04",
+    "ccy:USD",
+    "bank:VHBK"
+   ],
+   "score": 1.0776039955752463
+  },
+  {
+   "ref": "M2",
+   "id": "8a9d2966-b145-469f-baf3-5eb652bccb98",
+   "text": "Payment EXC-260904-01 from Sunrise Textiles Pte Ltd to Tsuen Wan Garment Accessories Ltd was rejected by Victoria Harbour Bank with reason code RR04 due to a missing invoice reference.",
+   "type": "observation",
+   "occurred": "2026-09-04T02:40:00.010000+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "client:sunrise",
+    "bank:VHBK",
+    "ccy:USD",
+    "code:RR04"
+   ],
+   "score": 1.0643469165972588
+  },
+  {
+   "ref": "M3",
+   "id": "d9d4a8c5-b66e-4594-bf56-8b445455037e",
+   "text": "Payment of USD 11,050.00 from Sunrise Textiles Pte Ltd to Tsuen Wan Garment Accessories Ltd was rejected by Victoria Harbour Bank with reason code RR04 due to a missing invoice reference, then resolved by adding invoice reference 'TWG-7802'.",
+   "type": "observation",
+   "occurred": "2026-09-23T07:30:00.010000+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "client:sunrise",
+    "bank:VHBK",
+    "ccy:USD",
+    "code:RR04"
+   ],
+   "score": 1.0563265966174964
+  },
+  {
+   "ref": "M4",
+   "id": "7ecc7729-f6ef-42c2-ac0a-ba5af022bd1a",
+   "text": "Payment exception EXC-260915-01 for Kestrel Components Pte Ltd was resolved by adding invoice number KCS-56120 to the remittance information.",
+   "type": "observation",
+   "occurred": "2026-09-15T03:00:00.010000+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "ccy:USD",
+    "bank:VHBK",
+    "code:RR04",
+    "client:kestrel"
+   ],
+   "score": 0.9785713064697482
+  },
+  {
+   "ref": "M5",
+   "id": "ad0ab9d2-0035-4a20-82b3-02d915038b16",
+   "text": "Victoria Harbour Bank requires an invoice number for trade payments exceeding USD 10,000. | Involving: Victoria Harbour Bank",
+   "type": "world",
+   "occurred": "2026-09-04T02:40:00+00:00",
+   "case_id": "EXC-260904-01",
+   "root_cause": "MISSING_INVOICE_REFERENCE",
+   "tags": [
+    "client:sunrise",
+    "bank:VHBK",
+    "ccy:USD",
+    "code:RR04"
+   ],
+   "score": 1.0862005327245052
+  },
+  {
+   "ref": "M6",
+   "id": "58318e2a-4ae7-4072-921d-63e110686906",
+   "text": "Payment exception EXC-260917-02 for Blue Harbour Logistics Pte Ltd involving a USD 12,460.00 transfer to Guangzhou Harbour Freight Agency Co., Ltd. at Pearl Delta Commercial Bank was rejected with reason code AC01 due to an incorrect account number. | When: 2026-09-17 | Involving: Blue Harbour Logistics Pte Ltd (client), Guangzhou Harbour Freight Agency Co., Ltd. (beneficiary), Pearl Delta Commercial Bank (beneficiary bank) | Beneficiary bank changed account format.",
+   "type": "world",
+   "occurred": "2026-09-17T07:20:00+00:00",
+   "case_id": "EXC-260917-02",
+   "root_cause": "ACCOUNT_FORMAT_CHANGED",
+   "tags": [
+    "bank:PDCB",
+    "ccy:USD",
+    "client:blueharbour",
+    "code:AC01"
+   ],
+   "score": 1.0860593030164147
+  },
+  {
+   "ref": "M7",
+   "id": "36479d65-719d-432d-b836-ea0a42ba500f",
+   "text": "Payment exception EXC-260910-02 for Vantage Analytics Pte Ltd involving an INR 2,594,000.00 transfer to Srinivasa Infotech Private Limited at Golconda Commercial Bank was rejected due to a missing RBI purpose code. | When: 2026-09-10 | Involving: Vantage Analytics Pte Ltd (client), Srinivasa Infotech Private Limited (beneficiary), Golconda Commercial Bank (beneficiary bank), Coromandel Clearing Bank (intermediary) | Regulatory requirement for inward INR remittances.",
+   "type": "world",
+   "occurred": "2026-09-10T04:40:00+00:00",
+   "case_id": "EXC-260910-02",
+   "root_cause": "PURPOSE_CODE_MISSING",
+   "tags": [
+    "client:vantage",
+    "ccy:INR",
+    "bank:GOLC",
+    "code:RR04"
+   ],
+   "score": 1.0858502817809916
+  },
+  {
+   "ref": "M8",
+   "id": "88f305b5-943c-4487-ba4a-a64a32f8d402",
+   "text": "Payment of USD 16,750.00 from Kestrel Components Pte Ltd to Kowloon Circuit Supplies Ltd at Victoria Harbour Bank (VHBKHKHH) was rejected with reason code RR04. | When: 2026-09-15 | Involving: Kestrel Components Pte Ltd (client), Kowloon Circuit Supplies Ltd (beneficiary), Victoria Harbour Bank (beneficiary bank), Atlantic Clearing Bank (intermediary) | Regulatory requirement for trade payments over USD 10,000 at Victoria Harbour Bank.",
+   "type": "world",
+   "occurred": "2026-09-15T03:00:00+00:00",
+   "case_id": "EXC-260915-01",
+   "root_cause": "MISSING_INVOICE_REFERENCE",
+   "tags": [
+    "client:kestrel",
+    "code:RR04",
+    "ccy:USD",
+    "bank:VHBK"
+   ],
+   "score": 1.0812582668488624
+  }
+ ],
+ "requires_human_approval": false,
+ "auto_fix_eligible": true,
+ "guardrail_notes": [],
+ "model": "openai/gpt-oss-120b",
+ "latency_ms": 53805,
+ "degraded": false,
+ "warnings": []
+}

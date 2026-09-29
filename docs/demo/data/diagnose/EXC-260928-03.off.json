@@ -1,0 +1,20 @@
+{
+ "case_id": "EXC-260928-03",
+ "used_memory": false,
+ "root_cause": "INTERMEDIARY_DELAY",
+ "root_cause_label": "Held at an intermediary bank",
+ "confidence": 0.55,
+ "reasoning": "The SWIFT message was sent to the beneficiary bank on the same day, but the status remains \"credit pending\" which typically indicates the funds are held at the intermediary bank before being released. No evidence points to a typo, cutoff, or sanction issue.",
+ "recommended_action": "Contact Coromandel Clearing Bank to confirm the status of the funds and request release. Monitor the credit status and update the client accordingly.",
+ "draft_message": "Dear Hyderabad Organics Pvt Ltd, we are checking with the intermediary bank on the pending credit of INR 748,000.00 (account ending 0063). We will update you as soon as we have a resolution.",
+ "prevention_tip": "Include a follow‑up step to verify intermediary processing times for large INR payments.",
+ "evidence": [],
+ "recalled": [],
+ "requires_human_approval": false,
+ "auto_fix_eligible": false,
+ "guardrail_notes": [],
+ "model": "openai/gpt-oss-120b",
+ "latency_ms": 1157,
+ "degraded": false,
+ "warnings": []
+}

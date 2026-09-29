@@ -1,0 +1,166 @@
+{
+ "case_id": "EXC-260929-01",
+ "used_memory": true,
+ "root_cause": "NOSTRO_FUNDING_SHORTFALL",
+ "root_cause_label": "Our nostro account is short",
+ "confidence": 0.9,
+ "reasoning": "AM04 indicates insufficient funds on the bank's IDR settlement (nostro) account, while the client’s debit account passed the balance check. The same client and beneficiary experienced an identical hold on 2026-08-28 (M8), confirming a nostro funding shortfall as the cause.",
+ "recommended_action": "Verify the current balance of the IDR settlement (nostro) account, arrange immediate funding to cover the IDR 995,000,000.00 payment, and then release or re‑submit the transaction. Update internal monitoring thresholds for large IDR outflows.",
+ "draft_message": "Dear Lotus Hospitality Group, your payment of IDR 995,000,000.00 to PT Bali Villas Management (account ending 8544) is currently on hold due to insufficient funds in our IDR settlement account. We are arranging the necessary funding and will process the payment as soon as the account is topped up. Thank you for your patience.",
+ "prevention_tip": "Set up real‑time alerts for nostro balance thresholds and pre‑fund large payments to avoid AM04 holds.",
+ "evidence": [
+  {
+   "memory_ref": "M8",
+   "why_relevant": "Same client, same beneficiary bank, same AM04 hold due to insufficient funds on IDR settlement account.",
+   "case_id": "EXC-260828-01",
+   "text": "Lotus Hospitality Group Pte Ltd payment of IDR 1,210,000,000.00 to PT Bali Villas Management at Nusantara Sentral Bank (NSBKIDJA) was held due to AM04 (Insufficient funds). | When: 2026-08-28 | Involving: Lotus Hospitality Group Pte Ltd (client), PT Bali Villas Management (beneficiary), Nusantara Sentral Bank (beneficiary bank)",
+   "occurred": "2026-08-28T02:05:00+00:00",
+   "type": "world"
+  },
+  {
+   "memory_ref": "M5",
+   "why_relevant": "Demonstrates that AM04 holds are linked to nostro funding shortfalls in this corridor.",
+   "case_id": null,
+   "text": "Payment exception EXC-260831-02 occurred on 2026-08-31 due to a NOSTRO_FUNDING_SHORTFALL on the IDR settlement account, causing an AM04 hold for a transaction between Blue Harbour Logistics Pte Ltd and PT Surabaya Port Logistics.",
+   "occurred": "2026-08-31T03:10:00+00:00",
+   "type": "observation"
+  }
+ ],
+ "recalled": [
+  {
+   "ref": "M1",
+   "id": "42ad64f0-4f1b-4498-a7e8-3e518e9ffa13",
+   "text": "A payment of IDR 1,210,000,000.00 from Lotus Hospitality Group Pte Ltd to PT Bali Villas Management at Nusantara Sentral Bank was held on 2026-08-28 due to insufficient funds (AM04).",
+   "type": "observation",
+   "occurred": "2026-08-28T02:05:00+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "ccy:IDR",
+    "bank:NSBK",
+    "client:lotus",
+    "code:AM04"
+   ],
+   "score": 1.0715903079787024
+  },
+  {
+   "ref": "M2",
+   "id": "86c4e40f-aad2-4225-b71c-ae55d5362466",
+   "text": "Lotus Hospitality Group Pte Ltd sent IDR 216,000,000.00 to PT Bali Villas Management at Nusantara Sentral Bank for a management fee instalment on 2026-09-17.",
+   "type": "observation",
+   "occurred": "2026-09-17T03:10:00+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "client:lotus",
+    "bank:NSBK",
+    "code:AM05",
+    "ccy:IDR"
+   ],
+   "score": 1.0605047723119057
+  },
+  {
+   "ref": "M3",
+   "id": "9495b8a1-1e68-4389-b09e-7ac2969138b0",
+   "text": "Lotus Hospitality Group Pte Ltd initiated a payment of IDR 465,000,000.00 to PT Bali Villas Management via Nusantara Sentral Bank on 2026-08-27.",
+   "type": "observation",
+   "occurred": "2026-08-27T03:30:00+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "code:AM05",
+    "ccy:IDR",
+    "bank:NSBK",
+    "client:lotus"
+   ],
+   "score": 1.0457087810425898
+  },
+  {
+   "ref": "M4",
+   "id": "f3d85efb-404e-40dd-814b-de09792a9beb",
+   "text": "Payment exception EXC-260826-01 for Sunrise Textiles Pte Ltd was rejected with reason code AC01 due to an outdated beneficiary account number format.",
+   "type": "observation",
+   "occurred": "2026-08-26T02:50:00.010000+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "code:AC01",
+    "bank:PDCB",
+    "client:sunrise",
+    "ccy:USD"
+   ],
+   "score": 1.0417701533431551
+  },
+  {
+   "ref": "M5",
+   "id": "29386a65-dc30-4114-aab6-30db04d45dc5",
+   "text": "Payment exception EXC-260831-02 occurred on 2026-08-31 due to a NOSTRO_FUNDING_SHORTFALL on the IDR settlement account, causing an AM04 hold for a transaction between Blue Harbour Logistics Pte Ltd and PT Surabaya Port Logistics.",
+   "type": "observation",
+   "occurred": "2026-08-31T03:10:00+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "ccy:IDR",
+    "bank:NSBK",
+    "client:blueharbour",
+    "code:AM04"
+   ],
+   "score": 1.0296758570838498
+  },
+  {
+   "ref": "M6",
+   "id": "63bb1447-ffe6-4a84-82e7-3f1170c73d99",
+   "text": "DejaVu incorrectly diagnosed the root cause of payment exception EXC-260826-01 as CLIENT_TYPO_IN_DETAILS; the actual cause was ACCOUNT_FORMAT_CHANGED.",
+   "type": "observation",
+   "occurred": "2026-08-26T02:50:00.020000+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "code:AC01",
+    "bank:PDCB",
+    "client:sunrise",
+    "ccy:USD"
+   ],
+   "score": 0.9693970821526918
+  },
+  {
+   "ref": "M7",
+   "id": "a65c2b72-a28e-43fa-9ba2-20bcb24bc7d4",
+   "text": "Payment exception EXC-260922-02 for Vantage Analytics Pte Ltd involving an INR 1,889,000.00 transfer to Srinivasa Infotech Private Limited at Golconda Commercial Bank (GOLCINHH) was rejected with reason code AC01 due to an incorrect beneficiary account number. | When: 2026-09-22 | Involving: Vantage Analytics Pte Ltd (client), Srinivasa Infotech Private Limited (beneficiary), Golconda Commercial Bank (bank), Coromandel Clearing Bank (intermediary)",
+   "type": "world",
+   "occurred": "2026-09-22T06:50:00+00:00",
+   "case_id": "EXC-260922-02",
+   "root_cause": "CLIENT_TYPO_IN_DETAILS",
+   "tags": [
+    "client:vantage",
+    "ccy:INR",
+    "bank:GOLC",
+    "code:AC01"
+   ],
+   "score": 1.0925830075594258
+  },
+  {
+   "ref": "M8",
+   "id": "648d47cc-0239-4ea4-a548-b7401dbbd402",
+   "text": "Lotus Hospitality Group Pte Ltd payment of IDR 1,210,000,000.00 to PT Bali Villas Management at Nusantara Sentral Bank (NSBKIDJA) was held due to AM04 (Insufficient funds). | When: 2026-08-28 | Involving: Lotus Hospitality Group Pte Ltd (client), PT Bali Villas Management (beneficiary), Nusantara Sentral Bank (beneficiary bank)",
+   "type": "world",
+   "occurred": "2026-08-28T02:05:00+00:00",
+   "case_id": "EXC-260828-01",
+   "root_cause": "NOSTRO_FUNDING_SHORTFALL",
+   "tags": [
+    "ccy:IDR",
+    "bank:NSBK",
+    "client:lotus",
+    "code:AM04"
+   ],
+   "score": 1.082455098934551
+  }
+ ],
+ "requires_human_approval": false,
+ "auto_fix_eligible": true,
+ "guardrail_notes": [],
+ "model": "openai/gpt-oss-120b",
+ "latency_ms": 3026,
+ "degraded": false,
+ "warnings": []
+}

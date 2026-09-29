@@ -1,0 +1,160 @@
+{
+ "case_id": "EXC-260928-04",
+ "used_memory": true,
+ "root_cause": "SANCTIONS_KNOWN_FALSE_POSITIVE",
+ "root_cause_label": "Known sanctions false positive",
+ "confidence": 0.92,
+ "reasoning": "The beneficiary and match score are identical to several prior holds (M1‑M4) and a recent case (M6) was cleared as a known false positive with a specific compliance reference. This pattern strongly indicates the current hit is the same false positive.",
+ "recommended_action": "Add the compliance clearance reference CLR-2026-0819-07 to the payment details and release the hold, or forward to Compliance for final verification if needed.",
+ "draft_message": "Dear Blue Harbour Logistics, your payment of USD 8,660.00 to Desert Star General Trading LLC (account ***8898) is on hold due to a sanctions screening hit. This match has been previously cleared as a false positive (reference CLR-2026-0819-07). Please attach this reference so we can release the payment promptly.",
+ "prevention_tip": "Include the known false‑positive clearance reference (CLR-2026-0819-07) in all future payments to this beneficiary.",
+ "evidence": [
+  {
+   "memory_ref": "M6",
+   "why_relevant": "Same beneficiary, same 0.86 match score, and the hit was previously cleared as a false positive (CLR-2026-0819-07).",
+   "case_id": null,
+   "text": "The payment of USD 37,090.00 was held due to a sanctions screening hit (0.86 match score) against Desert Star Shipping FZE, but was resolved as a known false positive by Compliance under clearance CLR-2026-0819-07; future payments to this beneficiary require attaching this reference. The most recent occurrence was on 2026-09-25.",
+   "occurred": "2026-09-25T02:10:00.010000+00:00",
+   "type": "observation"
+  }
+ ],
+ "recalled": [
+  {
+   "ref": "M1",
+   "id": "a4190ca5-49d0-4036-adab-c118c9e77687",
+   "text": "A payment of USD 44,940.00 from Blue Harbour Logistics Pte Ltd to Desert Star General Trading LLC at Desert Rose Bank (DRBKAEAD) was held on 2026-09-16 due to a 0.86 sanctions match score against Desert Star Shipping FZE.",
+   "type": "observation",
+   "occurred": "2026-09-16T06:30:00+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "bank:DRBK",
+    "client:blueharbour",
+    "code:SCREENING_HOLD",
+    "ccy:USD"
+   ],
+   "score": 1.0715184956968986
+  },
+  {
+   "ref": "M2",
+   "id": "23332d26-2ff5-41e0-976a-683b7bb4fb37",
+   "text": "A payment of USD 43,020.00 from Blue Harbour Logistics Pte Ltd to Desert Star General Trading LLC at Desert Rose Bank (DRBKAEAD) was held on 2026-08-19 due to a 0.86 sanctions match score against Desert Star Shipping FZE.",
+   "type": "observation",
+   "occurred": "2026-08-19T06:20:00+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "bank:DRBK",
+    "client:blueharbour",
+    "code:SCREENING_HOLD",
+    "ccy:USD"
+   ],
+   "score": 1.0600772917338586
+  },
+  {
+   "ref": "M3",
+   "id": "a3c63ed2-5d12-4cf3-bd58-39c4a0df3392",
+   "text": "A payment of USD 55,750.00 from Blue Harbour Logistics Pte Ltd to Desert Star General Trading LLC at Desert Rose Bank (DRBKAEAD) was held on 2026-09-07 due to a 0.86 sanctions match score against Desert Star Shipping FZE.",
+   "type": "observation",
+   "occurred": "2026-09-07T05:15:00+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "client:blueharbour",
+    "bank:DRBK",
+    "code:SCREENING_HOLD",
+    "ccy:USD"
+   ],
+   "score": 1.0593643165113475
+  },
+  {
+   "ref": "M4",
+   "id": "233bf533-01bc-4514-9aef-a119c6d5f502",
+   "text": "A payment of USD 55,730.00 from Blue Harbour Logistics Pte Ltd to Desert Star General Trading LLC at Desert Rose Bank (DRBKAEAD) was held on 2026-09-25 due to a 0.86 sanctions match score against Desert Star Shipping FZE.",
+   "type": "observation",
+   "occurred": "2026-09-25T02:10:00+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "bank:DRBK",
+    "client:blueharbour",
+    "code:SCREENING_HOLD",
+    "ccy:USD"
+   ],
+   "score": 1.054191754511042
+  },
+  {
+   "ref": "M5",
+   "id": "ed7b7a9d-663e-4ddc-a551-bd900587dd4e",
+   "text": "DejaVu diagnosed payment exception EXC-260827-02 as a missed cut-off with 55% confidence and advised Orchid Pharma Asia Pte Ltd to submit INR payments before 14:00 SGT for same-day value.",
+   "type": "observation",
+   "occurred": "2026-08-27T06:10:00.020000+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "bank:GOLC",
+    "client:orchid",
+    "code:NON_RECEIPT_CLAIM",
+    "ccy:INR"
+   ],
+   "score": 1.035442764064672
+  },
+  {
+   "ref": "M6",
+   "id": "2e8e2db3-ea4e-4f56-9cfc-260efe0dfacc",
+   "text": "The payment of USD 37,090.00 was held due to a sanctions screening hit (0.86 match score) against Desert Star Shipping FZE, but was resolved as a known false positive by Compliance under clearance CLR-2026-0819-07; future payments to this beneficiary require attaching this reference. The most recent occurrence was on 2026-09-25.",
+   "type": "observation",
+   "occurred": "2026-09-25T02:10:00.010000+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "bank:DRBK",
+    "ccy:USD",
+    "code:SCREENING_HOLD",
+    "client:blueharbour"
+   ],
+   "score": 1.0342628708678538
+  },
+  {
+   "ref": "M7",
+   "id": "bb7aaead-bce6-4508-bfd0-37fae72b842d",
+   "text": "Victoria Harbour Bank requires an invoice number for trade payments exceeding USD 10,000.",
+   "type": "observation",
+   "occurred": "2026-09-04T02:40:00+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "client:sunrise",
+    "bank:VHBK",
+    "ccy:USD",
+    "code:RR04"
+   ],
+   "score": 0.7159343020262203
+  },
+  {
+   "ref": "M8",
+   "id": "34b5fa9d-b6b6-4dea-8653-2468b062ddb4",
+   "text": "Payment exception EXC-260915-01 resolved by adding invoice number KCS-56120 to the remittance information. | When: 2026-09-15 | Involving: Kestrel Components Pte Ltd | Victoria Harbour Bank requires invoice numbers for trade payments exceeding USD 10,000.",
+   "type": "world",
+   "occurred": "2026-09-15T03:00:00.010000+00:00",
+   "case_id": "EXC-260915-01",
+   "root_cause": "MISSING_INVOICE_REFERENCE",
+   "tags": [
+    "client:kestrel",
+    "code:RR04",
+    "ccy:USD",
+    "bank:VHBK"
+   ],
+   "score": 1.0928652968670725
+  }
+ ],
+ "requires_human_approval": true,
+ "auto_fix_eligible": false,
+ "guardrail_notes": [
+  "Sanctions rule: DejaVu never releases a screening hold. Routed to Compliance for a human decision."
+ ],
+ "model": "openai/gpt-oss-120b",
+ "latency_ms": 4724,
+ "degraded": false,
+ "warnings": []
+}

@@ -1,0 +1,102 @@
+{
+ "risk_level": "high",
+ "summary": "The transaction to Pearl Delta Commercial Bank (PDCB) for Sunrise Textiles Pte Ltd faces a high risk of rejection due to an outdated 12-digit account format. PDCB requires a 15-digit format following a migration on 2026-08-25.",
+ "warnings": [
+  {
+   "title": "Account Format Migration",
+   "detail": "PDCB migrated to a 15-digit account format on 2026-08-25. Using the old 12-digit format results in rejection code AC01.",
+   "severity": "high",
+   "fix": "Prefix the existing 12-digit account number with the bank's branch code 601 to meet the 15-digit requirement."
+  },
+  {
+   "title": "Beneficiary Account Format",
+   "detail": "Historical data shows consistent payment failures for transactions using 12-digit account numbers at this bank, including a previous exception for Sunrise Textiles Pte Ltd.",
+   "severity": "high",
+   "fix": "Ensure the 15-digit format is used to avoid a repeat of previous failures."
+  }
+ ],
+ "evidence": [
+  {
+   "id": "9c9e9e46-e3b2-4381-a221-f4bcc7add424",
+   "text": "Kestrel Components Pte Ltd payment of USD 9,670.00 to Foshan Metalworks Co., Ltd. at Pearl Delta Commercial Bank was rejected with reason code AC01 due to an incorrect account number. | When: 2026-08-31 | Involving: Kestrel Components Pte Ltd, Foshan Metalworks Co., Ltd., Pearl Delta Commercial Bank",
+   "type": "world",
+   "context": "resolved payment exception",
+   "occurred_start": "2026-08-31T05:41:00+00:00",
+   "occurred_end": "2026-08-31T06:45:00+00:00"
+  },
+  {
+   "id": "bcfa5f99-569c-41dd-8848-ade9b134e688",
+   "text": "Payment of USD 11,050.00 from Sunrise Textiles Pte Ltd to Tsuen Wan Garment Accessories Ltd was rejected by Victoria Harbour Bank (VHBK) with reason code RR04. | When: 2026-09-23 | Involving: Sunrise Textiles Pte Ltd (client), Tsuen Wan Garment Accessories Ltd (beneficiary), Victoria Harbour Bank (beneficiary bank), Atlantic Clearing Bank (intermediary) | Missing invoice reference required by the beneficiary bank.",
+   "type": "world",
+   "context": "resolved payment exception",
+   "occurred_start": "2026-09-23T06:01:00+00:00",
+   "occurred_end": "2026-09-23T07:30:00+00:00"
+  },
+  {
+   "id": "42ad463a-1318-417b-a2ec-51c81c5d0de8",
+   "text": "Payment exception EXC-260826-02 was returned with reason code AC04 (Closed account number). | When: 2026-08-26 | Involving: MBSB (bank) | Beneficiary account closed.",
+   "type": "world",
+   "context": "resolved payment exception",
+   "occurred_start": "2026-08-26T08:20:00.010000+00:00",
+   "occurred_end": "2026-08-26T08:20:00.010000+00:00"
+  },
+  {
+   "id": "38b76cf6-f4a3-444b-a923-182c46bfc53b",
+   "text": "Payment exception EXC-260915-02 for Kestrel Components Pte Ltd involving a USD 56,080.00 transfer to Orient Star Maritime Co at Saigon Riverside Bank (SGRBVNVX) was held due to a sanctions screening match. | When: 2026-09-15 | Involving: Kestrel Components Pte Ltd (client), Orient Star Maritime Co (beneficiary), Saigon Riverside Bank (beneficiary bank) | Sanctions screening hit: beneficiary 'ORIENT STAR MARITIME CO' vs list entry 'ORIENT STAR MARINE LTD' (match score 0.91).",
+   "type": "world",
+   "context": "resolved payment exception",
+   "occurred_start": "2026-09-15T05:08:00+00:00",
+   "occurred_end": "2026-09-15T07:45:00+00:00"
+  },
+  {
+   "id": "5060e200-3a07-45af-a4a0-6d4eabb3def7",
+   "text": "Tungabhadra Co-operative Bank requires exact legal name matching for beneficiary accounts. | Involving: Tungabhadra Co-operative Bank",
+   "type": "world",
+   "context": "resolved payment exception",
+   "occurred_start": null,
+   "occurred_end": null
+  },
+  {
+   "id": "57ed65f7-0550-4d9e-b826-5a23beab5cb3",
+   "text": "Payment exception EXC-260911-01 for Orchid Pharma Asia Pte Ltd involving an INR 1,499,000.00 transfer to Deccan Bio Labs Pvt Ltd at Tungabhadra Co-operative Bank was rejected due to a beneficiary name mismatch. | When: 2026-09-11 | Involving: Orchid Pharma Asia Pte Ltd (client), Deccan Bio Labs Pvt Ltd (beneficiary), Tungabhadra Co-operative Bank (beneficiary bank), Coromandel Clearing Bank (intermediary)",
+   "type": "world",
+   "context": "resolved payment exception",
+   "occurred_start": "2026-09-10T23:51:00+00:00",
+   "occurred_end": "2026-09-11T02:15:00+00:00"
+  },
+  {
+   "id": "f6fe1b73-4083-4941-a1d3-4c15c4795dd8",
+   "text": "Lotus Hospitality Group Pte Ltd payment of PHP 1,458,000.00 to Manila Harbour Laundry Services Inc held due to insufficient funds (AM04). | When: 2026-09-10 | Involving: Lotus Hospitality Group Pte Ltd (client), Manila Harbour Laundry Services Inc (beneficiary) | Client account lacked funds due to payroll processing earlier that morning.",
+   "type": "world",
+   "context": "resolved payment exception",
+   "occurred_start": "2026-09-10T02:31:00+00:00",
+   "occurred_end": "2026-09-10T07:00:00+00:00"
+  },
+  {
+   "id": "0c24a9a3-11c4-4d84-8984-c54aff2ad201",
+   "text": "Payment exception EXC-260916-01 opened due to non-receipt claim by beneficiary. | When: 2026-09-16 | Involving: Vantage Analytics Pte Ltd | Beneficiary did not receive funds on the value date of 2026-09-15.",
+   "type": "world",
+   "context": "resolved payment exception",
+   "occurred_start": "2026-09-16T02:20:00.010000+00:00",
+   "occurred_end": "2026-09-16T02:20:00.010000+00:00"
+  }
+ ],
+ "directives": [
+  {
+   "id": "9646ff2b-0a35-41fc-bdd7-a6a1a4d5b787",
+   "name": "Sanctions holds are human-only",
+   "content": "Never recommend releasing, auto-approving or bypassing a payment held by sanctions screening, even if the beneficiary was cleared before. Always route sanctions hits to the Compliance team for human review; a prior clearance reference may be cited only as supporting context."
+  },
+  {
+   "id": "6d8a66af-a0f9-46e0-8dd1-fd88b0ba9da7",
+   "name": "Mask account numbers",
+   "content": "Never write a full bank account number or IBAN in an answer. Show only the last 4 characters, e.g. ****0913."
+  },
+  {
+   "id": "b00baa59-a49d-49db-8bb1-18e51bcea4eb",
+   "name": "Cite evidence",
+   "content": "When you state a pattern, cite the dates or case IDs of the past exceptions it is based on. If memory has no relevant evidence, say so explicitly instead of guessing."
+  }
+ ],
+ "latency_ms": 10362
+}

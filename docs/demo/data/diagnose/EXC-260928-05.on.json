@@ -1,0 +1,174 @@
+{
+ "case_id": "EXC-260928-05",
+ "used_memory": true,
+ "root_cause": "CORRESPONDENT_ROUTING_CHANGED",
+ "root_cause_label": "Correspondent / routing changed",
+ "confidence": 0.85,
+ "reasoning": "The payment was rejected with RC01 (Bank identifier incorrect) and the intermediary used (Atlantic Clearing Bank) matches previous cases (M1, M3) where the same outdated correspondent caused the same error. Nordkyst Bank has switched to Hudson Federal Bank as its correspondent, so the routing information is stale.",
+ "recommended_action": "Update the routing table to use Hudson Federal Bank (HFBKUS33) as the intermediary for Nordkyst Bank and resend the payment with the corrected BICs. Verify the beneficiary BIC (NKYSNOBB) and account details before resubmission.",
+ "draft_message": "Dear Tanjong Marine Services, your USD 59,680 payment to Stavanger Offshore Supply AS (account ...4375) was rejected because it was routed via an outdated intermediary. Please resend using the updated correspondent, Hudson Federal Bank, and ensure the BICs are correct. Let us know if you need assistance.",
+ "prevention_tip": "Regularly review and update correspondent bank routing tables after any bank‑to‑bank changes.",
+ "evidence": [
+  {
+   "memory_ref": "M1",
+   "why_relevant": "Same client, beneficiary, and obsolete intermediary caused RC01",
+   "case_id": null,
+   "text": "Tanjong Marine Services Pte Ltd attempted to send USD 28,640.00 to Stavanger Offshore Supply AS at Nordkyst Bank on 2026-09-08, but the payment was rejected with code RC01 because it used the outdated intermediary Atlantic Clearing Bank instead of the new correspondent, Hudson Federal Bank.",
+   "occurred": "2026-09-08T07:10:00.010000+00:00",
+   "type": "observation"
+  },
+  {
+   "memory_ref": "M3",
+   "why_relevant": "Identical pattern of outdated intermediary leading to RC01",
+   "case_id": null,
+   "text": "Tanjong Marine Services Pte Ltd attempted to send USD 27,610.00 to Bergen Subsea Services AS at Nordkyst Bank on 2026-09-18, but the payment was rejected with code RC01 because it used the obsolete intermediary Atlantic Clearing Bank instead of the new correspondent, Hudson Federal Bank.",
+   "occurred": "2026-09-18T02:40:00.010000+00:00",
+   "type": "observation"
+  },
+  {
+   "memory_ref": "M6",
+   "why_relevant": "Confirms that Nordkyst Bank changed correspondent routing and required update",
+   "case_id": "EXC-260908-02",
+   "text": "The payment was resolved by rerouting via Hudson Federal Bank New York (HFBKUS33) because the internal settlement-instruction table for Nordkyst Bank was outdated. | When: 2026-09-08 | Involving: Nordkyst Bank (beneficiary bank), Hudson Federal Bank (intermediary) | The previous correspondent routing was no longer valid.",
+   "occurred": "2026-09-08T07:10:00.010000+00:00",
+   "type": "world"
+  }
+ ],
+ "recalled": [
+  {
+   "ref": "M1",
+   "id": "6aa79f44-2261-4804-bec5-0ccca80fde7c",
+   "text": "Tanjong Marine Services Pte Ltd attempted to send USD 28,640.00 to Stavanger Offshore Supply AS at Nordkyst Bank on 2026-09-08, but the payment was rejected with code RC01 because it used the outdated intermediary Atlantic Clearing Bank instead of the new correspondent, Hudson Federal Bank.",
+   "type": "observation",
+   "occurred": "2026-09-08T07:10:00.010000+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "client:tanjong",
+    "bank:NKYS",
+    "ccy:USD",
+    "code:RC01"
+   ],
+   "score": 1.0598850042153984
+  },
+  {
+   "ref": "M2",
+   "id": "bcee8026-0320-4b6b-a4b0-aa80d5c00c8c",
+   "text": "Tanjong Marine Services Pte Ltd attempted to send USD 23,580.00 to Bergen Subsea Services AS at Nordkyst Bank on 2026-08-25, but the payment was rejected with code RC01 due to an incorrect BIC (NKYSNOBX instead of NKYSNOBB).",
+   "type": "observation",
+   "occurred": "2026-08-25T03:45:00.020000+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "ccy:USD",
+    "code:RC01",
+    "client:tanjong",
+    "bank:NKYS"
+   ],
+   "score": 1.048719224904234
+  },
+  {
+   "ref": "M3",
+   "id": "aaad614c-2652-42dd-8477-04f0136a1178",
+   "text": "Tanjong Marine Services Pte Ltd attempted to send USD 27,610.00 to Bergen Subsea Services AS at Nordkyst Bank on 2026-09-18, but the payment was rejected with code RC01 because it used the obsolete intermediary Atlantic Clearing Bank instead of the new correspondent, Hudson Federal Bank.",
+   "type": "observation",
+   "occurred": "2026-09-18T02:40:00.010000+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "ccy:USD",
+    "code:RC01",
+    "client:tanjong",
+    "bank:NKYS"
+   ],
+   "score": 1.0394942172655928
+  },
+  {
+   "ref": "M4",
+   "id": "beee58a0-adb8-477c-aaeb-fabfcf1c2f0e",
+   "text": "DejaVu incorrectly diagnosed the root cause of a payment exception as CLIENT_TYPO_IN_DETAILS, when the actual cause was ACCOUNT_FORMAT_CHANGED.",
+   "type": "observation",
+   "occurred": "2026-08-31T06:45:00.020000+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "bank:PDCB",
+    "code:AC01",
+    "ccy:USD",
+    "client:kestrel"
+   ],
+   "score": 1.012090646743487
+  },
+  {
+   "ref": "M5",
+   "id": "57ed65f7-0550-4d9e-b826-5a23beab5cb3",
+   "text": "Payment exception EXC-260911-01 for Orchid Pharma Asia Pte Ltd involving an INR 1,499,000.00 transfer to Deccan Bio Labs Pvt Ltd at Tungabhadra Co-operative Bank was rejected due to a beneficiary name mismatch. | When: 2026-09-11 | Involving: Orchid Pharma Asia Pte Ltd (client), Deccan Bio Labs Pvt Ltd (beneficiary), Tungabhadra Co-operative Bank (beneficiary bank), Coromandel Clearing Bank (intermediary)",
+   "type": "world",
+   "occurred": "2026-09-11T02:15:00+00:00",
+   "case_id": "EXC-260911-01",
+   "root_cause": "NAME_LEGAL_SUFFIX_MISMATCH",
+   "tags": [
+    "code:BE01",
+    "client:orchid",
+    "bank:TUNG",
+    "ccy:INR"
+   ],
+   "score": 1.0905407153729072
+  },
+  {
+   "ref": "M6",
+   "id": "3ccbedd9-504b-4c57-8898-c127ada56908",
+   "text": "The payment was resolved by rerouting via Hudson Federal Bank New York (HFBKUS33) because the internal settlement-instruction table for Nordkyst Bank was outdated. | When: 2026-09-08 | Involving: Nordkyst Bank (beneficiary bank), Hudson Federal Bank (intermediary) | The previous correspondent routing was no longer valid.",
+   "type": "world",
+   "occurred": "2026-09-08T07:10:00.010000+00:00",
+   "case_id": "EXC-260908-02",
+   "root_cause": "CORRESPONDENT_ROUTING_CHANGED",
+   "tags": [
+    "client:tanjong",
+    "bank:NKYS",
+    "ccy:USD",
+    "code:RC01"
+   ],
+   "score": 1.0854202186980972
+  },
+  {
+   "ref": "M7",
+   "id": "9885e252-8447-4459-9cc2-b9279df9dfac",
+   "text": "Payment exception EXC-260914-02 for Blue Harbour Logistics Pte Ltd involving a GBP 17,090.00 transfer to Felixstowe Freight Ltd at Thames Union Bank was rejected due to an incorrect BIC. | When: 2026-09-14 | Involving: Blue Harbour Logistics Pte Ltd (client), Felixstowe Freight Ltd (beneficiary), Thames Union Bank (beneficiary bank), Albion Clearing Bank (intermediary)",
+   "type": "world",
+   "occurred": "2026-09-14T04:30:00+00:00",
+   "case_id": "EXC-260914-02",
+   "root_cause": "CLIENT_TYPO_IN_DETAILS",
+   "tags": [
+    "bank:THUB",
+    "client:blueharbour",
+    "ccy:GBP",
+    "code:RC01"
+   ],
+   "score": 1.0849408859692304
+  },
+  {
+   "ref": "M8",
+   "id": "34b5fa9d-b6b6-4dea-8653-2468b062ddb4",
+   "text": "Payment exception EXC-260915-01 resolved by adding invoice number KCS-56120 to the remittance information. | When: 2026-09-15 | Involving: Kestrel Components Pte Ltd | Victoria Harbour Bank requires invoice numbers for trade payments exceeding USD 10,000.",
+   "type": "world",
+   "occurred": "2026-09-15T03:00:00.010000+00:00",
+   "case_id": "EXC-260915-01",
+   "root_cause": "MISSING_INVOICE_REFERENCE",
+   "tags": [
+    "client:kestrel",
+    "code:RR04",
+    "ccy:USD",
+    "bank:VHBK"
+   ],
+   "score": 1.0818357452263914
+  }
+ ],
+ "requires_human_approval": false,
+ "auto_fix_eligible": true,
+ "guardrail_notes": [],
+ "model": "openai/gpt-oss-120b",
+ "latency_ms": 53467,
+ "degraded": false,
+ "warnings": []
+}

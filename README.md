@@ -36,9 +36,9 @@ new exception ──► RECALL similar past cases + learned lessons (Hindsight)
               ──► Hindsight consolidates repeats into lessons and rewrites the Playbook
 ```
 
-| Case 1 | Case 10 | Case 40 |
+| First half of the replay (17 Aug to 7 Sep) | Second half (8 to 25 Sep) | Today's open queue |
 |---|---|---|
-| "Client keyed wrong details. Ask them to verify." (generic guess) | "Pearl Delta migrated to 15-digit accounts on 25 Aug. Prefix 601." | Most repeats are diagnosed with evidence. Pre-flight check warns *before* sending. |
+| Memory ON 58% right, the same as the model without memory (58%). Nothing to remember yet. | Memory ON **96%** right vs 52% without memory. Repeats are recognised, with evidence. | 9 of 10 open exceptions diagnosed correctly with memory, 5 of 10 without. |
 
 ## How Hindsight memory is used
 
@@ -50,7 +50,7 @@ Memory is the product. Without it, DejaVu is a generic classifier (see the memor
 | **retain** | Every resolved exception is stored as a narrative with `timestamp` (case date), `document_id` (case id), `tags` (bank, client, error code, currency), `metadata` (root cause, was DejaVu right) and `entities` | `retain_case()` |
 | **Experience memory** | The retained text says *"I (DejaVu) diagnosed this as X, which was wrong; the correct root cause was Y"*. The agent learns from its own mistakes, not just from facts | `prompts.resolved_case_content()` |
 | **recall (TEMPR)** | Two recalls run in parallel: a broad semantic + keyword + graph + temporal recall, and a **bank-scoped** recall (`tags=["bank:PDCB"]`, `tags_match="any_strict"`). `query_timestamp` is the case date, so "recent" means recent *for that case* | `recall_for_case()` |
-| **Observations** | Hindsight consolidates repeated cases into lessons with proof counts and version history (e.g. *"Pearl Delta requires 15-digit accounts since 25 Aug (×5)"*). Shown in **What it learned** | `lessons()` |
+| **Observations** | Hindsight consolidates repeated cases into lessons with proof counts and version history (e.g. *"Victoria Harbour Bank requires an invoice number in the remittance information for all trade payments exceeding USD 10,000"* ×3). Shown in **What it learned** | `lessons()` |
 | **Mental model** | `exception-playbook`: a standing answer that Hindsight rewrites in **delta mode** after consolidation. It is the desk's self-writing playbook | `_ensure_playbook()`, `playbook()` |
 | **reflect** | "Ask DejaVu" and the **pre-flight check** reason over the whole bank. The pre-flight check uses `response_schema` for structured warnings | `ask()`, `precheck()` |
 | **Directives** | Hard rules applied in reflect: *sanctions holds are human-only*, *mask account numbers*, *cite evidence*. The UI shows which directives were applied | `prompts.DIRECTIVES` |
@@ -97,10 +97,12 @@ Memory ON can only beat memory OFF by learning from the cases it has already see
 
 | Metric | Memory ON | Memory OFF |
 |---|---|---|
-| Root-cause accuracy (all cases) | _run the replay_ | _run the replay_ |
-| Accuracy on repeat patterns | _run the replay_ | _run the replay_ |
+| Root-cause accuracy (all 49 cases) | **78%** | 55% |
+| Accuracy on repeat patterns (26 cases) | **85%** | 38% |
 
-Run it and the UI's **Learning curve** tab animates the results. `python scripts/fill_content.py` copies the numbers into the table above.
+Split in half, memory ON climbs from 58% (first 24 cases) to **96%** (last 25), while memory OFF goes from 58% to 52%. On exceptions it had never seen before, memory doesn't help (70% vs 74%): the whole gain comes from remembering. Hindsight even consolidated DejaVu's own mistakes into a lesson (×4): *"DejaVu correctly diagnosed the root cause as CORRESPONDENT_ROUTING_CHANGED ... following previous incorrect diagnoses of CLIENT_TYPO_IN_DETAILS for similar Nordkyst Bank routing issues"*.
+
+The UI's **Learning curve** tab animates the results. `python scripts/fill_content.py` copies the numbers into the table above.
 
 ## Quickstart
 
@@ -135,11 +137,11 @@ python scripts/export_demo.py             # optional: record the static demo for
 
 ## Demo script (3 minutes)
 
-1. **Exception desk → Pearl Delta, AC01**
-   - Click **Compare with / without memory**. Without memory: "Client keyed wrong details."
-   - With memory: "Beneficiary bank changed account format", with evidence from earlier Pearl Delta cases.
+1. **Exception desk → Nordkyst Bank, RC01**
+   - Click **Compare with / without memory**. Without memory: "Client keyed wrong details", a BIC typo.
+   - With memory: "Correspondent / routing changed". Nordkyst now uses Hudson Federal Bank, and this payment still went via the old correspondent. It cites the earlier Nordkyst cases.
 2. **Approve**. The resolution and "DejaVu was right" are retained.
-3. **Rheinland Handelsbank, AC01**. Same error code, but DejaVu does *not* force the Pearl Delta pattern. It's a typo.
+3. **Golconda Commercial Bank, non-receipt claim**. Without memory: "held at an intermediary bank". With memory: "arrived after the bank's cut-off", so the credit lands the next business day.
 4. **Desert Rose Bank, sanctions hit**
    - DejaVu recognises the known false positive and cites the prior clearance.
    - The guardrail still requires Compliance. It never auto-releases.
@@ -182,7 +184,7 @@ scripts/
   seed_memory.py        load history without evaluating
   fill_content.py       copy replay numbers into this README
   export_demo.py        record a real run as the static clickable demo (docs/demo)
-  windows/              double-click helpers: setup, replay, run, export_demo, publish
+  windows/              double-click helpers: setup, replay, run, export_demo, update_playbook, publish
 tests/            33 offline tests (pytest)
 data/             history.json (49 cases), live.json (10 open cases), entities.json
 docs/             learning_curve.png and the recorded demo served by GitHub Pages
@@ -197,6 +199,8 @@ The six weeks contain eight recurring patterns (P1 to P8 in `scripts/generate_da
 ## Limitations and what's next
 
 - 49 historical cases is a small sample. The replay proves the mechanism, not a production accuracy number.
+- Recall ranking is the next thing to fix. On the open Pearl Delta case, recall put an older typo at the same bank above the account-format lessons, so DejaVu said "typo" (70%) when the real cause was the bank's new 15-digit format. Ranking same-bank memories from after a known change first should fix that class of miss.
+- In the recorded demo, the with-memory timings include waiting for the free-tier Groq rate limit, because the recording runs 20 diagnoses back to back. A single live diagnosis takes a few seconds.
 - Next steps:
   - ingest real exception feeds (camt.029 / pacs.002, Swift gpi tracker)
   - per-analyst preferences with tag-scoped memories

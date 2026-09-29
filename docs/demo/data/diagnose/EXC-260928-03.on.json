@@ -1,0 +1,158 @@
+{
+ "case_id": "EXC-260928-03",
+ "used_memory": true,
+ "root_cause": "MISSED_CUTOFF_NEXT_DAY_CREDIT",
+ "root_cause_label": "Arrived after bank cut-off",
+ "confidence": 0.85,
+ "reasoning": "The payment was submitted at 15:20 SGT and reached the beneficiary bank at 15:24 SGT on the same day, but Golconda Commercial Bank's same‑day credit cutoff is earlier. Similar cases (M2) were diagnosed as missed cutoff, resulting in a next‑business‑day credit.",
+ "recommended_action": "Inform the client that the funds will be credited on the next business day; monitor the credit status and confirm receipt once posted.",
+ "draft_message": "Dear Orchid Pharma Asia, the INR 748,000 payment to Hyderabad Organics Private Limited (account ****3063) was received by Golconda Commercial Bank after its same‑day cut‑off, so the credit will be posted on the next business day. We will confirm once the beneficiary reports receipt.",
+ "prevention_tip": "Submit payments before the beneficiary bank’s same‑day cut‑off time to avoid next‑day credit delays.",
+ "evidence": [
+  {
+   "memory_ref": "M2",
+   "why_relevant": "Same beneficiary bank, same corridor, and the previous case was caused by a missed cutoff after a similar submission time.",
+   "case_id": null,
+   "text": "The payment delay for the Vantage Analytics Pte Ltd transfer (EXC-260922-01) was caused by a MISSED_CUTOFF_NEXT_DAY_CREDIT at Golconda Commercial Bank; DejaVu correctly diagnosed this with 85% confidence.",
+   "occurred": "2026-09-22T03:15:00.030000+00:00",
+   "type": "observation"
+  }
+ ],
+ "recalled": [
+  {
+   "ref": "M1",
+   "id": "d049694c-529b-4780-841a-29305a29c6a2",
+   "text": "Vantage Analytics Pte Ltd initiated a payment of INR 1,959,000.00 to Srinivasa Infotech Private Limited on 2026-09-21, routed through Coromandel Clearing Bank to Golconda Commercial Bank.",
+   "type": "observation",
+   "occurred": "2026-09-22T03:15:00+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "bank:GOLC",
+    "client:vantage",
+    "code:NON_RECEIPT_CLAIM",
+    "ccy:INR"
+   ],
+   "score": 1.0669265091974902
+  },
+  {
+   "ref": "M2",
+   "id": "492519fe-fd9a-4487-be85-27aace6e6dc8",
+   "text": "The payment delay for the Vantage Analytics Pte Ltd transfer (EXC-260922-01) was caused by a MISSED_CUTOFF_NEXT_DAY_CREDIT at Golconda Commercial Bank; DejaVu correctly diagnosed this with 85% confidence.",
+   "type": "observation",
+   "occurred": "2026-09-22T03:15:00.030000+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "bank:GOLC",
+    "client:vantage",
+    "code:NON_RECEIPT_CLAIM",
+    "ccy:INR"
+   ],
+   "score": 1.0559241651055076
+  },
+  {
+   "ref": "M3",
+   "id": "a4f8b41b-cea6-457c-b7ee-ffb7f12cab90",
+   "text": "Orchid Pharma Asia Pte Ltd submitted an INR 1,975,000.00 payment to Hyderabad Organics Private Limited on 2026-08-26 via Coromandel Clearing Bank to Golconda Commercial Bank.",
+   "type": "observation",
+   "occurred": "2026-08-27T06:10:00+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "bank:GOLC",
+    "client:orchid",
+    "code:NON_RECEIPT_CLAIM",
+    "ccy:INR"
+   ],
+   "score": 1.049459558345074
+  },
+  {
+   "ref": "M4",
+   "id": "bb86ddb7-d2af-4c8c-95bd-626b699e10ee",
+   "text": "Orchid Pharma Asia Pte Ltd submitted an INR 1,918,000.00 payment to Hyderabad Organics Private Limited on 2026-09-10 via Coromandel Clearing Bank to Golconda Commercial Bank.",
+   "type": "observation",
+   "occurred": "2026-09-11T08:00:00+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "bank:GOLC",
+    "client:orchid",
+    "code:NON_RECEIPT_CLAIM",
+    "ccy:INR"
+   ],
+   "score": 1.0428312963623092
+  },
+  {
+   "ref": "M5",
+   "id": "009c2309-fab5-4d38-9fc9-05058c49372d",
+   "text": "Vantage Analytics Pte Ltd initiated a payment of INR 777,000.00 to Srinivasa Infotech Private Limited on 2026-09-15 for invoice SI-8960, routed through Coromandel Clearing Bank to Golconda Commercial Bank.",
+   "type": "observation",
+   "occurred": "2026-09-16T02:20:00+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "code:NON_RECEIPT_CLAIM",
+    "bank:GOLC",
+    "ccy:INR",
+    "client:vantage"
+   ],
+   "score": 1.0416789507335926
+  },
+  {
+   "ref": "M6",
+   "id": "cd94c415-09de-4406-b97e-2e7923472ec7",
+   "text": "Payment EXC-260911-01 was resolved by amending the beneficiary name to 'DECCAN BIO LABS PRIVATE LIMITED' and requesting the client to update their beneficiary master data.",
+   "type": "observation",
+   "occurred": "2026-09-11T02:15:00.020000+00:00",
+   "case_id": null,
+   "root_cause": null,
+   "tags": [
+    "code:BE01",
+    "client:orchid",
+    "bank:TUNG",
+    "ccy:INR"
+   ],
+   "score": 1.0322898200744437
+  },
+  {
+   "ref": "M7",
+   "id": "ac134eea-94bd-4b7f-82a3-beaa19481d86",
+   "text": "Vantage Analytics Pte Ltd sent INR 1,959,000.00 to Srinivasa Infotech Private Limited via Golconda Commercial Bank (GOLCINHH) and intermediary Coromandel Clearing Bank (CRMCINBB). | When: 2026-09-21 | Involving: Vantage Analytics Pte Ltd (client), Srinivasa Infotech Private Limited (beneficiary), Golconda Commercial Bank (bank), Coromandel Clearing Bank (intermediary)",
+   "type": "world",
+   "occurred": "2026-09-22T03:15:00+00:00",
+   "case_id": "EXC-260922-01",
+   "root_cause": "MISSED_CUTOFF_NEXT_DAY_CREDIT",
+   "tags": [
+    "bank:GOLC",
+    "client:vantage",
+    "code:NON_RECEIPT_CLAIM",
+    "ccy:INR"
+   ],
+   "score": 1.0962690258751904
+  },
+  {
+   "ref": "M8",
+   "id": "5fbdc0b5-7f1b-4a77-b82c-272956b770f9",
+   "text": "Vantage Analytics Pte Ltd sent INR 777,000.00 to Srinivasa Infotech Private Limited at Golconda Commercial Bank (GOLCINHH) via intermediary Coromandel Clearing Bank (CRMCINBB). | When: 2026-09-15 | Involving: Vantage Analytics Pte Ltd (client), Srinivasa Infotech Private Limited (beneficiary), Golconda Commercial Bank (beneficiary bank), Coromandel Clearing Bank (intermediary) | Payment for INV SI-8960 data engineering services.",
+   "type": "world",
+   "occurred": "2026-09-16T02:20:00+00:00",
+   "case_id": "EXC-260916-01",
+   "root_cause": "INTERMEDIARY_DELAY",
+   "tags": [
+    "code:NON_RECEIPT_CLAIM",
+    "bank:GOLC",
+    "ccy:INR",
+    "client:vantage"
+   ],
+   "score": 1.0892126626040413
+  }
+ ],
+ "requires_human_approval": false,
+ "auto_fix_eligible": true,
+ "guardrail_notes": [],
+ "model": "openai/gpt-oss-120b",
+ "latency_ms": 53393,
+ "degraded": false,
+ "warnings": []
+}

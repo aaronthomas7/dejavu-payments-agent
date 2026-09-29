@@ -1,0 +1,20 @@
+{
+ "case_id": "EXC-260928-01",
+ "used_memory": false,
+ "root_cause": "CLIENT_ERP_DUPLICATE",
+ "root_cause_label": "Client system re-sent a file",
+ "confidence": 0.6,
+ "reasoning": "The system detected two identical instructions (same beneficiary, amount, and value date) submitted within minutes, which matches the pattern of duplicate submissions from the client's ERP system. No other error indicators (e.g., formatting, sanctions) are present.",
+ "recommended_action": "Release the held payment after confirming with the client that the second submission was unintended, and advise them to check their ERP scheduling to avoid duplicate sends.",
+ "draft_message": "Dear Arcadia Foods, we have identified a duplicate payment submission for USD 12,420 to Mekong Delta Seafood JSC (account ending 0093). Please confirm if the second instruction should be cancelled; otherwise we will proceed with the first payment.",
+ "prevention_tip": "Configure the ERP system to enforce unique transaction IDs or add a short delay between batch submissions to prevent duplicates.",
+ "evidence": [],
+ "recalled": [],
+ "requires_human_approval": false,
+ "auto_fix_eligible": false,
+ "guardrail_notes": [],
+ "model": "openai/gpt-oss-120b",
+ "latency_ms": 1487,
+ "degraded": false,
+ "warnings": []
+}
