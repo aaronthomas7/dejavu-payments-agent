@@ -1,4 +1,4 @@
-# DejaVu: the payments-ops agent that has seen this before
+# DejaVu: the payments-ops agent that has seen this before 
 
 **DejaVu remembers every failed payment your operations desk has ever fixed. It uses that memory to diagnose the next one in seconds and warns you before a payment fails.** It is built on [Hindsight](https://github.com/vectorize-io/hindsight) agent memory, with Groq for fast reasoning.
 
