@@ -468,12 +468,22 @@ async function loadCurve() {
     return;
   }
   const s = r.summary;
+  // KPI percentages from the per-case rows: the stored summary is rounded to 3 decimals, and rounding twice
+  // can turn 38.46% into 39%.
+  const frac = (rows, key) => (rows.length ? rows.filter((c) => c[key]).length / rows.length : null);
+  const reps = r.cases.filter((c) => c.is_repeat);
+  const half = Math.floor(r.cases.length / 2);
+  const k = {
+    accOn: frac(r.cases, "on_correct"), accOff: frac(r.cases, "off_correct"),
+    repOn: frac(reps, "on_correct"), repOff: frac(reps, "off_correct"),
+    h1: frac(r.cases.slice(0, half), "on_correct"), h2: frac(r.cases.slice(half), "on_correct"),
+  };
   box.innerHTML = `
     ${r.offline ? `<div class="card note warn" style="margin-bottom:14px">These results came from the offline stand-ins, not Hindsight + Groq. Re-run the replay with API keys for real numbers.</div>` : ""}
     <div class="kpis">
-      <div class="card kpi"><div class="label">Root-cause accuracy</div><div class="value">${pct(s.accuracy_on)} <span class="off">vs ${pct(s.accuracy_off)}</span></div><div class="vs">with memory vs same model without</div></div>
-      <div class="card kpi"><div class="label">On patterns seen before</div><div class="value">${pct(s.repeat_accuracy_on)} <span class="off">vs ${pct(s.repeat_accuracy_off)}</span></div><div class="vs">${s.repeat_cases} repeat cases</div></div>
-      <div class="card kpi"><div class="label">Gets better over time</div><div class="value">${pct(s.first_half_accuracy_on)} → ${pct(s.second_half_accuracy_on)}</div><div class="vs">first half → second half (memory ON)</div></div>
+      <div class="card kpi"><div class="label">Root-cause accuracy</div><div class="value">${pct(k.accOn)} <span class="off">vs ${pct(k.accOff)}</span></div><div class="vs">with memory vs same model without</div></div>
+      <div class="card kpi"><div class="label">On patterns seen before</div><div class="value">${pct(k.repOn)} <span class="off">vs ${pct(k.repOff)}</span></div><div class="vs">${s.repeat_cases} repeat cases</div></div>
+      <div class="card kpi"><div class="label">Gets better over time</div><div class="value">${pct(k.h1)} → ${pct(k.h2)}</div><div class="vs">first half → second half (memory ON)</div></div>
       <div class="card kpi"><div class="label">Analyst time (estimate)</div><div class="value">${Math.round(s.minutes_manual / 60)}h → ${Math.round(s.minutes_with_dejavu_estimate / 60)}h</div><div class="vs">if confident, correct answers take 5 min to verify</div></div>
     </div>
     <div class="card">

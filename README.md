@@ -184,7 +184,7 @@ scripts/
   seed_memory.py        load history without evaluating
   fill_content.py       copy replay numbers into this README
   export_demo.py        record a real run as the static clickable demo (docs/demo)
-  windows/              double-click helpers: setup, replay, run, export_demo, update_playbook, publish
+  windows/              double-click helpers: setup, replay, run, export_demo, update_playbook, reset_demo, publish
 tests/            33 offline tests (pytest)
 data/             history.json (49 cases), live.json (10 open cases), entities.json
 docs/             learning_curve.png and the recorded demo served by GitHub Pages
