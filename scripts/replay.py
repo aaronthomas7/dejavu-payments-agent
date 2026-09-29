@@ -153,8 +153,18 @@ async def main() -> None:
         await memory.close()
         raise SystemExit(1)
     if args.fresh:
-        print(f"Wiping memory bank '{memory.bank_id}' ...")
-        await memory.reset()
+        existing = await memory.count()
+        if existing:
+            print(f"Wiping memory bank '{memory.bank_id}' ({existing} memories) ...")
+            try:
+                await memory.reset()
+            except Exception as exc:
+                print(f"\nCould not wipe and re-create the bank: {exc}\n"
+                      "Easy fix: put a new name in .env, e.g. HINDSIGHT_BANK_ID=dejavu-payments-desk-2, and run again.")
+                await memory.close()
+                raise SystemExit(1)
+        else:
+            print(f"Bank '{memory.bank_id}' is empty, starting fresh.")
         rows, done_ids = [], set()
     elif not rows and await memory.count() > 0:
         print(f"Bank '{memory.bank_id}' already has memories. Use --fresh for an honest learning curve "

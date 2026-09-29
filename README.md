@@ -46,7 +46,7 @@ Memory is the product. Without it, DejaVu is a generic classifier (see the memor
 
 | Hindsight feature | What DejaVu does with it | Code |
 |---|---|---|
-| **Memory bank** | One bank = the desk's shared brain (`dejavu-payments-ops`), with a `background`, `retain_mission` and `reflect_mission` | `app/memory.py` → `setup()` |
+| **Memory bank** | One bank = the desk's shared brain (`dejavu-payments-desk`), with a `background`, `retain_mission` and `reflect_mission` | `app/memory.py` → `setup()` |
 | **retain** | Every resolved exception is stored as a narrative with `timestamp` (case date), `document_id` (case id), `tags` (bank, client, error code, currency), `metadata` (root cause, was DejaVu right) and `entities` | `retain_case()` |
 | **Experience memory** | The retained text says *"I (DejaVu) diagnosed this as X, which was wrong; the correct root cause was Y"*. The agent learns from its own mistakes, not just from facts | `prompts.resolved_case_content()` |
 | **recall (TEMPR)** | Two recalls run in parallel: a broad semantic + keyword + graph + temporal recall, and a **bank-scoped** recall (`tags=["bank:PDCB"]`, `tags_match="any_strict"`). `query_timestamp` is the case date, so "recent" means recent *for that case* | `recall_for_case()` |
@@ -183,7 +183,7 @@ scripts/
   fill_content.py       copy replay numbers into this README
   export_demo.py        record a real run as the static clickable demo (docs/demo)
   windows/              double-click helpers: setup, replay, run, export_demo, publish
-tests/            29 offline tests (pytest)
+tests/            33 offline tests (pytest)
 data/             history.json (49 cases), live.json (10 open cases), entities.json
 docs/             learning_curve.png and the recorded demo served by GitHub Pages
 ```

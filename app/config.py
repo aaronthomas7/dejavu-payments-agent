@@ -32,7 +32,7 @@ class Settings:
     # --- Hindsight (memory) ---
     hindsight_base_url: str = field(default_factory=lambda: os.getenv("HINDSIGHT_BASE_URL", "https://api.hindsight.vectorize.io"))
     hindsight_api_key: str = field(default_factory=lambda: os.getenv("HINDSIGHT_API_KEY", ""))
-    bank_id: str = field(default_factory=lambda: os.getenv("HINDSIGHT_BANK_ID", "dejavu-payments-ops"))
+    bank_id: str = field(default_factory=lambda: os.getenv("HINDSIGHT_BANK_ID", "dejavu-payments-desk"))
 
     # --- LLM (Groq, OpenAI-compatible) ---
     groq_api_key: str = field(default_factory=lambda: os.getenv("GROQ_API_KEY", ""))

@@ -38,6 +38,43 @@ class MemoryUnavailable(RuntimeError):
     pass
 
 
+def _short(exc: BaseException) -> str:
+    text = str(exc).replace("\n", " ")
+    return text if len(text) < 200 else text[:200] + "..."
+
+
+def _is_empty_namespace(exc: BaseException) -> bool:
+    """Hindsight Cloud answers 500 "namespace ... has no manifest" for a bank that has no data yet."""
+    return "no manifest" in str(exc)
+
+
+def _is_transient(exc: BaseException) -> bool:
+    status = getattr(exc, "status", None)
+    if isinstance(status, int) and status >= 500:
+        return True
+    if isinstance(exc, asyncio.TimeoutError):
+        return True
+    try:
+        import aiohttp
+        return isinstance(exc, aiohttp.ClientError)
+    except ImportError:  # pragma: no cover
+        return False
+
+
+async def _retry(what: str, make_call, attempts: int = 4, first_wait: float = 3.0, retry_empty: bool = True):
+    """Retry a Hindsight call on server errors / network blips (3s, 6s, 12s)."""
+    wait = first_wait
+    for attempt in range(attempts):
+        try:
+            return await make_call()
+        except Exception as exc:
+            if attempt == attempts - 1 or not _is_transient(exc) or (not retry_empty and _is_empty_namespace(exc)):
+                raise
+            log.warning("%s failed (%s); retrying in %.0fs", what, _short(exc), wait)
+            await asyncio.sleep(wait)
+            wait *= 2
+
+
 def _case_tags(case: dict[str, Any]) -> list[str]:
     p = case["payment"]
     return [
@@ -78,28 +115,41 @@ class HindsightMemory:
         self.last_error: Optional[str] = None
         self._stats_cache: tuple[float, dict] | None = None
         self._rich_retain = True
+        self.playbook_pending = False
 
     # ---- setup -------------------------------------------------------------
     async def setup(self) -> dict[str, Any]:
         """Idempotently create/configure the bank, its directives and the playbook mental model."""
         c, bank = self.client, self.bank_id
-        await c.acreate_bank(bank_id=bank, name=prompts.BANK_NAME, background=prompts.BANK_BACKGROUND,
-                             retain_mission=prompts.RETAIN_MISSION, reflect_mission=prompts.REFLECT_MISSION)
+        await _retry("create bank", lambda: c.acreate_bank(
+            bank_id=bank, name=prompts.BANK_NAME, background=prompts.BANK_BACKGROUND,
+            retain_mission=prompts.RETAIN_MISSION, reflect_mission=prompts.REFLECT_MISSION))
         try:
             await c.aupdate_bank_config(bank, **prompts.DISPOSITION)
         except Exception as exc:  # disposition is nice-to-have; never block startup on it
             log.warning("could not set disposition: %s", exc)
 
-        existing = await c.alist_directives(bank)
+        existing = await _retry("list directives", lambda: c.alist_directives(bank))
         names = {d.name for d in getattr(existing, "items", None) or getattr(existing, "directives", None) or []}
         for d in prompts.DIRECTIVES:
             if d["name"] not in names:
-                await c.acreate_directive(bank, name=d["name"], content=d["content"], priority=d["priority"])
+                await _retry("create directive", lambda d=d: c.acreate_directive(
+                    bank, name=d["name"], content=d["content"], priority=d["priority"]))
 
-        await self._ensure_playbook()
+        await self._try_playbook()
         self.ready = True
         self.last_error = None
         return {"bank_id": bank, "directives": [d["name"] for d in prompts.DIRECTIVES], "playbook": prompts.PLAYBOOK_ID}
+
+    async def _try_playbook(self) -> bool:
+        """Create the playbook if missing. Never fatal: a brand-new bank may refuse it until the first retain."""
+        try:
+            await self._ensure_playbook()
+            self.playbook_pending = False
+        except Exception as exc:
+            self.playbook_pending = True
+            log.warning("playbook mental model not created yet (%s); will retry after the next retain", _short(exc))
+        return not self.playbook_pending
 
     async def _ensure_playbook(self) -> None:
         from hindsight_client_api.exceptions import ApiException
@@ -130,11 +180,17 @@ class HindsightMemory:
             if exc.status != 404:
                 raise
         self.ready = False
-        await asyncio.sleep(1.0)
+        await asyncio.sleep(5.0)  # give the service time to drop the old bank before re-creating it
         await self.setup()
 
     async def count(self) -> int:
-        resp = await self.client.alist_memories(self.bank_id, limit=1)
+        try:
+            resp = await _retry("count memories", lambda: self.client.alist_memories(self.bank_id, limit=1),
+                                retry_empty=False)
+        except Exception as exc:
+            if _is_empty_namespace(exc):
+                return 0
+            raise
         return int(resp.total)
 
     async def stats(self) -> dict[str, Any]:
@@ -172,16 +228,18 @@ class HindsightMemory:
         from hindsight_client_api.exceptions import ApiException
 
         try:
-            await self.client.aretain(self.bank_id, **base, **extras)
+            await _retry("retain", lambda: self.client.aretain(self.bank_id, **base, **extras))
         except ApiException as exc:
             # If a server version rejects the optional hints (entity types / update mode), keep going without them.
             if exc.status in (400, 422) and extras:
                 log.warning("retain rejected optional fields (%s); retrying without them", exc.status)
                 self._rich_retain = False
-                await self.client.aretain(self.bank_id, **base)
+                await _retry("retain", lambda: self.client.aretain(self.bank_id, **base))
             else:
                 raise
         self._stats_cache = None
+        if self.playbook_pending:
+            await self._try_playbook()
 
     async def forget_case(self, case_id: str) -> None:
         """Delete everything retained for one case (its document). Used to rehearse the live demo."""
@@ -214,6 +272,8 @@ class HindsightMemory:
                 continue
             results.extend(resp.results or [])
         if isinstance(general, Exception) and isinstance(scoped, Exception):
+            if _is_empty_namespace(general):
+                return []  # brand-new bank with nothing retained yet
             raise MemoryUnavailable(str(general))
 
         # Only memories from before this case "happened" may be used (matters for the replay).
@@ -263,8 +323,8 @@ class HindsightMemory:
         try:
             mm = await self.client.aget_mental_model(self.bank_id, prompts.PLAYBOOK_ID, detail="full")
         except ApiException as exc:
-            if exc.status == 404:
-                await self._ensure_playbook()
+            if exc.status == 404 or _is_empty_namespace(exc):
+                await self._try_playbook()
                 return {"content": "", "status": "building", "is_stale": True}
             raise
         return {
@@ -275,6 +335,8 @@ class HindsightMemory:
         }
 
     async def refresh_playbook(self) -> dict[str, Any]:
+        if self.playbook_pending:
+            await self._try_playbook()
         await self.client.arefresh_mental_model(self.bank_id, prompts.PLAYBOOK_ID)
         return {"status": "refreshing"}
 
