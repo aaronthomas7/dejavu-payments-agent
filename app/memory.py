@@ -364,13 +364,13 @@ class LocalMemory:
         self.last_error = None
         if self.path.exists():
             try:
-                self.items = json.loads(self.path.read_text())
+                self.items = json.loads(self.path.read_text(encoding="utf-8"))
             except Exception:
                 self.items = []
 
     def _save(self) -> None:
         self.path.parent.mkdir(parents=True, exist_ok=True)
-        self.path.write_text(json.dumps(self.items, indent=1))
+        self.path.write_text(json.dumps(self.items, indent=1), encoding="utf-8")
 
     async def setup(self) -> dict[str, Any]:
         return {"bank_id": self.bank_id, "directives": [d["name"] for d in prompts.DIRECTIVES], "playbook": "offline"}

@@ -1,0 +1,2 @@
+# keep Windows helper scripts runnable on every platform
+*.bat text eol=crlf

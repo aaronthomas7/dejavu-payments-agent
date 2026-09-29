@@ -1,12 +1,17 @@
 /* DejaVu front end - plain JS, no build step. */
 "use strict";
 
+// Recorded-demo mode: the same UI served as static files (e.g. GitHub Pages). Every answer
+// comes from JSON captured during a real run by scripts/export_demo.py; nothing calls an API.
+const STATIC = !!window.DEJAVU_STATIC;
+
 const S = {
   status: null, taxonomy: [], tax: {}, entities: null,
   filter: "open", cases: [], selectedId: null, caseData: null,
   diag: null, compare: null, busy: false,
   replay: null, chart: null, chartMode: "rolling", playing: false,
   loaded: { curve: false, precheck: false },
+  inputs: { suggestions: [], presets: [] }, presetIndex: null, presetDirty: false,
 };
 
 // ---------------------------------------------------------------- helpers
@@ -17,6 +22,7 @@ const md = (text) => DOMPurify.sanitize(marked.parse(String(text || "")));
 const pct = (v) => (v === null || v === undefined ? "–" : `${Math.round(v * 100)}%`);
 
 async function api(path, opts = {}) {
+  if (STATIC) return staticApi(path, opts);
   const init = { method: opts.method || "GET", headers: {} };
   if (opts.body !== undefined) {
     init.headers["Content-Type"] = "application/json";
@@ -30,6 +36,79 @@ async function api(path, opts = {}) {
     throw new Error(detail);
   }
   return data;
+}
+
+// ---------------------------------------------------------------- recorded demo (static files)
+const DEMO = { cache: {}, open: null, resolved: null, decisions: {} };
+
+async function demoFile(name) {
+  if (!(name in DEMO.cache)) {
+    const res = await fetch(`data/${name}`);
+    if (!res.ok) throw new Error("Not part of the recorded demo.");
+    DEMO.cache[name] = await res.json();
+  }
+  return JSON.parse(JSON.stringify(DEMO.cache[name]));
+}
+
+async function demoCases() {
+  if (!DEMO.open) {
+    DEMO.open = await demoFile("cases_open.json");
+    DEMO.resolved = await demoFile("cases_resolved.json");
+  }
+}
+
+async function staticApi(path, opts = {}) {
+  const method = (opts.method || "GET").toUpperCase();
+  const url = new URL(path, "http://demo.local");
+  const p = url.pathname;
+  const body = opts.body || {};
+  if (p === "/api/status") {
+    await demoCases();
+    const st = await demoFile("status.json");
+    st.cases = { open: DEMO.open.length, resolved: DEMO.resolved.length, pending_retains: 0 };
+    return st;
+  }
+  if (p === "/api/taxonomy") return demoFile("taxonomy.json");
+  if (p === "/api/entities") return demoFile("entities.json");
+  if (p === "/api/replay") return demoFile("replay.json");
+  if (p === "/api/memory/lessons") return demoFile("lessons.json");
+  if (p === "/api/memory/playbook") return demoFile("playbook.json");
+  if (p === "/api/memory/playbook/refresh") throw new Error("In the recorded demo the playbook is shown as it was captured.");
+  if (p === "/api/cases") {
+    await demoCases();
+    return JSON.parse(JSON.stringify(url.searchParams.get("status") === "resolved" ? DEMO.resolved : DEMO.open));
+  }
+  const m = p.match(/^\/api\/cases\/([^/]+)(\/(diagnose|resolve))?$/);
+  if (m) {
+    await demoCases();
+    const id = decodeURIComponent(m[1]);
+    const c = DEMO.open.find((x) => x.case_id === id) || DEMO.resolved.find((x) => x.case_id === id);
+    if (!c) throw new Error(`Case ${id} not found`);
+    if (!m[3]) return JSON.parse(JSON.stringify(c));
+    if (m[3] === "diagnose") {
+      try { return await demoFile(`diagnose/${id}.${body.use_memory ? "on" : "off"}.json`); }
+      catch (_) { throw new Error("In the recorded demo, diagnoses were captured for the open cases only."); }
+    }
+    // resolve: keep the decision in this browser tab only
+    const res = { root_cause: body.root_cause, note: body.note, agent_root_cause: body.agent_root_cause, recorded_demo: true };
+    DEMO.open = DEMO.open.filter((x) => x.case_id !== id);
+    DEMO.resolved.unshift({ ...c, status: "resolved", resolution: res });
+    return {
+      case_id: id, root_cause: body.root_cause, retained: false, queued_for_retry: false,
+      agent_was_right: body.agent_root_cause ? body.agent_root_cause === body.root_cause : null,
+      message: "Recorded demo, so this decision isn't saved. Run DejaVu locally to teach it for real.",
+    };
+  }
+  if (p === "/api/memory/ask") {
+    const i = S.inputs.suggestions.indexOf((body.question || "").trim());
+    if (i < 0) throw new Error("This is a recorded demo: pick one of the suggested questions above.");
+    return demoFile(`ask/${i}.json`);
+  }
+  if (p === "/api/precheck") {
+    if (S.presetIndex === null || S.presetDirty) throw new Error("This is a recorded demo: choose one of the example payments above, then run the check.");
+    return demoFile(`precheck/${S.presetIndex}.json`);
+  }
+  throw new Error("Not available in the recorded demo.");
 }
 
 let toastTimer = null;
@@ -85,11 +164,21 @@ async function loadStatus() {
     : `<span class="pill warn">Memory: offline stub</span>`;
   const llmPill = st.llm_backend === "groq" ? `<span class="pill ok">Groq · ${esc(st.model)}</span>` : `<span class="pill warn">Model: offline heuristic</span>`;
   const memCount = counts.error ? "" : `<span class="pill">${facts} memories · ${counts.observation ?? 0} lessons</span>`;
-  $("#status").innerHTML = memPill + llmPill + memCount;
+  const demoPill = STATIC ? `<span class="pill warn">Recorded demo</span>` : "";
+  $("#status").innerHTML = demoPill + memPill + llmPill + memCount;
   $("#count-open").textContent = st.cases ? `(${st.cases.open})` : "";
   $("#count-resolved").textContent = st.cases ? `(${st.cases.resolved})` : "";
 
   const banner = $("#offline-banner");
+  if (STATIC) {
+    const when = st.recorded_at ? ` on ${esc(fmtDate(st.recorded_at, true))}` : "";
+    const repo = st.repo_url ? ` <a href="${esc(st.repo_url)}" target="_blank" rel="noopener">Run it live from the repo</a>.` : "";
+    banner.innerHTML = st.offline
+      ? `<b>Offline test capture, not real results.</b> Re-run scripts/export_demo.py with API keys before publishing.`
+      : `<b>Recorded demo.</b> Every answer on this page was captured from a real run of DejaVu (Hindsight memory + Groq)${when}. Decisions you make here are not saved.${repo}`;
+    banner.classList.remove("hidden");
+    return;
+  }
   if (st.setup_error) {
     banner.innerHTML = `Memory setup failed: <b>${esc(st.setup_error)}</b>. Check HINDSIGHT_API_KEY in .env, then restart. Diagnoses still work without memory.`;
     banner.classList.remove("hidden");
@@ -303,7 +392,7 @@ function renderResolveBar(d) {
     <div class="resolve-bar" style="margin-top:0;padding-top:0;border-top:0">
       <button class="btn primary" id="btn-approve">${approveLabel} <span class="kbd">A</span></button>
       <button class="btn" id="btn-correct">Correct it</button>
-      <span class="muted small">Your decision is written to Hindsight memory, so DejaVu learns from it.</span>
+      <span class="muted small">${STATIC ? "Recorded demo: your decision stays in this browser tab." : "Your decision is written to Hindsight memory, so DejaVu learns from it."}</span>
     </div>
     <form class="resolve-form hidden" id="correct-form">
       <label>Actual root cause<select id="correct-rc">${options}</select></label>
@@ -515,14 +604,6 @@ async function loadPlaybook() {
   }
 }
 
-const SUGGESTIONS = [
-  "What goes wrong with payments to Golconda Commercial Bank, and how do we avoid it?",
-  "Which clients send duplicate payment files, and when?",
-  "Can we auto-release the Desert Star General Trading sanctions hit this time?",
-  "What changed at Nordkyst Bank recently?",
-  "Which recurring exceptions cost the desk the most time?",
-];
-
 async function ask(question) {
   const out = $("#ask-answer");
   out.innerHTML = `<div class="thinking"><span class="spinner"></span>DejaVu is reflecting over the desk's memory…</div>`;
@@ -537,14 +618,6 @@ async function ask(question) {
 }
 
 // ---------------------------------------------------------------- pre-flight
-const PRESETS = [
-  { label: "Late INR payment to Golconda", v: { client: "Orchid Pharma Asia Pte Ltd", beneficiary: "Hyderabad Organics Private Limited", beneficiary_bank: "Golconda Commercial Bank", intermediary: "Coromandel Clearing Bank, Mumbai", currency: "INR", amount: 2150000, submit_time_sgt: "15:10", remittance_info: "INV HO-5702 active ingredients" } },
-  { label: "No invoice no. to Victoria Harbour", v: { client: "Kestrel Components Pte Ltd", beneficiary: "Kowloon Circuit Supplies Ltd", beneficiary_bank: "Victoria Harbour Bank", intermediary: "Atlantic Clearing Bank, New York", currency: "USD", amount: 18000, submit_time_sgt: "11:00", remittance_info: "Components" } },
-  { label: "USD to Nordkyst via old route", v: { client: "Tanjong Marine Services Pte Ltd", beneficiary: "Bergen Subsea Services AS", beneficiary_bank: "Nordkyst Bank", intermediary: "Atlantic Clearing Bank, New York", currency: "USD", amount: 27500, submit_time_sgt: "10:30", remittance_info: "INV BSS-760 ROV hire" } },
-  { label: "Old 12-digit account at Pearl Delta", v: { client: "Sunrise Textiles Pte Ltd", beneficiary: "Guangzhou Hengtai Trading Co., Ltd.", beneficiary_bank: "Pearl Delta Commercial Bank", intermediary: "", currency: "USD", amount: 15200, submit_time_sgt: "09:45", beneficiary_account: "620144880913", remittance_info: "INV HT-21190 cotton yarn" } },
-  { label: "Routine EUR payment", v: { client: "Orchid Pharma Asia Pte Ltd", beneficiary: "Rhein Chemie Vertrieb GmbH", beneficiary_bank: "Rheinland Handelsbank", intermediary: "", currency: "EUR", amount: 12000, submit_time_sgt: "10:00", remittance_info: "INV RCV-44310 reagents" } },
-];
-
 async function initPrecheck() {
   S.loaded.precheck = true;
   try {
@@ -557,17 +630,22 @@ async function initPrecheck() {
   $("#pc-client").innerHTML = Object.values(S.entities.clients).map((c) => opt(c.name)).join("");
   $("#pc-bank").innerHTML = Object.values(S.entities.banks).map((b) => opt(b.name)).join("");
   $("#pc-inter").innerHTML = `<option value="">None</option>` + Object.values(S.entities.intermediaries).map((b) => opt(b.name)).join("");
-  $("#precheck-presets").innerHTML = PRESETS.map((p, i) => `<button class="chip" data-preset="${i}">${esc(p.label)}</button>`).join("");
-  $$("[data-preset]").forEach((b) => (b.onclick = () => fillPreset(PRESETS[+b.dataset.preset].v)));
-  fillPreset(PRESETS[0].v);
+  const presets = S.inputs.presets;
+  $("#precheck-presets").innerHTML = presets.map((p, i) => `<button class="chip" data-preset="${i}">${esc(p.label)}</button>`).join("");
+  $$("[data-preset]").forEach((b) => (b.onclick = () => fillPreset(+b.dataset.preset)));
+  $("#precheck-form").addEventListener("input", () => { S.presetDirty = true; });
+  if (presets.length) fillPreset(0);
 }
 
-function fillPreset(v) {
+function fillPreset(i) {
+  const v = S.inputs.presets[i].v;
   const f = $("#precheck-form");
-  ["client", "beneficiary", "beneficiary_bank", "intermediary", "currency", "amount", "submit_time_sgt", "beneficiary_account", "remittance_info"].forEach((k) => {
+  ["client", "beneficiary", "beneficiary_bank", "intermediary", "currency", "amount", "submit_time_sgt", "submit_date",
+    "beneficiary_account", "remittance_info"].forEach((k) => {
     if (f.elements[k]) f.elements[k].value = v[k] !== undefined ? v[k] : "";
   });
-  f.elements.submit_date.value = "2026-09-29";
+  S.presetIndex = i;
+  S.presetDirty = false;
 }
 
 async function runPrecheck(e) {
@@ -608,9 +686,17 @@ async function boot() {
     try { await api("/api/memory/playbook/refresh", { method: "POST" }); toast("Hindsight is rewriting the playbook (about 30 seconds)"); setTimeout(loadPlaybook, 20000); }
     catch (e) { toast(e.message, "bad"); }
   };
+  try {
+    const res = await fetch(STATIC ? "demo_inputs.json" : "/static/demo_inputs.json");
+    if (res.ok) S.inputs = await res.json();
+  } catch (_) { /* suggestions and presets are optional */ }
   $("#ask-form").onsubmit = (e) => { e.preventDefault(); const q = $("#ask-input").value.trim(); if (q.length >= 3) ask(q); };
-  $("#ask-suggestions").innerHTML = SUGGESTIONS.map((q) => `<button class="chip">${esc(q)}</button>`).join("");
+  $("#ask-suggestions").innerHTML = S.inputs.suggestions.map((q) => `<button class="chip">${esc(q)}</button>`).join("");
   $$("#ask-suggestions .chip").forEach((b) => (b.onclick = () => { $("#ask-input").value = b.textContent; ask(b.textContent); }));
+  if (STATIC) {
+    $("#ask-input").placeholder = "Recorded demo: pick one of the suggested questions below";
+    $("#refresh-playbook").classList.add("hidden");
+  }
   $("#precheck-form").onsubmit = runPrecheck;
 
   document.addEventListener("keydown", (e) => {
@@ -633,7 +719,7 @@ async function boot() {
   } catch (_) { /* labels fall back to codes */ }
   await loadStatus();
   await loadCases();
-  setInterval(loadStatus, 20000);
+  if (!STATIC) setInterval(loadStatus, 20000);
 }
 
 boot();

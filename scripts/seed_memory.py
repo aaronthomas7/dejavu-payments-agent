@@ -31,7 +31,7 @@ async def main() -> None:
     await memory.setup()
     if args.fresh:
         await memory.reset()
-    history = json.loads((settings.data_dir / "history.json").read_text())
+    history = json.loads((settings.data_dir / "history.json").read_text(encoding="utf-8"))
     for i, case in enumerate(history, 1):
         gt = case["ground_truth"]
         await memory.retain_case(case, gt["root_cause"], gt["resolution_note"])

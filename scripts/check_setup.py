@@ -15,20 +15,28 @@ OK, BAD, WARN = "[ OK ]", "[FAIL]", "[WARN]"
 
 
 async def check_groq() -> bool:
-    if not settings.groq_api_key:
+    from app.llm import GroqJSONClient, LLMError, parse_keys
+
+    keys = parse_keys(settings.groq_api_key)
+    if not keys:
         print(f"{BAD} GROQ_API_KEY is empty. Create one at https://console.groq.com/keys and put it in .env")
         return False
-    from app.llm import GroqJSONClient, LLMError
-
-    client = GroqJSONClient(settings)
     schema = {"type": "object", "properties": {"ok": {"type": "boolean"}}, "required": ["ok"], "additionalProperties": False}
-    try:
-        data, model = await client.complete_json("Reply with JSON.", 'Return {"ok": true}.', schema, "ping", 50)
-        print(f"{OK} Groq answered with {model}: {data}")
-        return True
-    except LLMError as exc:
-        print(f"{BAD} Groq call failed: {exc}")
-        return False
+    working = 0
+    for i, key in enumerate(keys, 1):
+        label = f"Groq key {i} of {len(keys)}" if len(keys) > 1 else "Groq"
+        try:
+            data, model = await GroqJSONClient(settings, api_keys=[key]).complete_json(
+                "Reply with JSON.", 'Return {"ok": true}.', schema, "ping", 50)
+            note = "" if model == settings.llm_model else f"  ({settings.llm_model} is out of quota on this key today)"
+            print(f"{OK} {label} answered with {model}: {data}{note}")
+            working += 1
+        except LLMError as exc:
+            print(f"{BAD} {label} failed: {exc}")
+    if len(keys) == 1:
+        print(f"{WARN} Tip: the free tier allows about 200K tokens a day per key. The replay plus the demo export use\n"
+              f"       roughly 300K, so add a teammate's key after a comma:  GROQ_API_KEY=gsk_yours,gsk_theirs")
+    return working == len(keys)
 
 
 async def check_hindsight() -> bool:

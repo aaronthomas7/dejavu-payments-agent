@@ -41,7 +41,7 @@ VERIFY_MINUTES = 5  # assumed analyst time to verify a correct, high-confidence 
 
 def load_json(path: Path, default):
     try:
-        return json.loads(path.read_text())
+        return json.loads(path.read_text(encoding="utf-8"))
     except Exception:
         return default
 
@@ -138,7 +138,7 @@ async def main() -> None:
     memory = build_memory(settings, mem_mode)
     agent = DejaVuAgent(settings, memory, build_reasoner(settings, llm_mode), store=None)
 
-    history = json.loads((settings.data_dir / "history.json").read_text())
+    history = json.loads((settings.data_dir / "history.json").read_text(encoding="utf-8"))
     if args.limit:
         history = history[: args.limit]
 
@@ -151,7 +151,7 @@ async def main() -> None:
     except Exception as exc:
         print(f"Could not reach/configure the memory bank: {exc}\nRun  python scripts/check_setup.py  for details.")
         await memory.close()
-        return
+        raise SystemExit(1)
     if args.fresh:
         print(f"Wiping memory bank '{memory.bank_id}' ...")
         await memory.reset()
@@ -160,7 +160,7 @@ async def main() -> None:
         print(f"Bank '{memory.bank_id}' already has memories. Use --fresh for an honest learning curve "
               f"(or --resume to continue a previous run).")
         await memory.close()
-        return
+        raise SystemExit(1)
 
     cache = {} if args.no_baseline_cache else load_json(BASELINE_CACHE, {})
     model_key = settings.llm_model if llm_mode == "groq" else "offline"
@@ -189,14 +189,14 @@ async def main() -> None:
             if d is not None:
                 off = {"root_cause": d.root_cause, "confidence": d.confidence}
                 cache[key] = off
-                BASELINE_CACHE.write_text(json.dumps(cache, indent=1))
+                BASELINE_CACHE.write_text(json.dumps(cache, indent=1), encoding="utf-8")
         on = await diagnose_reliably(case, use_memory=True)
         if on is None or key not in cache:
             # Stop instead of skipping: cases must be learned in date order, or later ones would leak into earlier ones.
             print(f"\nStopping at {case['case_id']}: the model or memory kept failing (see the log above). "
                   "Fix it (python scripts/check_setup.py helps), then continue with:  python scripts/replay.py --resume")
             await memory.close()
-            return
+            raise SystemExit(1)
 
         row = {
             "case_id": case["case_id"], "date": case["created_at"][:10], "bank": case["payment"]["creditor_bank"]["name"],
@@ -223,7 +223,7 @@ async def main() -> None:
             "mode": {"memory": mem_mode, "llm": llm_mode, "model": model_key}, "offline": mem_mode != "hindsight" or llm_mode != "groq",
             "summary": summarize(rows), "cases": rows,
         }
-        RESULTS.write_text(json.dumps(payload, indent=1))
+        RESULTS.write_text(json.dumps(payload, indent=1), encoding="utf-8")
         if args.pause:
             await asyncio.sleep(args.pause)
 

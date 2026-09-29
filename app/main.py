@@ -28,7 +28,7 @@ STATE: dict[str, Any] = {}
 
 
 def _load_json(name: str) -> Any:
-    return json.loads((settings.data_dir / name).read_text())
+    return json.loads((settings.data_dir / name).read_text(encoding="utf-8"))
 
 
 @asynccontextmanager
@@ -191,7 +191,7 @@ async def replay_results() -> dict[str, Any]:
     path = settings.data_dir / "replay_results.json"
     if not path.exists():
         return {"available": False}
-    return {"available": True, **json.loads(path.read_text())}
+    return {"available": True, **json.loads(path.read_text(encoding="utf-8"))}
 
 
 @app.post("/api/admin/reset-demo")

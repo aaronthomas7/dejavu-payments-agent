@@ -506,10 +506,10 @@ def main() -> None:
         if pid:
             seen.add(pid)
 
-    (DATA / "history.json").write_text(json.dumps(history, indent=2))
-    (DATA / "live.json").write_text(json.dumps(live, indent=2))
+    (DATA / "history.json").write_text(json.dumps(history, indent=2), encoding="utf-8")
+    (DATA / "live.json").write_text(json.dumps(live, indent=2), encoding="utf-8")
     (DATA / "entities.json").write_text(json.dumps({"clients": CLIENTS, "banks": BANKS,
-                                                     "intermediaries": INTERMEDIARIES}, indent=2))
+                                                     "intermediaries": INTERMEDIARIES}, indent=2), encoding="utf-8")
     print(f"history: {len(history)} cases, live: {len(live)} cases -> {DATA}")
 
 

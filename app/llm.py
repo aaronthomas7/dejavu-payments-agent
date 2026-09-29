@@ -61,6 +61,11 @@ class RateLimiter:
             log.info("rate limiter: waiting %.1fs (tokens used in window=%s)", wait, used)
             await asyncio.sleep(min(max(wait, 0.5), 30))
 
+    def load(self) -> int:
+        """Tokens used in the current one-minute window (for picking the least-busy key)."""
+        self._prune(time.monotonic())
+        return sum(e[1] for e in self._events)
+
     async def settle(self, ticket: int, actual_tokens: int | None) -> None:
         """Replace a request's estimated token count with the real usage reported by the API."""
         if not actual_tokens:
@@ -91,13 +96,52 @@ def extract_json(text: str) -> dict[str, Any]:
     return json.loads(candidate)
 
 
+def parse_keys(raw: str | None) -> list[str]:
+    """GROQ_API_KEY may hold several keys separated by commas (e.g. one per teammate)."""
+    return [k.strip() for k in (raw or "").replace(";", ",").split(",") if k.strip()]
+
+
+class _NoKeyLeft(LLMError):
+    """Every key has used up its daily quota for this model (or was rejected)."""
+
+
 class GroqJSONClient:
-    def __init__(self, settings: Settings):
+    """Groq chat client with one rate limiter per API key.
+
+    Free-tier keys have a daily token quota per model. When a key runs out for a model,
+    it is skipped for the rest of the process: the next key takes over, and when no key
+    is left the fallback model is used. Calls go to the least-busy key, so two keys also
+    make long runs (the replay) about twice as fast.
+    """
+
+    def __init__(self, settings: Settings, api_keys: list[str] | None = None):
         self.settings = settings
-        self.client = AsyncOpenAI(api_key=settings.groq_api_key or "missing", base_url=settings.llm_base_url,
-                                  timeout=45.0, max_retries=0)
-        self.limiter = RateLimiter(settings.llm_tpm_limit, settings.llm_rpm_limit)
+        keys = (api_keys if api_keys is not None else parse_keys(settings.groq_api_key)) or ["missing"]
+        self.clients = [AsyncOpenAI(api_key=k, base_url=settings.llm_base_url, timeout=45.0, max_retries=0)
+                        for k in keys]
+        self.limiters = [RateLimiter(settings.llm_tpm_limit, settings.llm_rpm_limit) for _ in keys]
+        self.exhausted: set[tuple[int, str]] = set()  # (key index, model) pairs out of daily quota
+        self.dead: set[int] = set()  # keys the API rejected (401/403)
         self._reasoning_ok = True
+
+    # kept for callers/tests that use a single client
+    @property
+    def client(self):
+        return self.clients[0]
+
+    @client.setter
+    def client(self, value) -> None:
+        self.clients[0] = value
+
+    @property
+    def limiter(self) -> RateLimiter:
+        return self.limiters[0]
+
+    def _pick_key(self, model: str) -> int | None:
+        usable = [i for i in range(len(self.clients)) if i not in self.dead and (i, model) not in self.exhausted]
+        if not usable:
+            return None
+        return min(usable, key=lambda i: self.limiters[i].load())
 
     async def complete_json(
         self,
@@ -114,14 +158,19 @@ class GroqJSONClient:
 
         errors: list[str] = []
         for model in models:
+            hint = None
             # attempt 1: strict schema; attempt 2: json_object + repair hint
             for mode in ("json_schema", "json_object"):
                 try:
                     data = await self._call(model, system, user, schema, schema_name, mode, max_completion_tokens,
-                                            repair_hint=errors[-1] if errors else None)
+                                            repair_hint=hint)
                     return data, model
+                except _NoKeyLeft as exc:
+                    errors.append(f"{model}: {exc}")
+                    break
                 except LLMError as exc:
                     errors.append(f"{model}/{mode}: {exc}")
+                    hint = str(exc)
                     log.warning("LLM attempt failed: %s", errors[-1])
         raise LLMError("; ".join(errors[-3:]))
 
@@ -140,27 +189,46 @@ class GroqJSONClient:
 
         est = estimate_tokens(*(m["content"] for m in messages)) + max_completion_tokens
         backoff = 2.0
-        for attempt in range(4):
-            ticket = await self.limiter.acquire(est)
+        attempts = 0
+        while attempts < 4:
+            idx = self._pick_key(model)
+            if idx is None:
+                raise _NoKeyLeft(f"daily limit reached on every Groq key ({len(self.clients)})")
+            limiter = self.limiters[idx]
+            ticket = await limiter.acquire(est)
             try:
                 kwargs: dict[str, Any] = dict(model=model, messages=messages, temperature=0.1,
                                               max_completion_tokens=max_completion_tokens,
                                               response_format=response_format)
                 if "gpt-oss" in model and self.settings.llm_reasoning_effort and self._reasoning_ok:
                     kwargs["reasoning_effort"] = self.settings.llm_reasoning_effort
-                resp = await self.client.chat.completions.create(**kwargs)
+                resp = await self.clients[idx].chat.completions.create(**kwargs)
                 usage = getattr(resp, "usage", None)
-                await self.limiter.settle(ticket, getattr(usage, "total_tokens", None))
+                await limiter.settle(ticket, getattr(usage, "total_tokens", None))
                 content = (resp.choices[0].message.content or "").strip()
                 try:
                     return json.loads(content)
                 except json.JSONDecodeError:
                     return extract_json(content)
             except openai.RateLimitError as exc:
-                retry_after = _retry_after_seconds(exc) or backoff
-                log.warning("Groq 429 on %s, sleeping %.1fs", model, retry_after)
-                await asyncio.sleep(min(retry_after, 60))
+                wait = _retry_after_seconds(exc)
+                if _is_daily_limit(exc, wait):
+                    self.exhausted.add((idx, model))
+                    others = self._pick_key(model) is not None
+                    print(f"  Groq key {idx + 1} used up its free daily quota for {model}"
+                          + ("; switching to the next key." if others else
+                             "; no key left for this model, using the fallback model."), flush=True)
+                    continue  # not counted as an attempt: the next key (or model) takes over at once
+                wait = wait or backoff
+                log.warning("Groq 429 on %s (key %d), sleeping %.1fs", model, idx + 1, wait)
+                await asyncio.sleep(min(wait, 60))
                 backoff *= 2
+            except (openai.AuthenticationError, openai.PermissionDeniedError) as exc:
+                if len(self.clients) > 1:
+                    self.dead.add(idx)
+                    print(f"  Groq key {idx + 1} was rejected ({_short(exc)[:80]}); using the other key(s).", flush=True)
+                    continue
+                raise LLMError(f"key rejected: {_short(exc)}") from exc
             except (openai.APITimeoutError, openai.APIConnectionError) as exc:
                 log.warning("Groq network issue (%s), retrying", type(exc).__name__)
                 await asyncio.sleep(backoff)
@@ -175,20 +243,37 @@ class GroqJSONClient:
                 if exc.status_code >= 500:
                     await asyncio.sleep(backoff)
                     backoff *= 2
+                    attempts += 1
                     continue
                 raise LLMError(f"status {exc.status_code}: {_short(exc)}") from exc
             except (ValueError, json.JSONDecodeError) as exc:
                 raise LLMError(f"unparseable JSON: {exc}") from exc
+            attempts += 1
         raise LLMError("gave up after retries (rate limit / network)")
 
 
+_DURATION = re.compile(r"(\d+(?:\.\d+)?)(ms|h|m|s)")
+
+
 def _retry_after_seconds(exc: Exception) -> float | None:
+    """Seconds to wait, from the retry-after header or Groq's "Please try again in 7m12.5s" message."""
     try:
-        headers = exc.response.headers  # type: ignore[attr-defined]
-        value = headers.get("retry-after")
-        return float(value) if value else None
+        value = exc.response.headers.get("retry-after")  # type: ignore[attr-defined]
+        if value:
+            return float(value)
     except Exception:
+        pass
+    match = re.search(r"try again in\s+([0-9hms.]+)", str(exc), re.IGNORECASE)
+    if not match:
         return None
+    units = {"h": 3600.0, "m": 60.0, "s": 1.0, "ms": 0.001}
+    total = sum(float(n) * units[u] for n, u in _DURATION.findall(match.group(1)))
+    return total or None
+
+
+def _is_daily_limit(exc: Exception, wait: float | None) -> bool:
+    text = str(exc).lower()
+    return "per day" in text or "(tpd)" in text or "(rpd)" in text or (wait is not None and wait > 120)
 
 
 def _short(exc: Exception) -> str:

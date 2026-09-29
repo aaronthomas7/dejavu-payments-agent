@@ -28,12 +28,12 @@ import pytest  # noqa: E402
 
 @pytest.fixture(scope="session")
 def history():
-    return json.loads((ROOT / "data" / "history.json").read_text())
+    return json.loads((ROOT / "data" / "history.json").read_text(encoding="utf-8"))
 
 
 @pytest.fixture(scope="session")
 def live():
-    return json.loads((ROOT / "data" / "live.json").read_text())
+    return json.loads((ROOT / "data" / "live.json").read_text(encoding="utf-8"))
 
 
 @pytest.fixture()
