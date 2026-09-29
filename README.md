@@ -208,8 +208,7 @@ The six weeks contain eight recurring patterns (P1 to P8 in `scripts/generate_da
   - a knowledge page per counterparty bank
 
 ## Team
-
-_Team name · member names · roles_
+TECHVENGERS
 
 ## License
 
