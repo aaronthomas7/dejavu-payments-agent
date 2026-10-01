@@ -97,6 +97,25 @@ class PrecheckRequest(BaseModel):
     remittance_info: Optional[str] = None
 
 
+class SimSendRequest(PrecheckRequest):
+    """A payment sent to the network simulator (same fields as a pre-flight check)."""
+
+    beneficiary_account: str = Field(min_length=4, max_length=40)
+    payment_ref: Optional[str] = Field(default=None, max_length=20)
+
+
+class SimSendResult(BaseModel):
+    payment_ref: str
+    status: Literal["credited", "credited_next_day", "rejected", "held"]
+    iso_status: str
+    bank: str
+    bic: str = ""
+    message: str
+    reason_code: Optional[str] = None
+    reason_text: Optional[str] = None
+    case_id: Optional[str] = None
+
+
 class PrecheckWarning(BaseModel):
     title: str
     detail: str

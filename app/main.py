@@ -16,7 +16,8 @@ from .agent import DejaVuAgent, build_reasoner
 from .config import settings
 from .memory import build_memory
 from .models import (AskRequest, AskResult, DiagnoseRequest, Diagnosis, PrecheckRequest, PrecheckResult,
-                     ResolveRequest, ResolveResult)
+                     ResolveRequest, ResolveResult, SimSendRequest, SimSendResult)
+from .simulator import ISO_STATUS, PaymentNetwork, case_id_prefix, new_payment_ref
 from .store import Store
 from .taxonomy import ROOT_CAUSES
 
@@ -38,7 +39,9 @@ async def lifespan(app: FastAPI):
     store.load_if_empty(_load_json("history.json"), _load_json("live.json"))
     memory = build_memory(settings, memory_backend)
     agent = DejaVuAgent(settings, memory, build_reasoner(settings, llm_backend), store)
-    STATE.update(store=store, memory=memory, agent=agent, memory_backend=memory_backend,
+    rules = settings.data_dir / "network_rules.json"
+    network = PaymentNetwork(rules, _load_json("entities.json")) if rules.exists() else None
+    STATE.update(store=store, memory=memory, agent=agent, network=network, memory_backend=memory_backend,
                  llm_backend=llm_backend, setup_error=None)
     log.info("DejaVu starting: memory=%s llm=%s bank=%s", memory_backend, llm_backend, memory.bank_id)
     try:
@@ -196,13 +199,51 @@ async def replay_results() -> dict[str, Any]:
 
 @app.post("/api/admin/reset-demo")
 async def reset_demo() -> dict[str, Any]:
-    """Re-open the live demo cases and remove their lessons from memory, so the demo can be rehearsed."""
+    """Re-open the live demo cases, remove simulated payments, and delete what memory learned from both,
+    so the demo can be rehearsed from the same starting point."""
     ids = STATE["store"].reopen_live_cases()
+    sim_ids = STATE["store"].delete_cases("sim")
     forgotten = 0
-    for cid in ids:
+    for cid in ids + sim_ids:
         try:
             await STATE["memory"].forget_case(cid)
             forgotten += 1
         except Exception as exc:
             log.warning("could not forget %s: %s", cid, exc)
-    return {"reopened": len(ids), "forgotten_in_memory": forgotten}
+    return {"reopened": len(ids), "simulated_removed": len(sim_ids), "forgotten_in_memory": forgotten}
+
+
+# ---- payment network simulator (live demo) ------------------------------------------------------------------
+def _network() -> PaymentNetwork:
+    if not STATE.get("network"):
+        raise HTTPException(404, "The payment network simulator is not set up (data/network_rules.json is missing).")
+    return STATE["network"]
+
+
+@app.get("/api/sim/network")
+async def sim_network() -> dict[str, Any]:
+    """Banks, clients and intermediaries the simulated network knows. The banks' rules stay hidden."""
+    return _network().directory()
+
+
+@app.get("/api/sim/rules")
+async def sim_rules() -> dict[str, Any]:
+    """The hidden rulebook, so the presenter can show afterwards what DejaVu never saw."""
+    return _network().rulebook()
+
+
+@app.post("/api/sim/send", response_model=SimSendResult)
+async def sim_send(req: SimSendRequest) -> SimSendResult:
+    """Send a payment into the simulated network. A rejection or hold opens a normal exception on the desk."""
+    network = _network()
+    outcome = network.evaluate(req)
+    ref = req.payment_ref or new_payment_ref()
+    bank = network.bank(req.beneficiary_bank) or {"name": req.beneficiary_bank, "bic": ""}
+    case_id = None
+    if outcome.opens_exception:
+        case_id = STATE["store"].next_case_id(case_id_prefix())
+        STATE["store"].add_case(network.build_case(req, outcome, case_id, ref), source="sim")
+        log.info("simulated network: %s %s at %s -> exception %s", ref, outcome.status, bank["name"], case_id)
+    return SimSendResult(payment_ref=ref, status=outcome.status, iso_status=ISO_STATUS[outcome.status],
+                         bank=bank["name"], bic=bank.get("bic", ""), message=outcome.message,
+                         reason_code=outcome.code, reason_text=outcome.text, case_id=case_id)

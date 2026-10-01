@@ -17,7 +17,8 @@
       </div>
     </div>
     <nav class="tabs" role="tablist">
-      <button class="tab active" data-tab="desk" role="tab">Exception desk</button>
+      <button class="tab active" data-tab="desk" role="tab">Exception desk<span class="newdot hidden" id="desk-new"></span></button>
+      <button class="tab" data-tab="network" role="tab">Send payment</button>
       <button class="tab" data-tab="curve" role="tab">Learning curve</button>
       <button class="tab" data-tab="learned" role="tab">What it learned</button>
       <button class="tab" data-tab="precheck" role="tab">Pre-flight check</button>
@@ -41,6 +42,49 @@
       <section class="case" id="case-panel">
         <div class="empty">Select an exception from the queue.</div>
       </section>
+    </section>
+
+    <!-- ================= PAYMENT NETWORK SIMULATOR (live demo) ================= -->
+    <section id="tab-network" class="tab-panel">
+      <div class="panel-wrap network-grid">
+        <div class="card">
+          <div class="card-head"><h2>Send a payment <span class="muted small">into the payment network simulator</span></h2></div>
+          <p class="muted small sim-explain">Fictional banks with their own hidden rules stand in for the real payment network.
+            DejaVu never sees those rules: like an analyst, it only sees the status message a bank sends back.</p>
+          <div class="chips" id="sim-presets"></div>
+          <form id="sim-form" class="form-grid" autocomplete="off">
+            <label>Client<select name="client" id="sim-client"></select></label>
+            <label>Beneficiary<input name="beneficiary" required></label>
+            <label>Beneficiary bank<select name="beneficiary_bank" id="sim-bank"></select></label>
+            <label>Beneficiary account<input name="beneficiary_account" class="mono" required minlength="4"></label>
+            <label>Currency<select name="currency">
+              <option>INR</option><option>USD</option><option>EUR</option><option>GBP</option><option>HKD</option>
+              <option>AED</option><option>IDR</option><option>MYR</option><option>PHP</option></select></label>
+            <label>Amount<input name="amount" type="number" min="1" step="0.01" required></label>
+            <label>Intermediary (optional)<select name="intermediary" id="sim-inter"></select></label>
+            <label>Submit time (SGT)<input name="submit_time_sgt" type="time" required></label>
+            <label class="span-2">Remittance info<input name="remittance_info"></label>
+            <input type="hidden" name="submit_date">
+            <div class="span-2 sim-send-row">
+              <label class="switch" title="Ask DejaVu to check the payment before it leaves the bank">
+                <input type="checkbox" id="sim-check" checked><span class="track"></span> Check with DejaVu before sending
+              </label>
+              <button class="btn primary big" type="submit" id="sim-send">Send payment</button>
+            </div>
+          </form>
+        </div>
+        <div class="net-col">
+          <div class="card sim-panel" id="sim-dejavu">
+            <div class="empty small">Send a payment. DejaVu's checks and diagnoses appear here.</div>
+          </div>
+          <div class="card">
+            <div class="card-head"><h2>Network log <span class="muted small">ISO 20022 status messages</span></h2>
+              <button class="btn ghost" id="sim-rules-btn" type="button">Reveal the hidden rulebook</button></div>
+            <div id="sim-rules" class="rulebook hidden"></div>
+            <div id="sim-log" class="netlog"></div>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- ================= LEARNING CURVE ================= -->

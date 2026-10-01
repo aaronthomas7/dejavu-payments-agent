@@ -528,9 +528,15 @@ class LocalMemory:
             if req.beneficiary_bank.lower() in row["text"].lower():
                 warnings.append(PrecheckWarning(title="Seen before at this bank", detail=row["text"], severity="medium",
                                                 fix="Check the playbook entry before sending."))
+        # Like Hindsight, a single resolved case is enough to remember (lessons need two).
+        seen = [i for i in self.items if i.get("bank_name", "").lower() == req.beneficiary_bank.lower()]
+        if seen and not warnings:
+            warnings.append(PrecheckWarning(title="Seen before at this bank", detail=seen[-1]["text"][:400], severity="medium",
+                                            fix="Check how the last exception at this bank was resolved before sending."))
+        evidence = [{"id": i["id"], "text": i["text"], "type": "experience", "occurred_start": i["occurred"]} for i in seen]
         return PrecheckResult(risk_level="medium" if warnings else "low",
                               summary="Offline heuristic check (connect Hindsight for the real pre-flight check).",
-                              warnings=warnings)
+                              warnings=warnings, evidence=evidence[-8:])
 
     async def close(self) -> None:
         return None

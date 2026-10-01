@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS cases (
     case_id     TEXT PRIMARY KEY,
     created_at  TEXT NOT NULL,
     status      TEXT NOT NULL,           -- open | resolved
-    source      TEXT NOT NULL,           -- history | live
+    source      TEXT NOT NULL,           -- history | live | sim (payment network simulator)
     data        TEXT NOT NULL,           -- full case JSON (includes ground truth)
     resolution  TEXT                     -- JSON written when an analyst resolves the case
 );
@@ -80,6 +80,30 @@ class Store:
             self._conn.execute("UPDATE cases SET status = 'resolved', resolution = ? WHERE case_id = ?",
                                (json.dumps({**resolution, "resolved_at": _now()}), case_id))
             self._conn.commit()
+
+    def add_case(self, case: dict[str, Any], source: str) -> None:
+        """Insert a new open case (e.g. an exception raised by the payment network simulator)."""
+        with self._lock:
+            self._conn.execute("INSERT INTO cases VALUES (?,?,?,?,?,?)",
+                               (case["case_id"], case["created_at"], "open", source, json.dumps(case), None))
+            self._conn.commit()
+
+    def next_case_id(self, prefix: str) -> str:
+        with self._lock:
+            ids = {r[0] for r in self._conn.execute("SELECT case_id FROM cases WHERE case_id LIKE ?", (prefix + "%",))}
+        n = len(ids) + 1
+        while f"{prefix}{n:02d}" in ids:
+            n += 1
+        return f"{prefix}{n:02d}"
+
+    def delete_cases(self, source: str) -> list[str]:
+        """Remove every case from one source (used to clear simulated payments between rehearsals)."""
+        with self._lock:
+            ids = [r[0] for r in self._conn.execute("SELECT case_id FROM cases WHERE source = ?", (source,))]
+            for table in ("cases", "outbox", "diagnoses"):
+                self._conn.executemany(f"DELETE FROM {table} WHERE case_id = ?", [(i,) for i in ids])
+            self._conn.commit()
+        return ids
 
     def reopen_live_cases(self) -> list[str]:
         with self._lock:

@@ -152,6 +152,18 @@ python scripts/export_demo.py             # optional: record the static demo for
 
 Keyboard: `J`/`K` next/previous case, `D` diagnose, `C` compare, `A` approve.
 
+## Live demo: the payment network simulator
+
+The **Send payment** tab lets you send a payment into a small simulated payment network and watch DejaVu react in real time.
+
+- **The network is simulated; DejaVu is not.** Fictional banks with their own hidden rules (`data/network_rules.json`) stand in for the real network. A bank replies the way a real one would, with an ISO 20022 `pacs.002` status (credited, or rejected with a reason code such as `AC01`).
+- **DejaVu never reads the rulebook.** A rejection becomes a normal exception on the desk, and DejaVu only sees the bank's message, exactly like an analyst. Anything it knows about a bank, it learned from cases the desk resolved.
+- **The demo loop:** a payment to a bank DejaVu has never seen (Charminar Co-operative Bank) is rejected → DejaVu diagnoses it from memory and has nothing specific to go on → the analyst corrects it and the lesson is retained in Hindsight → the next payment to that bank is held by the pre-flight check before it leaves, citing the case learned minutes earlier → apply the fix and it is credited.
+- **Reveal the hidden rulebook** in the network log at any time to show what DejaVu never saw.
+- `scripts/windows/reset_demo.bat` (or `POST /api/admin/reset-demo`) removes the simulated payments and deletes their retained documents from memory, so the demo can be rehearsed.
+
+In production the simulator is replaced by the real `pacs.002` and `pacs.004` messages the bank's payment hub already receives.
+
 ## Guardrails and edge cases
 
 - **Sanctions**:
@@ -162,7 +174,7 @@ Keyboard: `J`/`K` next/previous case, `D` diagnose, `C` compare, `A` approve.
 - **Privacy**: account numbers and IBANs are masked in drafted messages.
 - **Model failures**: strict-schema failure → JSON-object mode with a repair hint → fallback model → "Needs human review". The analyst's screen never crashes.
 - **Memory outage**: diagnoses continue without history and are flagged, and resolutions are queued and flushed later.
-- **Re-rehearsal**: `POST /api/admin/reset-demo` reopens the live cases and deletes their retained documents from the bank.
+- **Re-rehearsal**: `POST /api/admin/reset-demo` reopens the live cases, removes simulated payments, and deletes their retained documents from the bank.
 
 ## Project structure
 
@@ -176,6 +188,7 @@ app/
   guardrails.py   deterministic safety rules
   taxonomy.py     the 15 root causes
   store.py        SQLite queue + retain outbox
+  simulator.py    payment network simulator for live demos (fictional banks with hidden rules)
   static/         index.html, app.js, styles.css, vendored libs
 scripts/
   generate_dataset.py   the synthetic 6-week dataset (fictional banks and companies)
@@ -185,8 +198,8 @@ scripts/
   fill_content.py       copy replay numbers into this README
   export_demo.py        record a real run as the static clickable demo (docs/demo)
   windows/              double-click helpers: setup, replay, run, export_demo, update_playbook, reset_demo, publish
-tests/            33 offline tests (pytest)
-data/             history.json (49 cases), live.json (10 open cases), entities.json
+tests/            50 offline tests (pytest)
+data/             history.json (49 cases), live.json (10 open cases), entities.json, network_rules.json (simulator)
 docs/             learning_curve.png and the recorded demo served by GitHub Pages
 ```
 

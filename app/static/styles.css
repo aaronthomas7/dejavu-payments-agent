@@ -206,6 +206,40 @@ th { font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: v
 .warning.low { border-left-color: var(--teal); }
 .warning .fix { margin-top: 6px; color: var(--teal); font-weight: 600; }
 
+/* ---------- payment network simulator ---------- */
+.network-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; align-content: start; }
+.network-grid .card + .card, .net-col .card + .card { margin-top: 0; }
+.net-col { display: grid; gap: 14px; align-content: start; }
+.sim-explain { margin: 0 0 2px; }
+.sim-send-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 4px; }
+.chip.active { border-color: var(--teal); color: var(--teal); background: var(--teal-bg); }
+.chip:disabled { opacity: .5; cursor: progress; }
+.sim-panel { min-height: 160px; }
+.sim-verdict { font-size: 19px; font-weight: 800; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
+.sim-verdict.ok { color: var(--teal); }
+.sim-verdict.warn { color: var(--amber); }
+.sim-verdict.bad { color: var(--red); }
+.sim-diag { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); }
+.sim-diag p { margin: 6px 0 0; }
+.sim-rc { font-size: 19px; font-weight: 750; margin: 2px 0 2px; }
+.sim-conf { font-size: 13px; font-weight: 600; color: var(--muted); margin-left: 8px; }
+.sim-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 14px; }
+.netlog { max-height: 320px; overflow: auto; font-size: 12.5px; }
+.net-row { display: grid; grid-template-columns: 62px 14px 1fr; gap: 6px; padding: 5px 0; border-bottom: 1px dashed var(--line); }
+.net-row:first-child { animation: flash 1.6s ease-out 1; }
+.net-time { color: var(--muted); font-size: 11.5px; }
+.net-icon { font-weight: 800; text-align: center; color: var(--ink-2); }
+.net-row.ok .net-icon { color: var(--teal); }
+.net-row.bad .net-icon, .net-row.bad .net-text { color: var(--red); }
+.net-row.warn .net-icon { color: var(--amber); }
+.net-row.dv .net-icon { color: var(--blue); }
+.rulebook { background: var(--navy); color: #e2e8f0; border-radius: 8px; padding: 10px 12px; margin-bottom: 10px; font-size: 12.5px; display: grid; gap: 8px; }
+.rulebook .muted { color: #9fb3c8; }
+.rule b { color: #5eead4; }
+.newdot { display: inline-grid; place-items: center; min-width: 18px; height: 18px; padding: 0 5px; margin-left: 6px; border-radius: 999px; background: #ef4444; color: #fff; font-size: 11px; font-weight: 800; vertical-align: 1px; }
+.flash { animation: flash 1.6s ease-out 1; }
+@keyframes flash { 0% { background: #fef08a; } 100% { background: transparent; } }
+
 /* ---------- toast ---------- */
 .toast { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); background: var(--navy); color: #fff; padding: 10px 16px; border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,.2); font-weight: 600; z-index: 50; max-width: 90vw; }
 .toast.ok { background: var(--teal); }
@@ -214,7 +248,7 @@ th { font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: v
 @media (max-width: 1100px) {
   .kv { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .learned-grid, .precheck-grid, .compare { grid-template-columns: 1fr; }
+  .learned-grid, .precheck-grid, .network-grid, .compare { grid-template-columns: 1fr; }
   .span-2 { grid-column: auto; }
   .brand { min-width: 0; }
   .brand-tag { display: none; }

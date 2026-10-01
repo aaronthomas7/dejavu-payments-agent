@@ -1,0 +1,106 @@
+{
+  "about": "Payment network simulator for live demos. These fictional banks stand in for the real payment network. Each bank has its own hidden rules. DejaVu never reads this file: like an ops analyst, it only sees the status messages the banks send back.",
+  "banks": [
+    {
+      "code": "CHMR", "name": "Charminar Co-operative Bank", "bic": "CHMRINBBXXX", "city": "Hyderabad", "country": "IN",
+      "rules": [
+        {
+          "id": "CHMR-ACCOUNT-14",
+          "summary": "Moved to 14-digit account numbers on 1 Oct 2026. Old 11-digit numbers are rejected.",
+          "check": {"type": "account_digits", "digits": 14},
+          "outcome": {"status": "rejected", "code": "AC01", "text": "Incorrect account number",
+                      "message": "Beneficiary account {account} not found. Please verify and resend."},
+          "root_cause": "ACCOUNT_FORMAT_CHANGED",
+          "analyst_note": "Called Charminar Co-operative Bank's Hyderabad operations desk: they moved to 14-digit account numbers on 1 Oct 2026. Old 11-digit numbers must be prefixed with branch code 500. Repaired the account number and resent - accepted."
+        }
+      ]
+    },
+    {
+      "code": "PDCB", "name": "Pearl Delta Commercial Bank", "bic": "PDCBCNGZXXX", "city": "Guangzhou", "country": "CN",
+      "rules": [
+        {
+          "id": "PDCB-ACCOUNT-15",
+          "summary": "Moved to 15-digit account numbers on 25 Aug 2026. Old 12-digit numbers need the branch prefix 601.",
+          "check": {"type": "account_digits", "digits": 15},
+          "outcome": {"status": "rejected", "code": "AC01", "text": "Incorrect account number",
+                      "message": "Beneficiary account {account} not found. Please verify and resend."},
+          "root_cause": "ACCOUNT_FORMAT_CHANGED",
+          "analyst_note": "Pearl Delta Commercial Bank migrated to 15-digit account numbers on 25 Aug 2026. Prefixed the old 12-digit number with branch code 601 and resent - accepted."
+        }
+      ]
+    },
+    {
+      "code": "VHBK", "name": "Victoria Harbour Bank", "bic": "VHBKHKHHXXX", "city": "Hong Kong", "country": "HK",
+      "rules": [
+        {
+          "id": "VHBK-INVOICE",
+          "summary": "Trade payments above USD 10,000 must carry an invoice number in the remittance information.",
+          "check": {"type": "remittance_contains", "pattern": "\\bINV\\b|invoice", "min_amount": 10000, "currencies": ["USD", "HKD"]},
+          "outcome": {"status": "rejected", "code": "RR04", "text": "Regulatory reason",
+                      "message": "Payment rejected. Reason: RR04 Regulatory reason."},
+          "root_cause": "MISSING_INVOICE_REFERENCE",
+          "analyst_note": "Called Victoria Harbour Bank: their compliance rules require an invoice number in the remittance information for trade payments above USD 10,000. Got the invoice number from the client and resubmitted - accepted."
+        }
+      ]
+    },
+    {
+      "code": "NKYS", "name": "Nordkyst Bank", "bic": "NKYSNOBBXXX", "city": "Bergen", "country": "NO",
+      "rules": [
+        {
+          "id": "NKYS-USD-ROUTE",
+          "summary": "USD payments must go via Hudson Federal Bank since 1 Sep 2026. The old route via Atlantic Clearing Bank is rejected.",
+          "check": {"type": "intermediary_not", "names": ["Atlantic Clearing Bank, New York"], "currencies": ["USD"]},
+          "outcome": {"status": "rejected", "code": "RC01", "text": "Bank identifier incorrect",
+                      "message": "Bank identifier incorrect. Payment rejected by intermediary."},
+          "root_cause": "CORRESPONDENT_ROUTING_CHANGED",
+          "analyst_note": "Nordkyst Bank moved its USD correspondent from Atlantic Clearing Bank New York to Hudson Federal Bank New York on 1 Sep 2026. Updated the settlement instructions and resent via Hudson Federal - accepted."
+        }
+      ]
+    },
+    {
+      "code": "TUNG", "name": "Tungabhadra Co-operative Bank", "bic": "TUNGINBBXXX", "city": "Bengaluru", "country": "IN",
+      "rules": [
+        {
+          "id": "TUNG-EXACT-NAME",
+          "summary": "Exact beneficiary name matching: abbreviated suffixes like 'Pvt Ltd' are rejected; the full legal name ('Private Limited') is required.",
+          "check": {"type": "name_excludes", "terms": ["Pvt Ltd", "Pvt. Ltd.", "Pvt. Ltd"]},
+          "outcome": {"status": "rejected", "code": "BE01", "text": "Inconsistent with end customer",
+                      "message": "Beneficiary name does not match the account holder name. Payment rejected."},
+          "root_cause": "NAME_LEGAL_SUFFIX_MISMATCH",
+          "analyst_note": "Tungabhadra Co-operative Bank does exact name matching. Amended the beneficiary name to the full legal suffix 'Private Limited' and resent - accepted."
+        }
+      ]
+    },
+    {
+      "code": "GOLC", "name": "Golconda Commercial Bank", "bic": "GOLCINHHXXX", "city": "Hyderabad", "country": "IN",
+      "rules": [
+        {
+          "id": "GOLC-CUTOFF",
+          "summary": "Same-day cut-off is 12:00 IST (14:30 SGT). Later payments are credited on the next business day.",
+          "check": {"type": "after_cutoff", "time_sgt": "14:30"},
+          "outcome": {"status": "credited_next_day",
+                      "message": "Received after Golconda Commercial Bank's same-day cut-off (14:30 SGT). It will be credited on the next business day."},
+          "root_cause": "MISSED_CUTOFF_NEXT_DAY_CREDIT"
+        }
+      ]
+    },
+    {
+      "code": "DRBK", "name": "Desert Rose Bank", "bic": "DRBKAEADXXX", "city": "Dubai", "country": "AE",
+      "rules": [
+        {
+          "id": "DRBK-SCREENING",
+          "summary": "Beneficiary names similar to the listed entity 'Desert Star Shipping FZE' are held for sanctions screening.",
+          "check": {"type": "name_includes", "terms": ["Desert Star"]},
+          "outcome": {"status": "held", "exception_type": "SCREENING_HOLD",
+                      "message": "Payment held by sanctions screening: beneficiary name matched watch-list entry 'Desert Star Shipping FZE' (score 0.86). Pending review."},
+          "root_cause": "SANCTIONS_KNOWN_FALSE_POSITIVE",
+          "analyst_note": "Compliance confirmed this beneficiary is the previously cleared Desert Star General Trading LLC, not the listed Desert Star Shipping FZE. Released with the clearance reference attached."
+        }
+      ]
+    },
+    {"code": "RHHB", "name": "Rheinland Handelsbank", "bic": "RHHBDEFFXXX", "city": "Frankfurt", "country": "DE", "rules": []},
+    {"code": "THUB", "name": "Thames Union Bank", "bic": "THUBGB2LXXX", "city": "London", "country": "GB", "rules": []},
+    {"code": "SGRB", "name": "Saigon Riverside Bank", "bic": "SGRBVNVXXXX", "city": "Ho Chi Minh City", "country": "VN", "rules": []},
+    {"code": "STHB", "name": "Straits Heritage Bank", "bic": "STHBMYKPXXX", "city": "Penang", "country": "MY", "rules": []}
+  ]
+}

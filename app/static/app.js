@@ -10,7 +10,7 @@ const S = {
   filter: "open", cases: [], selectedId: null, caseData: null,
   diag: null, compare: null, busy: false,
   replay: null, chart: null, chartMode: "rolling", playing: false,
-  loaded: { curve: false, precheck: false },
+  loaded: { curve: false, precheck: false, network: false },
   inputs: { suggestions: [], presets: [] }, presetIndex: null, presetDirty: false,
 };
 
@@ -197,6 +197,12 @@ function showTab(name) {
   if (name === "curve") loadCurve();
   if (name === "learned") { loadLessons(); loadPlaybook(); }
   if (name === "precheck" && !S.loaded.precheck) initPrecheck();
+  if (name === "network" && !S.loaded.network) initNetwork();
+  if (name === "desk" && SIM.newCount) {
+    clearDeskNew();
+    loadStatus();
+    loadCases(S.selectedId);
+  }
 }
 
 // ---------------------------------------------------------------- queue
@@ -658,6 +664,12 @@ function fillPreset(i) {
   S.presetDirty = false;
 }
 
+function warningsHtml(r) {
+  const dirs = (r.directives || []).map((d) => `<span class="badge red">🛡 ${esc(d.name || "directive")}</span>`).join("");
+  return (r.warnings.map((w) => `<div class="warning ${esc(w.severity)}"><b>${esc(w.title)}</b><div>${esc(w.detail)}</div>${w.fix ? `<div class="fix">Fix before sending: ${esc(w.fix)}</div>` : ""}</div>`).join("") || `<div class="muted">No warnings.</div>`)
+    + `<div class="based-on muted small"><span>Based on ${r.evidence.length} memories</span>${dirs}<span>${r.latency_ms} ms</span></div>`;
+}
+
 async function runPrecheck(e) {
   e.preventDefault();
   const f = e.target;
@@ -668,14 +680,280 @@ async function runPrecheck(e) {
   out.innerHTML = `<div class="thinking"><span class="spinner"></span>Reflecting over every exception this desk has seen…</div>`;
   try {
     const r = await api("/api/precheck", { method: "POST", body });
-    const dirs = (r.directives || []).map((d) => `<span class="badge red">🛡 ${esc(d.name || "directive")}</span>`).join("");
     out.innerHTML = `<div class="card-head"><h2>Pre-flight result</h2><span class="muted small">${r.latency_ms} ms</span></div>
       <div class="risk ${esc(r.risk_level)}">${esc(r.risk_level)} risk</div>
-      <p>${esc(r.summary)}</p>
-      ${r.warnings.map((w) => `<div class="warning ${esc(w.severity)}"><b>${esc(w.title)}</b><div>${esc(w.detail)}</div>${w.fix ? `<div class="fix">Fix before sending: ${esc(w.fix)}</div>` : ""}</div>`).join("") || `<div class="muted">No warnings.</div>`}
-      <div class="based-on muted small"><span>Based on ${r.evidence.length} memories</span>${dirs}</div>`;
+      <p>${esc(r.summary)}</p>${warningsHtml(r)}`;
   } catch (err) {
     out.innerHTML = `<div class="note warn">${esc(err.message)}</div>`;
+  }
+}
+
+// ---------------------------------------------------------------- payment network simulator (live demo)
+// Fictional banks with hidden rules stand in for the payment network (see data/network_rules.json). DejaVu is never
+// shown those rules: a rejection reaches it as a normal exception on the desk, exactly like a real bank's reply.
+const SIM = { dir: null, presetIndex: null, dirty: false, busy: false, newCount: 0 };
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+function sgtNow() {
+  const parts = Object.fromEntries(new Intl.DateTimeFormat("en-GB", {
+    timeZone: SGT, year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit", hourCycle: "h23",
+  }).formatToParts(new Date()).map((p) => [p.type, p.value]));
+  return { date: `${parts.year}-${parts.month}-${parts.day}`, time: `${parts.hour}:${parts.minute}`, clock: `${parts.hour}:${parts.minute}:${parts.second}` };
+}
+
+async function initNetwork() {
+  S.loaded.network = true;
+  try {
+    SIM.dir = await api("/api/sim/network");
+  } catch (e) {
+    simPanel(`<div class="note warn">The payment network simulator is not available: ${esc(e.message)}</div>`);
+    return;
+  }
+  const opt = (v) => `<option>${esc(v)}</option>`;
+  $("#sim-client").innerHTML = SIM.dir.clients.map((c) => opt(c.name)).join("");
+  $("#sim-bank").innerHTML = SIM.dir.banks.map((b) => opt(b.name)).join("");
+  $("#sim-inter").innerHTML = `<option value="">None</option>` + SIM.dir.intermediaries.map((b) => opt(b.name)).join("");
+  const presets = S.inputs.sim_presets || [];
+  $("#sim-presets").innerHTML = presets.map((p, i) => `<button class="chip" type="button" data-sim-preset="${i}">${esc(p.label)}</button>`).join("");
+  $$("[data-sim-preset]").forEach((b) => (b.onclick = () => fillSimPreset(+b.dataset.simPreset)));
+  const form = $("#sim-form");
+  form.addEventListener("input", () => { SIM.dirty = true; });
+  form.onsubmit = (e) => { e.preventDefault(); sendPayment(); };
+  $("#sim-rules-btn").onclick = toggleRulebook;
+  if (presets.length) fillSimPreset(0); else simDefaults();
+  netLog("info", `Connected to the payment network simulator: ${SIM.dir.banks.length} banks.`);
+}
+
+function simDefaults() {
+  const f = $("#sim-form");
+  const now = sgtNow();
+  f.elements.submit_time_sgt.value = now.time;
+  f.elements.submit_date.value = now.date;
+}
+
+function fillSimPreset(i) {
+  const p = S.inputs.sim_presets[i];
+  const f = $("#sim-form");
+  ["client", "beneficiary", "beneficiary_bank", "beneficiary_account", "currency", "amount", "intermediary", "remittance_info"].forEach((k) => {
+    if (f.elements[k]) f.elements[k].value = p.v[k] !== undefined ? p.v[k] : "";
+  });
+  simDefaults();
+  if (p.v.submit_time_sgt) f.elements.submit_time_sgt.value = p.v.submit_time_sgt;
+  SIM.presetIndex = i;
+  SIM.dirty = false;
+  $$("[data-sim-preset]").forEach((b) => b.classList.toggle("active", +b.dataset.simPreset === i));
+}
+
+function simBody() {
+  const f = $("#sim-form");
+  if (!f.reportValidity()) return null;
+  const body = Object.fromEntries(new FormData(f).entries());
+  body.amount = parseFloat(body.amount);
+  if (!body.intermediary) delete body.intermediary;
+  if (!body.submit_date) body.submit_date = sgtNow().date;
+  return body;
+}
+
+function simPanel(html) { $("#sim-dejavu").innerHTML = html; }
+
+function simBusy(busy) {
+  SIM.busy = busy;
+  $("#sim-send").disabled = busy;
+  $$("[data-sim-preset]").forEach((b) => (b.disabled = busy));
+}
+
+function netLog(kind, text, ref = "") {
+  const icon = { out: "→", ok: "✓", bad: "✗", warn: "!", dv: "◆", info: "·" }[kind] || "·";
+  const row = document.createElement("div");
+  row.className = `net-row ${kind}`;
+  row.innerHTML = `<span class="net-time mono">${sgtNow().clock}</span><span class="net-icon">${icon}</span>
+    <span class="net-text">${ref ? `<span class="mono muted">${esc(ref)}</span> ` : ""}${esc(text)}</span>`;
+  $("#sim-log").prepend(row);
+}
+
+function markDeskNew() {
+  SIM.newCount += 1;
+  const dot = $("#desk-new");
+  dot.textContent = SIM.newCount;
+  dot.classList.remove("hidden");
+}
+
+function clearDeskNew() {
+  SIM.newCount = 0;
+  $("#desk-new").classList.add("hidden");
+}
+
+function flash(el) {
+  el.classList.remove("flash");
+  void el.offsetWidth;  // restart the animation
+  el.classList.add("flash");
+}
+
+// When a memory was formed during this session, say so ("learned 3 min ago"): that is the point of the demo.
+function ageLabel(iso) {
+  const t = new Date(iso).getTime();
+  if (!iso || Number.isNaN(t)) return null;
+  const mins = Math.round((Date.now() - t) / 60000);
+  if (mins >= -5 && mins < 240) return { text: mins <= 1 ? "learned just now" : `learned ${mins} min ago`, fresh: true };
+  return { text: fmtDay(iso), fresh: false };
+}
+
+function evidenceLine(text, occurred, why, caseId) {
+  const id = caseId || ((text || "").match(/EXC-\d{6}-[A-Z0-9]+/) || [])[0];
+  const age = ageLabel(occurred);
+  return `<div class="ev"><div class="ev-top">${id ? `<span class="badge code">${esc(id)}</span>` : ""}${age ? `<span class="badge ${age.fresh ? "teal" : ""}">${esc(age.text)}</span>` : ""}</div>
+    <div class="ev-why">${esc(why || (text || "").slice(0, 200))}</div></div>`;
+}
+
+async function sendPayment(opts = {}) {
+  if (SIM.busy) return;
+  const body = opts.body || simBody();
+  if (!body) return;
+  const ref = opts.ref || `PAY-${Math.floor(1000000 + Math.random() * 9000000)}`;
+  simBusy(true);
+  try {
+    if (!opts.skipCheck) {
+      netLog("out", `New payment: ${body.client} → ${body.beneficiary} · ${fmtMoney(body.amount, body.currency)} · ${body.beneficiary_bank}`, ref);
+      if ($("#sim-check").checked) {
+        simPanel(thinking("DejaVu is checking this payment against everything the desk has learned…"));
+        netLog("dv", "DejaVu pre-flight check…", ref);
+        const r = await api("/api/precheck", { method: "POST", body });
+        if (r.risk_level !== "low") {
+          netLog(r.risk_level === "high" ? "bad" : "warn", `DejaVu flagged ${r.risk_level} risk and held the payment before it left the bank.`, ref);
+          showBlocked(r, body, ref);
+          return;
+        }
+        netLog("ok", "DejaVu pre-flight: low risk. Releasing the payment.", ref);
+        simPanel(`<div class="sim-verdict ok">✓ Pre-flight passed</div><p class="muted">${esc(r.summary)}</p>`);
+        await sleep(600);
+      }
+    }
+    await transmit(body, ref);
+  } catch (e) {
+    simPanel(`<div class="note warn">${esc(e.message)}</div>`);
+    netLog("bad", `Error: ${e.message}`, ref);
+  } finally {
+    simBusy(false);
+  }
+}
+
+function showBlocked(r, body, ref) {
+  const preset = SIM.presetIndex !== null && !SIM.dirty ? (S.inputs.sim_presets || [])[SIM.presetIndex] : null;
+  const fix = preset && preset.fix;
+  const ev = (r.evidence || []).slice(0, 3).map((m) => evidenceLine(m.text, m.occurred_start || m.mentioned_at, "", null)).join("");
+  simPanel(`<div class="sim-verdict ${r.risk_level === "high" ? "bad" : "warn"}">🛡 DejaVu held this payment: ${esc(r.risk_level)} risk</div>
+    <p>${esc(r.summary)}</p>
+    ${warningsHtml(r)}
+    ${ev ? `<div class="section"><h3>What it remembered</h3><div class="evidence">${ev}</div></div>` : ""}
+    <div class="sim-actions">
+      ${fix ? `<button class="btn primary" id="sim-fix">Apply fix and send</button><span class="muted small">${esc(fix.label)}</span>` : ""}
+      <button class="btn" id="sim-anyway">Send anyway</button>
+      <button class="btn ghost" id="sim-cancel">Cancel</button>
+    </div>`);
+  if (fix) {
+    $("#sim-fix").onclick = () => {
+      const form = $("#sim-form");
+      Object.entries(fix.set).forEach(([k, v]) => { if (form.elements[k]) { form.elements[k].value = v; flash(form.elements[k]); } });
+      netLog("info", `Analyst applied the fix: ${fix.label}`, ref);
+      sendPayment({ body: { ...body, ...fix.set }, ref, skipCheck: true });
+    };
+  }
+  $("#sim-anyway").onclick = () => {
+    netLog("warn", "Analyst overrode DejaVu and sent the payment anyway.", ref);
+    sendPayment({ body, ref, skipCheck: true });
+  };
+  $("#sim-cancel").onclick = () => {
+    netLog("info", "Payment cancelled before it was sent.", ref);
+    simPanel(`<div class="empty small">Payment cancelled. Nothing was sent.</div>`);
+  };
+}
+
+async function transmit(body, ref) {
+  netLog("out", `pacs.008 sent over SWIFT to ${body.beneficiary_bank}`, ref);
+  simPanel(thinking(`Payment in flight to ${body.beneficiary_bank}…`));
+  const [res] = await Promise.all([api("/api/sim/send", { method: "POST", body: { ...body, payment_ref: ref } }), sleep(1400)]);
+  const tail = `<div class="muted small">${esc(ref)} · ${esc(fmtMoney(body.amount, body.currency))} · ${esc(res.bank)}</div>`;
+  if (res.status === "credited") {
+    netLog("ok", `pacs.002 ${res.iso_status} · credited by ${res.bank}`, ref);
+    simPanel(`<div class="sim-verdict ok">✓ Credited</div><p>${esc(res.message)}</p>${tail}`);
+    return;
+  }
+  if (res.status === "credited_next_day") {
+    netLog("warn", `pacs.002 ${res.iso_status} · accepted late by ${res.bank}`, ref);
+    simPanel(`<div class="sim-verdict warn">Accepted, but late</div><p>${esc(res.message)}</p>${tail}`);
+    return;
+  }
+  const why = res.reason_code ? `${res.reason_code} ${res.reason_text}` : "held for screening";
+  netLog("bad", `pacs.002 ${res.iso_status} · ${why} · from ${res.bank}`, ref);
+  netLog("info", `Exception ${res.case_id} opened on the desk`, ref);
+  markDeskNew();
+  toast(`New exception on the desk: ${res.bank}${res.reason_code ? " · " + res.reason_code : ""}`, "bad");
+  await autoDiagnose(res, ref);
+}
+
+async function autoDiagnose(res, ref) {
+  const head = `<div class="sim-verdict bad">✗ ${res.status === "held" ? "Held" : "Rejected"} by ${esc(res.bank)}
+      ${res.reason_code ? `<span class="badge code">${esc(res.reason_code)}</span>` : ""}</div>
+    <div class="what">${esc(res.message)}</div>
+    <div class="muted small">Exception ${esc(res.case_id)} opened on the desk</div>`;
+  simPanel(head + thinking("DejaVu is diagnosing the new exception, recalling similar cases from Hindsight…"));
+  try {
+    const d = await api(`/api/cases/${encodeURIComponent(res.case_id)}/diagnose`, { method: "POST", body: { use_memory: true } });
+    netLog("dv", `DejaVu diagnosis: ${rcLabel(d.root_cause)} (${Math.round((d.confidence || 0) * 100)}% confident)`, ref);
+    const ev = (d.evidence || []).slice(0, 3).map((e) => evidenceLine(e.text, e.occurred, e.why_relevant, e.case_id)).join("");
+    simPanel(head + `<div class="sim-diag">
+        <div class="muted small">DejaVu's diagnosis</div>
+        <div class="sim-rc">${esc(rcLabel(d.root_cause))}<span class="sim-conf">${Math.round((d.confidence || 0) * 100)}% confident</span></div>
+        <p>${esc(d.reasoning)}</p>
+        <p><b>Next step:</b> ${esc(d.recommended_action)}</p>
+        ${ev ? `<div class="section"><h3>Evidence from memory</h3><div class="evidence">${ev}</div></div>` : `<div class="muted small">Nothing similar in memory for this bank yet.</div>`}
+        ${d.requires_human_approval ? `<div class="notes"><div class="note guard">Human approval required: DejaVu never releases this kind of hold by itself.</div></div>` : ""}
+        <div class="sim-actions"><button class="btn primary" id="sim-open-desk">Review on the desk →</button></div>
+      </div>`);
+    $("#sim-open-desk").onclick = () => showOnDesk(res.case_id, d);
+  } catch (e) {
+    simPanel(head + `<div class="note warn">Diagnosis failed: ${esc(e.message)}</div>
+      <div class="sim-actions"><button class="btn" id="sim-open-desk">Open on the desk →</button></div>`);
+    $("#sim-open-desk").onclick = () => showOnDesk(res.case_id, null);
+  }
+}
+
+// Jump to the desk with the new exception selected and the diagnosis already on screen (no second model call).
+async function showOnDesk(caseId, diag) {
+  clearDeskNew();
+  showTab("desk");
+  S.filter = "open";
+  $$(".seg-btn[data-filter]").forEach((x) => x.classList.toggle("active", x.dataset.filter === "open"));
+  S.cases = await api("/api/cases?status=open");
+  S.cases.sort((a, b) => a.created_at.localeCompare(b.created_at));
+  renderQueue();
+  loadStatus();
+  await selectCase(caseId);
+  const item = $(`.qitem[data-id="${CSS.escape(caseId)}"]`);
+  if (item) { item.scrollIntoView({ block: "center" }); flash(item); }
+  if (diag && S.selectedId === caseId) {
+    S.diag = diag;
+    $("#diag-area").innerHTML = renderDiag(diag) + renderResolveBar(diag);
+    wireDiag();
+  }
+}
+
+async function toggleRulebook() {
+  const box = $("#sim-rules");
+  const btn = $("#sim-rules-btn");
+  if (!box.classList.contains("hidden")) {
+    box.classList.add("hidden");
+    btn.textContent = "Reveal the hidden rulebook";
+    return;
+  }
+  try {
+    const rb = await api("/api/sim/rules");
+    box.innerHTML = `<div class="muted small">${esc(rb.about)}</div>`
+      + rb.banks.filter((b) => b.rules.length).map((b) => `<div class="rule"><b>${esc(b.name)}</b><div>${b.rules.map(esc).join("<br>")}</div></div>`).join("");
+    box.classList.remove("hidden");
+    btn.textContent = "Hide the rulebook";
+  } catch (e) {
+    toast(e.message, "bad");
   }
 }
 
@@ -706,6 +984,8 @@ async function boot() {
   if (STATIC) {
     $("#ask-input").placeholder = "Recorded demo: pick one of the suggested questions below";
     $("#refresh-playbook").classList.add("hidden");
+    // The payment network simulator needs the live app, so the recorded demo leaves it out.
+    $$('[data-tab="network"], #tab-network').forEach((el) => el.remove());
   }
   $("#precheck-form").onsubmit = runPrecheck;
 
