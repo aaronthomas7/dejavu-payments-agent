@@ -33,24 +33,37 @@ def _beneficiary(case: dict[str, Any]) -> str:
 
 
 _LIST_ENTRY = re.compile(r"list entry\s*'([^']+)'", re.IGNORECASE)
+_CLEARED = re.compile(r"false positive|cleared|clearance", re.IGNORECASE)
 
 
-def _core(name: str) -> set[str]:
-    words = _words(name)
-    return {w for w in words if w not in _LEGAL_WORDS} or set(words)
+def _core(text: str) -> list[str]:
+    words = _words(text)
+    return [w for w in words if w not in _LEGAL_WORDS] or words
+
+
+def _mentions(text: str, name: str) -> bool:
+    """`name` appears in `text` as a whole phrase, ignoring case, punctuation and legal words like LLC."""
+    phrase = " ".join(_core(name))
+    return bool(phrase) and f" {phrase} " in f" {' '.join(_core(text))} "
+
+
+def _listed_name(case: dict[str, Any]) -> str:
+    m = _LIST_ENTRY.search(case.get("counterparty_message") or "")
+    return m.group(1) if m else ""
 
 
 def names_listed_entity(case: dict[str, Any]) -> bool:
     """True when the beneficiary carries the watch-list entry's own name (one name contains the other)."""
-    m = _LIST_ENTRY.search(case.get("counterparty_message") or "")
-    benef, listed = _core(_beneficiary(case)), _core(m.group(1)) if m else set()
+    benef, listed = set(_core(_beneficiary(case))), set(_core(_listed_name(case)))
     return bool(benef and listed) and (benef <= listed or listed <= benef)
 
 
-def cites_same_beneficiary(case: dict[str, Any], evidence: list[dict[str, Any]]) -> bool:
-    """True when a cited memory names this beneficiary: every word of its name appears (legal words like LLC ignored)."""
-    core = _core(_beneficiary(case))
-    return bool(core) and any(core <= set(_words(str(ev.get("text") or ""))) for ev in evidence)
+def cleared_before(case: dict[str, Any], texts: list[str]) -> bool:
+    """Memory names this exact beneficiary, and records a clearance for it or for the same watch-list entry."""
+    who, listed = _beneficiary(case), _listed_name(case)
+    if not any(_mentions(t, who) for t in texts):
+        return False
+    return any(_CLEARED.search(t) and (_mentions(t, who) or bool(listed and _mentions(t, listed))) for t in texts)
 
 
 def _compliance_referral(case: dict[str, Any]) -> str:
@@ -74,8 +87,12 @@ def mask_accounts(text: str) -> str:
     return _ACCOUNT_LIKE.sub(_mask, text or "")
 
 
-def apply(case: dict[str, Any], diag: dict[str, Any], used_memory: bool) -> dict[str, Any]:
-    """Mutates and returns `diag`, adding requires_human_approval / auto_fix_eligible / guardrail_notes."""
+def apply(case: dict[str, Any], diag: dict[str, Any], used_memory: bool,
+          recalled_texts: list[str] | None = None) -> dict[str, Any]:
+    """Mutates and returns `diag`, adding requires_human_approval / auto_fix_eligible / guardrail_notes.
+
+    `recalled_texts` are the memories recalled for this case (cited or not); the sanctions check reads them.
+    """
     notes: list[str] = []
     rc = diag["root_cause"]
     is_screening = case.get("exception_type") == "SCREENING_HOLD"
@@ -86,10 +103,11 @@ def apply(case: dict[str, Any], diag: dict[str, Any], used_memory: bool) -> dict
         rc = diag["root_cause"] = "SANCTIONS_POTENTIAL_MATCH"
         diag["confidence"] = min(float(diag.get("confidence", 0.5)), 0.5)
 
-    # 1b) "Known false positive" needs proof: a cited past case for this same beneficiary. A new name that only
-    #     looks like one cleared before (Red Sea Star vs Desert Star) is a new potential match.
+    # 1b) "Known false positive" needs proof: memory of this exact beneficiary and of a clearance. A new name that
+    #     only looks like one cleared before (Red Sea Star vs Desert Star) is a new potential match.
+    texts = [str(ev.get("text") or "") for ev in diag.get("evidence") or []] + [str(t) for t in recalled_texts or []]
     listed = names_listed_entity(case)
-    if rc == "SANCTIONS_KNOWN_FALSE_POSITIVE" and (listed or not cites_same_beneficiary(case, diag.get("evidence") or [])):
+    if rc == "SANCTIONS_KNOWN_FALSE_POSITIVE" and (listed or not cleared_before(case, texts)):
         who = _beneficiary(case) or "this beneficiary"
         notes.append(f"{who} has the same name as the watch-list entry, so it can never be a known false positive."
                      if listed else f"No past clearance for {who} in memory, so DejaVu treats this as a new potential match.")

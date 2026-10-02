@@ -115,7 +115,8 @@ class DejaVuAgent:
             evidence.append(Evidence(memory_ref=m.ref, why_relevant=str(ev.get("why_relevant", "")), case_id=m.case_id,
                                      text=m.text, occurred=m.occurred, type=m.type))
         raw["evidence"] = [e.model_dump() for e in evidence]
-        raw = guardrails.apply(case, raw, used_memory=use_memory and bool(memories))
+        raw = guardrails.apply(case, raw, used_memory=use_memory and bool(memories),
+                               recalled_texts=[m.text for m in memories or []])
         kept = {e.get("memory_ref") for e in raw.get("evidence") or []}
         evidence = [e for e in evidence if e.memory_ref in kept]  # guardrails may reject evidence that does not fit
 

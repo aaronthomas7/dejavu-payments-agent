@@ -52,6 +52,33 @@ def test_a_lookalike_name_is_not_a_known_false_positive():
     assert d2["root_cause"] == "SANCTIONS_POTENTIAL_MATCH"
 
 
+# What Hindsight really returns: the alerts name the beneficiary, the consolidated clearance says "this beneficiary".
+RECALLED = [
+    "A payment of USD 44,940.00 from Blue Harbour Logistics Pte Ltd to Desert Star General Trading LLC at Desert Rose "
+    "Bank (DRBKAEAD) was held on 2026-09-16 due to a 0.86 sanctions match score against Desert Star Shipping FZE.",
+    "The payment of USD 37,090.00 was held due to a sanctions screening hit (0.86 match score) against Desert Star "
+    "Shipping FZE, but was resolved as a known false positive by Compliance under clearance CLR-2026-0819-07.",
+]
+ALERT = "Sanctions screening hit: beneficiary '{}' vs list entry 'DESERT STAR SHIPPING FZE' (match score 0.86). Payment held."
+
+
+def test_known_false_positive_can_rest_on_recalled_memories():
+    case = _hold("Desert Star General Trading LLC") | {"counterparty_message": ALERT.format("DESERT STAR GENERAL TRADING LLC")}
+    cited = [{"memory_ref": "M6", "text": RECALLED[1]}]
+    d = guardrails.apply(case, _diag(root_cause="SANCTIONS_KNOWN_FALSE_POSITIVE", evidence=cited), True,
+                         recalled_texts=RECALLED)
+    assert d["root_cause"] == "SANCTIONS_KNOWN_FALSE_POSITIVE" and d["evidence"] == cited
+
+
+def test_a_new_name_hitting_the_same_list_entry_is_not_cleared():
+    # Every word of "Desert Star Logistics" appears in the memories (the client is Blue Harbour *Logistics*),
+    # but never as that name, so it is a new beneficiary.
+    case = _hold("Desert Star Logistics LLC") | {"counterparty_message": ALERT.format("DESERT STAR LOGISTICS LLC")}
+    d = guardrails.apply(case, _diag(root_cause="SANCTIONS_KNOWN_FALSE_POSITIVE",
+                                     evidence=[{"memory_ref": "M6", "text": RECALLED[1]}]), True, recalled_texts=RECALLED)
+    assert d["root_cause"] == "SANCTIONS_POTENTIAL_MATCH"
+
+
 def test_the_listed_entity_itself_is_never_a_known_false_positive():
     # Past alerts mention the list entry's name, so the evidence check alone would pass here.
     case = _hold("DESERT STAR SHIPPING FZE")
