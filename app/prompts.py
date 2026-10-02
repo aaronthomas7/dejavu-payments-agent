@@ -266,13 +266,18 @@ def precheck_query(req: Any) -> str:
         parts.append(f"- Routing via intermediary: {req.intermediary}")
     if req.beneficiary_account:
         digits = _digits(req.beneficiary_account)
-        parts.append(f"- Beneficiary account has {len(digits)} digits (ends {req.beneficiary_account[-4:]})")
+        parts.append(f"- Beneficiary account has {len(digits)} digits (ends {digits[-4:]})")
     if req.remittance_info is not None:
         parts.append(f"- Remittance info: \"{req.remittance_info}\"")
     parts.append(
-        "Using only what this desk has learned from past payment exceptions, list the concrete risks that could "
-        "make this payment fail or be delayed, and how to prevent each one before sending. Set risk_level to "
-        "low, medium or high. If nothing in memory applies, say so and use risk_level low."
+        "Using only this desk's memory of past payment exceptions, will this payment fail or be delayed? "
+        "False alarms waste the desk's time. Warn only if memory shows a past failure at this same bank, for this "
+        "beneficiary, or for this whole currency corridor (e.g. inward INR needs an RBI purpose code), AND this "
+        "payment has the same problem. Ignore issues seen only at other banks, the client's unrelated history and "
+        "general good practice. Don't warn about anything the payment already has (an invoice number, a purpose "
+        "code such as P0102, the full legal name). risk_level: high if a matching past failure applies; medium if "
+        "this bank has a known issue that may or may not apply; low if nothing applies (then no warnings, and say "
+        "the desk has no matching history)."
     )
     return "\n".join(parts)
 

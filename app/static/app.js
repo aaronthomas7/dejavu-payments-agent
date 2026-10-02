@@ -837,14 +837,29 @@ async function sendPayment(opts = {}) {
   }
 }
 
+// Memories about the payment's own bank come first (freshest first), so the case the desk
+// just learned from is what the analyst sees. Falls back to Hindsight's order otherwise.
+function rankEvidence(list, bank) {
+  const stop = new Set(["bank", "banking", "operative", "cooperative", "commercial", "savings", "union", "the"]);
+  const key = (bank || "").toLowerCase().split(/[^a-z]+/).find((w) => w.length > 3 && !stop.has(w));
+  const scored = (list || []).map((m, i) => {
+    const age = ageLabel(m.occurred_start || m.mentioned_at);
+    return { m, i, same: !!key && (m.text || "").toLowerCase().includes(key), fresh: age && age.fresh ? 1 : 0 };
+  });
+  const same = scored.filter((x) => x.same).sort((a, b) => b.fresh - a.fresh || a.i - b.i);
+  return { items: (same.length ? same : scored).map((x) => x.m), sameBank: same.length > 0 };
+}
+
 function showBlocked(r, body, ref) {
   const preset = SIM.presetIndex !== null && !SIM.dirty ? (S.inputs.sim_presets || [])[SIM.presetIndex] : null;
   const fix = preset && preset.fix;
-  const ev = (r.evidence || []).slice(0, 3).map((m) => evidenceLine(m.text, m.occurred_start || m.mentioned_at, "", null)).join("");
+  const ranked = rankEvidence(r.evidence, body.beneficiary_bank);
+  const ev = ranked.items.slice(0, 3).map((m) => evidenceLine(m.text, m.occurred_start || m.mentioned_at, "", null)).join("");
+  const evTitle = ranked.sameBank ? `What it remembered about ${body.beneficiary_bank}` : "What it remembered";
   simPanel(`<div class="sim-verdict ${r.risk_level === "high" ? "bad" : "warn"}">🛡 DejaVu held this payment: ${esc(r.risk_level)} risk</div>
     <p>${esc(r.summary)}</p>
     ${warningsHtml(r)}
-    ${ev ? `<div class="section"><h3>What it remembered</h3><div class="evidence">${ev}</div></div>` : ""}
+    ${ev ? `<div class="section"><h3>${esc(evTitle)}</h3><div class="evidence">${ev}</div></div>` : ""}
     <div class="sim-actions">
       ${fix ? `<button class="btn primary" id="sim-fix">Apply fix and send</button><span class="muted small">${esc(fix.label)}</span>` : ""}
       <button class="btn" id="sim-anyway">Send anyway</button>
