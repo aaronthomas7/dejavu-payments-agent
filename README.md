@@ -135,6 +135,13 @@ python scripts/export_demo.py             # optional: record the static demo for
 
 **No keys yet?** `MEMORY_BACKEND=local LLM_BACKEND=offline uvicorn app.main:app` runs the UI with simple offline stand-ins, so you can click around. Those stand-ins are for development only; the UI shows a banner and the replay chart is watermarked.
 
+**Host a public live copy (free).** [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/aaronthomas7/dejavu-payments-agent)
+
+- `render.yaml` sets everything up; you only paste `HINDSIGHT_API_KEY` and `GROQ_API_KEY` when Render asks.
+- The hosted copy uses its own memory bank (`dejavu-payments-desk-public`), so visitors never touch the bank your local demo uses. On first start it loads the six weeks of history into that bank in the background (a few minutes; a banner shows progress).
+- Free services sleep after 15 minutes without visitors, and the first visit after that takes about a minute. The desk is rebuilt on every restart, and lessons from old simulated payments are forgotten automatically.
+- Everyone who opens the link shares one desk. `POST /api/admin/reset-demo` resets it.
+
 ## Demo script (3 minutes)
 
 1. **Exception desk → Nordkyst Bank, RC01**
@@ -199,9 +206,10 @@ scripts/
   fill_content.py       copy replay numbers into this README
   export_demo.py        record a real run as the static clickable demo (docs/demo)
   windows/              double-click helpers: setup, replay, run, export_demo, update_playbook, reset_demo, publish
-tests/            54 offline tests (pytest)
+tests/            57 offline tests (pytest)
 data/             history.json (49 cases), live.json (10 open cases), entities.json, network_rules.json (simulator)
 docs/             learning_curve.png and the recorded demo served by GitHub Pages
+render.yaml       one-click public hosting on Render's free plan
 ```
 
 ## The data

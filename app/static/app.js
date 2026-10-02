@@ -182,6 +182,11 @@ async function loadStatus() {
   if (st.setup_error) {
     banner.innerHTML = `Memory setup failed: <b>${esc(st.setup_error)}</b>. Check HINDSIGHT_API_KEY in .env, then restart. Diagnoses still work without memory.`;
     banner.classList.remove("hidden");
+  } else if (st.seeding && st.seeding.running) {
+    banner.innerHTML = `<b>Loading the desk's six weeks of history into Hindsight memory: ${st.seeding.done} of ${st.seeding.total} cases.</b> Diagnoses get sharper as it fills. This takes a few minutes.`;
+    banner.classList.remove("hidden");
+    clearTimeout(S.seedPoll);
+    S.seedPoll = setTimeout(loadStatus, 5000);
   } else if (st.offline) {
     banner.innerHTML = `<b>Offline development mode.</b> Using local stand-ins instead of ${st.memory_backend !== "hindsight" ? "Hindsight" : ""}${st.memory_backend !== "hindsight" && st.llm_backend !== "groq" ? " and " : ""}${st.llm_backend !== "groq" ? "Groq" : ""}. Add your API keys to <code>.env</code> for the real agent.`;
     banner.classList.remove("hidden");

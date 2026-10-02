@@ -1,0 +1,25 @@
+# A public live copy of DejaVu on Render's free plan.
+# One click: https://render.com/deploy?repo=https://github.com/aaronthomas7/dejavu-payments-agent
+#
+# It uses its own memory bank (HINDSIGHT_BANK_ID below) and loads the six weeks of history into it on first
+# start, so anything visitors do there never touches the bank used by a local demo.
+# Free services sleep after 15 minutes without visitors; the first visit after that takes about a minute.
+services:
+  - type: web
+    name: dejavu-payments-agent
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: HINDSIGHT_API_KEY
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+      - key: HINDSIGHT_BANK_ID
+        value: dejavu-payments-desk-public
+      - key: SEED_HISTORY
+        value: "true"
+      - key: PYTHON_VERSION
+        value: 3.14.3

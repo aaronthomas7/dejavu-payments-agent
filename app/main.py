@@ -2,8 +2,10 @@
 
 from __future__ import annotations
 
+import asyncio
 import json
 import logging
+import re
 from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Any, Optional
@@ -26,6 +28,7 @@ log = logging.getLogger("dejavu")
 
 STATIC = Path(__file__).parent / "static"
 STATE: dict[str, Any] = {}
+SIM_ID = re.compile(r"^EXC-\d{6}-S\d+$")  # simulated payments' case IDs
 
 
 def _load_json(name: str) -> Any:
@@ -42,18 +45,67 @@ async def lifespan(app: FastAPI):
     rules = settings.data_dir / "network_rules.json"
     network = PaymentNetwork(rules, _load_json("entities.json")) if rules.exists() else None
     STATE.update(store=store, memory=memory, agent=agent, network=network, memory_backend=memory_backend,
-                 llm_backend=llm_backend, setup_error=None)
+                 llm_backend=llm_backend, setup_error=None, seeding=None)
     log.info("DejaVu starting: memory=%s llm=%s bank=%s", memory_backend, llm_backend, memory.bank_id)
     try:
         await memory.setup()
         flushed = await agent.flush_outbox()
         if flushed:
             log.info("flushed %s queued retains", flushed)
+        await _tidy_memory()
     except Exception as exc:  # the UI shows this; the desk still works without memory
         STATE["setup_error"] = str(exc)[:500]
         log.error("memory setup failed: %s", exc)
+    seeding = asyncio.create_task(_seed_history()) if settings.seed_history and not STATE["setup_error"] else None
     yield
+    if seeding and not seeding.done():
+        seeding.cancel()
     await memory.close()
+
+
+async def _tidy_memory() -> None:
+    """Forget lessons from demo cases this desk no longer holds as resolved: simulated payments whose case is gone
+    (a hosted copy loses its database when it restarts) and demo cases that are open again."""
+    store, memory = STATE["store"], STATE["memory"]
+    try:
+        docs = await memory.document_ids()
+    except Exception as exc:
+        log.warning("could not list memory documents: %s", exc)
+        return
+    known = {c["case_id"]: c for c in store.list_cases()}
+    stale = sorted(d for d in docs if (SIM_ID.match(d) and d not in known) or (
+        d in known and known[d]["source"] in ("live", "sim") and known[d]["status"] == "open"))
+    for doc_id in stale:
+        try:
+            await memory.forget_case(doc_id)
+        except Exception as exc:
+            log.warning("could not forget %s: %s", doc_id, exc)
+    if stale:
+        log.info("forgot %s stale demo documents: %s", len(stale), ", ".join(stale))
+
+
+async def _seed_history() -> None:
+    """Load the resolved history into an empty or partly loaded bank, one case at a time, in the background."""
+    memory = STATE["memory"]
+    history = _load_json("history.json")
+    try:
+        have = await memory.document_ids()
+    except Exception as exc:  # cannot tell what is there: load everything (a retain replaces the same document)
+        log.warning("could not list memory documents (%s); loading the whole history", exc)
+        have = set()
+    todo = [c for c in history if c["case_id"] not in have]
+    STATE["seeding"] = {"done": 0, "total": len(todo), "running": bool(todo), "error": None}
+    for i, case in enumerate(todo, 1):
+        gt = case["ground_truth"]
+        try:
+            await memory.retain_case(case, gt["root_cause"], gt["resolution_note"])
+        except Exception as exc:
+            log.warning("seeding %s failed: %s", case["case_id"], exc)
+            STATE["seeding"]["error"] = str(exc)[:200]
+        STATE["seeding"]["done"] = i
+    STATE["seeding"]["running"] = False
+    if todo:
+        log.info("history seeding finished: %s cases retained", len(todo))
 
 
 app = FastAPI(title="DejaVu - payment exceptions agent", version="1.0.0", lifespan=lifespan)
@@ -96,8 +148,14 @@ async def status() -> dict[str, Any]:
         "offline": STATE["memory_backend"] != "hindsight" or STATE["llm_backend"] != "groq",
         "bank_id": memory.bank_id, "model": settings.llm_model if STATE["llm_backend"] == "groq" else "offline-heuristic",
         "setup_error": STATE.get("setup_error"), "memory_counts": counts, "cases": STATE["store"].counts(),
-        **_llm_capacity(),
+        "seeding": STATE.get("seeding"), **_llm_capacity(),
     }
+
+
+@app.get("/api/health")
+async def health() -> dict[str, bool]:
+    """Cheap liveness check for hosting platforms (touches neither memory nor the model)."""
+    return {"ok": True}
 
 
 def _llm_capacity() -> dict[str, Any]:
@@ -210,12 +268,19 @@ async def replay_results() -> dict[str, Any]:
 async def reset_demo() -> dict[str, Any]:
     """Re-open the live demo cases, remove simulated payments, and delete what memory learned from both,
     so the demo can be rehearsed from the same starting point."""
-    ids = STATE["store"].reopen_live_cases()
-    sim_ids = STATE["store"].delete_cases("sim")
+    store, memory = STATE["store"], STATE["memory"]
+    ids = store.reopen_live_cases()
+    sim_ids = store.delete_cases("sim")
+    live_ids = {c["case_id"] for c in store.list_cases() if c["source"] == "live"}
+    try:  # also catches lessons from simulated payments this desk no longer lists (e.g. after a hosted restart)
+        targets = sorted(d for d in await memory.document_ids() if SIM_ID.match(d) or d in live_ids)
+    except Exception as exc:
+        log.warning("could not list memory documents: %s", exc)
+        targets = sorted(set(ids + sim_ids))
     forgotten = 0
-    for cid in ids + sim_ids:
+    for cid in targets:
         try:
-            await STATE["memory"].forget_case(cid)
+            await memory.forget_case(cid)
             forgotten += 1
         except Exception as exc:
             log.warning("could not forget %s: %s", cid, exc)

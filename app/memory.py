@@ -252,6 +252,22 @@ class HindsightMemory:
                 raise
         self._stats_cache = None
 
+    async def document_ids(self, prefix: str = "EXC-") -> set[str]:
+        """IDs of the case documents retained in the bank (one document per resolved case)."""
+        ids: set[str] = set()
+        offset, page = 0, 500
+        while True:
+            resp = await _retry("list documents", lambda o=offset: self.client.documents.list_documents(
+                bank_id=self.bank_id, q=prefix, limit=page, offset=o))
+            items = list(getattr(resp, "items", None) or [])
+            for it in items:
+                doc_id = getattr(it, "id", None) or (it.get("id") if isinstance(it, dict) else None)
+                if doc_id:
+                    ids.add(str(doc_id))
+            if len(items) < page:
+                return ids
+            offset += page
+
     # ---- recall ------------------------------------------------------------
     async def recall_for_case(self, case: dict[str, Any], limit: int = 8) -> list[MemoryItem]:
         query = prompts.recall_query(case)
@@ -463,6 +479,9 @@ class LocalMemory:
     async def forget_case(self, case_id: str) -> None:
         self.items = [i for i in self.items if i["case_id"] != case_id]
         self._save()
+
+    async def document_ids(self, prefix: str = "EXC-") -> set[str]:
+        return {i["case_id"] for i in self.items if str(i["case_id"]).startswith(prefix)}
 
     async def recall_for_case(self, case: dict[str, Any], limit: int = 8) -> list[MemoryItem]:
         q = set(_WORD.findall(prompts.recall_query(case).lower()))

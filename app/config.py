@@ -50,6 +50,8 @@ class Settings:
     # "groq" (default) or "offline" (deterministic heuristic stub used by tests / no-key dev only)
     llm_backend: str = field(default_factory=lambda: os.getenv("LLM_BACKEND", "groq"))
     show_demo_hints: bool = field(default_factory=lambda: _bool("SHOW_DEMO_HINTS", True))
+    # Hosted copies start from an empty bank: load the 6 weeks of resolved history into it in the background.
+    seed_history: bool = field(default_factory=lambda: _bool("SEED_HISTORY", False))
 
     # --- Paths ---
     data_dir: Path = field(default_factory=lambda: Path(os.getenv("DATA_DIR", str(ROOT / "data"))))

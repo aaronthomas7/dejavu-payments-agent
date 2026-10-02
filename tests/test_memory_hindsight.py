@@ -85,3 +85,17 @@ def test_transient_retain_error_is_retried(mem, live):
     mem.client.fail["aretain"] = [_err(502, "bad gateway")]
     asyncio.run(mem.retain_case(live[0], "CLIENT_TYPO_IN_DETAILS", "fixed"))
     assert mem.client.calls.count("aretain") == 2
+
+
+def test_document_ids_pages_through_the_bank(mem):
+    pages = {0: [SimpleNamespace(id=f"EXC-2608{i:02d}-01") for i in range(500)], 500: [{"id": "EXC-261002-S01"}]}
+    calls = []
+
+    async def list_documents(bank_id, q=None, limit=None, offset=None):
+        calls.append((q, limit, offset))
+        return SimpleNamespace(items=pages.get(offset, []), total=501)
+
+    mem.client.documents = SimpleNamespace(list_documents=list_documents)
+    ids = asyncio.run(mem.document_ids())
+    assert len(ids) == 501 and "EXC-261002-S01" in ids
+    assert calls == [("EXC-", 500, 0), ("EXC-", 500, 500)]
