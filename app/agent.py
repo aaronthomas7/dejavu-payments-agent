@@ -116,6 +116,8 @@ class DejaVuAgent:
                                      text=m.text, occurred=m.occurred, type=m.type))
         raw["evidence"] = [e.model_dump() for e in evidence]
         raw = guardrails.apply(case, raw, used_memory=use_memory and bool(memories))
+        kept = {e.get("memory_ref") for e in raw.get("evidence") or []}
+        evidence = [e for e in evidence if e.memory_ref in kept]  # guardrails may reject evidence that does not fit
 
         rc = raw["root_cause"]
         diag = Diagnosis(

@@ -168,6 +168,7 @@ In production the simulator is replaced by the real `pacs.002` and `pacs.004` me
 
 - **Sanctions**:
   - A screening hold can only be classified as a sanctions cause, and always requires a human. This is enforced in code (`app/guardrails.py`) *and* as a Hindsight directive.
+  - "Known false positive" is accepted only when DejaVu cites a past case for that exact beneficiary, and never when the beneficiary carries the watch-list entry's own name. A look-alike (Red Sea Star vs Desert Star) is treated as a new potential match.
 - **Evidence and confidence**:
   - Without evidence from memory, confidence is capped at 60%.
   - Evidence references the model invents are dropped.
@@ -198,7 +199,7 @@ scripts/
   fill_content.py       copy replay numbers into this README
   export_demo.py        record a real run as the static clickable demo (docs/demo)
   windows/              double-click helpers: setup, replay, run, export_demo, update_playbook, reset_demo, publish
-tests/            50 offline tests (pytest)
+tests/            52 offline tests (pytest)
 data/             history.json (49 cases), live.json (10 open cases), entities.json, network_rules.json (simulator)
 docs/             learning_curve.png and the recorded demo served by GitHub Pages
 ```

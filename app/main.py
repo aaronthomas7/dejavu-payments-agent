@@ -96,7 +96,16 @@ async def status() -> dict[str, Any]:
         "offline": STATE["memory_backend"] != "hindsight" or STATE["llm_backend"] != "groq",
         "bank_id": memory.bank_id, "model": settings.llm_model if STATE["llm_backend"] == "groq" else "offline-heuristic",
         "setup_error": STATE.get("setup_error"), "memory_counts": counts, "cases": STATE["store"].counts(),
+        **_llm_capacity(),
     }
+
+
+def _llm_capacity() -> dict[str, Any]:
+    """How many Groq keys are configured and how busy each one is (never the keys themselves)."""
+    groq = getattr(getattr(STATE.get("agent"), "reasoner", None), "client", None)
+    limiters = getattr(groq, "limiters", None) or []
+    return {"llm_keys": len(limiters), "llm_tokens_last_minute": [lim.load() for lim in limiters],
+            "llm_tpm_limit": settings.llm_tpm_limit}
 
 
 @app.post("/api/setup")
